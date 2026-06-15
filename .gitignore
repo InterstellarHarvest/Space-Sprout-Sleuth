@@ -3,3 +3,7 @@ resources/
 htaccess
 log.php
 sprites/**/originals/
+
+# Old standalone Campaign 2 working copy — superseded by the merged root files.
+# Kept locally for archival but excluded from the repo.
+campaign_2/

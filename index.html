@@ -94,29 +94,8 @@
   #saa-icon:hover { filter: drop-shadow(0 0 4px rgba(6,182,212,0.8)); }
 
   #saa-abbr {
-    transition: max-width 0.3s ease-out, opacity 0.2s ease-out;
     display: inline-block;
-    max-width: 50px;
-    overflow: hidden;
     white-space: nowrap;
-    opacity: 1;
-  }
-  #saa-full {
-    display: inline-block;
-    max-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    opacity: 0;
-    transition: max-width 0.4s ease-out, opacity 0.3s 0.1s ease-out;
-  }
-
-  #saa-logo.expanded #saa-abbr {
-    max-width: 0;
-    opacity: 0;
-  }
-  #saa-logo.expanded #saa-full {
-    max-width: 300px;
-    opacity: 1;
   }
 
   #game-title-bar {
@@ -772,7 +751,7 @@
     50%       { box-shadow: 0 0 14px rgba(6,182,212,0.6), 0 0 24px rgba(6,182,212,0.3); }
   }
 
-  /* Campaign 2 (Phase 2): 6-button action bar. The 5 source buttons plus
+  /* Campaign 2: 6-button action bar. The 5 source buttons plus
      Diagnose all live inside #action-grid as equal-sized cells (2 columns ×
      3 rows). The diagnose button keeps its cyan border and pulse so it stays
      visually findable, but matches .action-btn dimensions. Gated on
@@ -1311,7 +1290,7 @@
     justify-content: center;
   }
 
-  /* Campaign 2 character creation popup (Phase 2) */
+  /* Campaign 2 character creation popup */
   #char-create {
     background: rgba(0,0,0,0.88);
     flex-direction: column;
@@ -1973,7 +1952,7 @@
 
   <!-- Menu bar -->
   <div id="menu-bar">
-    <div id="saa-logo"><svg id="saa-icon" viewBox="0 0 512 512" fill="#06b6d4"><g><polygon points="512,211.478 512,178.087 434.087,178.087 434.087,178.087 400.696,178.087 400.696,178.087 400.696,178.087 400.696,144.696 400.696,144.696 400.696,111.304 333.913,111.304 333.913,89.043 333.913,89.043 333.913,0 300.522,0 300.522,77.913 211.478,77.913 211.478,0 178.087,0 178.087,77.913 178.087,77.913 178.087,111.304 144.696,111.304 144.696,111.304 111.304,111.304 111.304,144.696 111.304,144.696 111.304,178.087 89.043,178.087 89.043,178.087 0,178.087 0,211.478 77.919,211.478 77.919,300.522 0,300.522 0,333.913 77.919,333.913 77.919,333.913 111.304,333.913 111.304,367.304 111.304,367.304 111.304,400.696 144.696,400.696 144.696,400.696 178.087,400.696 178.087,434.087 178.087,434.087 178.087,434.087 178.087,512 211.478,512 211.478,434.087 300.522,434.087 300.522,512 333.913,512 333.913,422.957 333.913,422.957 333.913,400.696 367.304,400.696 367.304,400.696 400.696,400.696 400.696,367.304 400.696,367.304 400.696,333.913 434.091,333.913 434.091,333.913 512,333.913 512,300.522 434.091,300.522 434.091,211.478"/><rect x="400.696" y="77.913" width="33.391" height="33.391"/><rect x="434.087" y="44.522" width="33.391" height="33.391"/><rect x="77.913" y="77.913" width="33.391" height="33.391"/><rect x="44.522" y="44.522" width="33.391" height="33.391"/><rect x="77.913" y="400.696" width="33.391" height="33.391"/><rect x="44.522" y="434.087" width="33.391" height="33.391"/><rect x="400.696" y="400.696" width="33.391" height="33.391"/><rect x="434.087" y="434.087" width="33.391" height="33.391"/></g></svg><span id="saa-abbr">SAA</span><span id="saa-full">Solar Agricultural Authority</span></div>
+    <div id="saa-logo"><svg id="saa-icon" viewBox="0 0 512 512" fill="#06b6d4"><g><polygon points="512,211.478 512,178.087 434.087,178.087 434.087,178.087 400.696,178.087 400.696,178.087 400.696,178.087 400.696,144.696 400.696,144.696 400.696,111.304 333.913,111.304 333.913,89.043 333.913,89.043 333.913,0 300.522,0 300.522,77.913 211.478,77.913 211.478,0 178.087,0 178.087,77.913 178.087,77.913 178.087,111.304 144.696,111.304 144.696,111.304 111.304,111.304 111.304,144.696 111.304,144.696 111.304,178.087 89.043,178.087 89.043,178.087 0,178.087 0,211.478 77.919,211.478 77.919,300.522 0,300.522 0,333.913 77.919,333.913 77.919,333.913 111.304,333.913 111.304,367.304 111.304,367.304 111.304,400.696 144.696,400.696 144.696,400.696 178.087,400.696 178.087,434.087 178.087,434.087 178.087,434.087 178.087,512 211.478,512 211.478,434.087 300.522,434.087 300.522,512 333.913,512 333.913,422.957 333.913,422.957 333.913,400.696 367.304,400.696 367.304,400.696 400.696,400.696 400.696,367.304 400.696,367.304 400.696,333.913 434.091,333.913 434.091,333.913 512,333.913 512,300.522 434.091,300.522 434.091,211.478"/><rect x="400.696" y="77.913" width="33.391" height="33.391"/><rect x="434.087" y="44.522" width="33.391" height="33.391"/><rect x="77.913" y="77.913" width="33.391" height="33.391"/><rect x="44.522" y="44.522" width="33.391" height="33.391"/><rect x="77.913" y="400.696" width="33.391" height="33.391"/><rect x="44.522" y="434.087" width="33.391" height="33.391"/><rect x="400.696" y="400.696" width="33.391" height="33.391"/><rect x="434.087" y="434.087" width="33.391" height="33.391"/></g></svg><span id="saa-abbr">SAA</span></div>
     <div id="game-title-bar">Space Sprout Sleuth</div>
     <div id="menu-right">
       <span id="menu-rank">Trainee</span> &middot; <span id="menu-case">Case 1 of 5</span>
@@ -2050,7 +2029,7 @@
   <!-- Resume prompt overlay -->
   <div id="resume-prompt" class="overlay hidden"></div>
 
-  <!-- Campaign 2 character creation overlay (Phase 2) -->
+  <!-- Campaign 2 character creation overlay -->
   <div id="char-create" class="overlay hidden"></div>
 
   <!-- SAA Agent Handbook — opens on click of SAA badge. Tabs: HOW TO PLAY, REPLAY TUTORIAL -->
@@ -2714,7 +2693,7 @@
 (function() {
   'use strict';
 
-  // ── Campaign registry (Phase 2) ─────────────────────────────────
+  // ── Campaign registry ─────────────────────────────────
   // Both data files are loaded by <script> tags above. We wrap them into
   // a single GAME_DATA.campaigns[] registry so the engine can switch between
   // them via setActiveCampaign(). Every existing reference to GAME_DATA.cases
@@ -2807,7 +2786,7 @@
         framesPromise = Promise.resolve(SPRITE_FRAMES.crew);
       }
     }
-    // Phase 2: Campaign 2 embedded frame data (sprites/c2/*)
+    // Campaign 2 embedded frame data (sprites/c2/*)
     if (!framesPromise && typeof CAMPAIGN_2_FRAMES !== 'undefined') {
       if (spriteSrc === 'sprites/c2/spritesheet_c2.png' && CAMPAIGN_2_FRAMES.ui) {
         framesPromise = Promise.resolve(CAMPAIGN_2_FRAMES.ui);
@@ -2846,7 +2825,7 @@
 
   // ── UI Spritesheet (consolidated non-crew sprites) ──────────────
   let uiSheetData = null; // { img, frameMap: { filename: {x,y,w,h} } }
-  // Phase 2: Campaign 2 has its own parallel UI sheet loaded alongside C1.
+  // Campaign 2 has its own parallel UI sheet loaded alongside C1.
   // drawUiFrame() below checks C1 first, then falls through to C2 — any frame
   // name that lives only in spritesheet_c2 is still reachable via sprites.portrait
   // or sprites.actionIcon without changing the call site.
@@ -2872,7 +2851,7 @@
 
   // ── Badge Spritesheet (separate, 512px badges) ─────────────────
   let badgeSheetData = null; // { img, frameMap: { filename: {x,y,w,h} } }
-  // Phase 2: Campaign 2 badges live in their own separate sheet with their own
+  // Campaign 2 badges live in their own separate sheet with their own
   // set of 5 filenames (federation_trainee → galactic_botanist). Campaign-aware
   // helpers getActiveBadgeSheet() / getActiveBadgeFrames() below pick the right
   // sheet + frame name array based on STATE.currentCampaign.
@@ -2922,7 +2901,7 @@
   }
 
   // Draw a named frame from the UI spritesheet onto a canvas.
-  // Phase 2: checks Campaign 1 sheet first, then falls through to Campaign 2
+  // checks Campaign 1 sheet first, then falls through to Campaign 2
   // sheet so existing sprites.portrait / sprites.actionIcon fields can reference
   // frames from either sheet by filename.
   function drawUiFrame(canvas, frameName) {
@@ -2973,7 +2952,7 @@
 
   // Build action icon — small canvas from spritesheet portrait, or emoji fallback
   //
-  // Phase 2 precedence order: explicit actionIcon wins over spritesheet. This
+  // Precedence order: explicit actionIcon wins over spritesheet. This
   // is a no-op for Campaign 1 (no C1 crew clue sets both) but lets Campaign 2
   // crew override the auto-drawn spritesheet icon with a species portrait.
   // E.g. Vressk crew has `spritesheet: "sprites/c2/vressk_botanist/..."` for the
@@ -3214,8 +3193,8 @@
       diagnosed: false,
       bonusInsights: 0,
       textProgress: {},      // clueTag → charIdx (-1 = fully read)  (kept for non-dialogue cases)
-      calledHome: false,     // Phase 2: Campaign 2 "call home" hint — one use per case
-      solutionIdx: -1        // Phase 5: which solution choice the player picked (Case 5 only)
+      calledHome: false,     // Campaign 2 "call home" hint — one use per case
+      solutionIdx: -1        // which solution choice the player picked (Case 5 only)
     };
   }
 
@@ -3227,7 +3206,7 @@
       caseState: defaultCaseState(),
       completedCases: [],
       totalScore: 0,
-      // Campaign 2 foundation (Phase 1) — additive fields, default to Campaign 1 behavior
+      // Campaign 2 — additive fields, default to Campaign 1 behavior
       campaign1Complete: false,
       currentCampaign: 0,
       playerSpecies: 'human'
@@ -3245,7 +3224,7 @@
       const s = localStorage.getItem(SAVE_KEY);
       if (s) {
         const parsed = JSON.parse(s);
-        // Backwards compat: default fields added in Phase 1 (Campaign 2 foundation)
+        // Backwards compat: Campaign 2 fields may be absent from older saves
         if (parsed.campaign1Complete === undefined) parsed.campaign1Complete = false;
         if (parsed.currentCampaign === undefined) parsed.currentCampaign = 0;
         if (parsed.playerSpecies === undefined) parsed.playerSpecies = 'human';
@@ -3426,7 +3405,7 @@
       const [src, state] = req.stateIs.split('.');
       return cs.sourceStates[src] && cs.sourceStates[src].state === state;
     }
-    // Campaign 2 (Phase 1): player species checks for cross-campaign dialogue gating.
+    // Campaign 2: player species checks for cross-campaign dialogue gating.
     // playerSpecies: "alien" matches any non-human; otherwise exact match.
     if (req.playerSpecies) {
       if (req.playerSpecies === 'alien') return STATE.playerSpecies !== 'human';
@@ -3847,7 +3826,7 @@
 
     if (fullRebuild || !actionGrid.children.length) {
       // Full rebuild — only on first render or screen transitions.
-      // Phase 2: for Campaign 2, move Diagnose into the grid as the 6th cell.
+      // for Campaign 2, move Diagnose into the grid as the 6th cell.
       // Re-parent to actionArea first so innerHTML='' on the grid can't wipe
       // the diagnose element (preserving its click listener). Only touch the
       // parent on full rebuild so lightweight updates (called on every
@@ -3963,7 +3942,7 @@
       stopConnectionScreen();
     }
 
-    // Phase 2: Campaign 2 briefings show Nova + Zel'keth handler portraits
+    // Campaign 2 briefings show Nova + Zel'keth handler portraits
     const handlersHtml = (STATE.currentCampaign === 1)
       ? '<div class="briefing-handlers">' +
           '<div class="handler-portrait">' +
@@ -4122,9 +4101,9 @@
     connScreenEl.innerHTML = '';
   }
 
-  // Phase 2: "Call Home" — one-use hint per case. Shows a stub message from
-  // Nova/Zel'keth based on how many clues the player has found. Real per-case
-  // hint scripts come in Phase 3; this just proves the wiring.
+  // "Call Home" — one-use hint per case (Campaign 2 only). Shows a message from
+  // Nova/Zel'keth keyed to how many clues the player has found, using the
+  // per-case scripts in caseData.callHomeHints (low / mid / full).
   function callHome() {
     if (STATE.currentCampaign !== 1) return;
     if (STATE.caseState.calledHome) return;
@@ -4219,7 +4198,7 @@
     const cs = STATE.caseState;
     const caseData = GAME_DATA.cases[STATE.currentCase];
 
-    // Phase 2: "Call Home" hint button — Campaign 2 only, once per case
+    // "Call Home" hint button — Campaign 2 only, once per case
     // Call home button — Campaign 2 only, hidden if the case has no hints (Case 6: we are home)
     const caseHints = GAME_DATA.cases[STATE.currentCase] && GAME_DATA.cases[STATE.currentCase].callHomeHints;
     const callHomeHtml = (STATE.currentCampaign === 1 && caseHints)
@@ -4495,7 +4474,7 @@
 
   // Rank colors — Trainee → Xenobotanist (progression from cool to warm/gold)
   const RANK_COLORS = ['#78909c', '#4fc3f7', '#66bb6a', '#f59e0b', '#f44336', '#a855f7'];
-  // Phase 2: Campaign 2 rank colors (5 ranks). Continues the cool→warm progression
+  // Campaign 2 rank colors (5 ranks). Continues the cool→warm progression
   // but shifts toward teals/purples for Federation/Concord feel.
   const RANK_COLORS_C2 = ['#06b6d4', '#14b8a6', '#4ade80', '#f59e0b', '#a855f7'];
 
@@ -4508,7 +4487,7 @@
     'badge_chief_sprout_sleuth.png',
     'badge_xenobotanist.png'
   ];
-  // Phase 2: Campaign 2 rank badge frame names (in badge_spritesheet_c2.png)
+  // Campaign 2 rank badge frame names (in badge_spritesheet_c2.png)
   const RANK_BADGE_FRAMES_C2 = [
     'badge_federation_trainee.png',
     'badge_concord_field_agent.png',
@@ -4517,7 +4496,7 @@
     'badge_galactic_botanist.png'
   ];
 
-  // Phase 2: pick the active campaign's rank badge frame array + colors.
+  // pick the active campaign's rank badge frame array + colors.
   function getActiveRankBadgeFrames() {
     return (STATE.currentCampaign === 1) ? RANK_BADGE_FRAMES_C2 : RANK_BADGE_FRAMES;
   }
@@ -4750,7 +4729,7 @@
     playTitleIntro();
   }
 
-  // Phase 1 (Campaign 2 foundation): return to title after Campaign 1 victory
+  // return to title after Campaign 1 victory
   // without wiping the save. Resets per-playthrough fields so a fresh Campaign 1
   // run can begin if the player picks Begin Mission again, but preserves the
   // campaign1Complete flag so the [INCOMING TRANSMISSION] button stays visible.
@@ -4768,7 +4747,7 @@
     playTitleIntro();
   }
 
-  // Phase 2: Campaign 2 character creation popup (§8.6 of design doc).
+  // Campaign 2 character creation popup (§8.6 of design doc).
   // Triggered by the [INCOMING TRANSMISSION] button. Collects a new name and
   // species, then hands off to enterCampaign2(). Name validation rejects any
   // input containing "nova" (case-insensitive, 4-letter substring match) since
@@ -4959,7 +4938,7 @@
     selectedSpecies = null;
   }
 
-  // Phase 2: enter Campaign 2. Resets per-campaign progress (currentCase, rank,
+  // enter Campaign 2. Resets per-campaign progress (currentCase, rank,
   // caseState, totalScore) to a fresh start, swaps GAME_DATA.cases/ranks pointers
   // via setActiveCampaign, and drops into the Case 1 briefing.
   //
@@ -5414,7 +5393,7 @@
       return;
     }
     const name = raw || 'Dr. Nova';
-    // Phase 1: preserve the campaign1Complete unlock across fresh playthroughs
+    // preserve the campaign1Complete unlock across fresh playthroughs
     // so the [INCOMING TRANSMISSION] button doesn't disappear if the player
     // replays Campaign 1 after finishing it.
     const wasUnlocked = STATE.campaign1Complete || false;
@@ -5464,7 +5443,7 @@
   }
 
   function declineResume() {
-    // Phase 1: preserve the campaign1Complete unlock when player chooses New Game
+    // preserve the campaign1Complete unlock when player chooses New Game
     // from the resume prompt (otherwise we'd strip the flag from a player who
     // already finished Campaign 1 once and was mid-replay).
     const flag = STATE.campaign1Complete;
@@ -5772,7 +5751,7 @@
 
     // Unhide both sprout variants, let CSS handle which shows
     const finishList = [$('title-sprout-img'), $('title-sprout'), logoEl, nameInput.parentElement, beginBtn];
-    // Phase 1: include transmission button only if Campaign 1 is complete
+    // include transmission button only if Campaign 1 is complete
     if (STATE.campaign1Complete) finishList.push(transmissionBtn);
     finishList.forEach(el => {
       if (el) {
@@ -5857,7 +5836,7 @@
     const subEl = $('title-sub');
     const inputW = nameInput.parentElement;
 
-    // Phase 1 (Campaign 2 foundation): show [INCOMING TRANSMISSION] button only
+    // show [INCOMING TRANSMISSION] button only
     // when Campaign 1 has been completed at least once. The .hidden class on the
     // button is the persistent gate; intro-hidden is layered on top during animation.
     const showTransmission = !!STATE.campaign1Complete;
@@ -5941,7 +5920,7 @@
     await introDelay(350);
     if (!introRunning) return;
 
-    // Phase 2: transmission terminal slides up then plays lock-in sequence
+    // transmission terminal slides up then plays lock-in sequence
     if (showTransmission) {
       stopTransmissionFx();
       transmissionBtn.classList.remove('intro-hidden');
@@ -5996,7 +5975,7 @@
     // Preload badge spritesheet (used on rank-up screen)
     loadBadgeSheet();
     loadAlienSheet();
-    // Phase 2: Campaign 2 sheets loaded in parallel. Harmless for C1 players
+    // Campaign 2 sheets loaded in parallel. Harmless for C1 players
     // (they just sit unused until/unless [INCOMING TRANSMISSION] is clicked).
     loadUiSheetC2();
     loadBadgeSheetC2();
@@ -6264,7 +6243,7 @@
       setTimeout(replayAll, 200);
     });
 
-    // SAA badge opens handbook (replaces former hover-expand behavior)
+    // SAA badge opens the handbook
     $('saa-logo').addEventListener('click', openHelp);
 
     // ESC closes whichever overlay is topmost
@@ -6290,7 +6269,7 @@
   // ── Event wiring ────────────────────────────────────────────────
   beginBtn.addEventListener('click', startGame);
   nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') startGame(); });
-  // Phase 2: transmission button shows the character creation popup.
+  // transmission button shows the character creation popup.
   // showCharCreation() collects name + species, then calls enterCampaign2()
   // which swaps state to Campaign 2 and drops into the Case 1 briefing.
   transmissionBtn.addEventListener('click', showCharCreation);
@@ -6479,9 +6458,9 @@
     newGame,
     resumeGame,
     declineResume,
-    // Phase 1 (Campaign 2 foundation)
+    // Campaign 2
     backToTitle,
-    // Phase 2 (Campaign 2 skeleton): character creation + call home onclick handlers
+    // character creation + call home onclick handlers
     selectSpecies,
     confirmCharCreation,
     cancelCharCreation,
@@ -6494,7 +6473,7 @@
   initTitleSprites();
   setScreen('TITLE');
 
-  // Phase 1 (Campaign 2 foundation): always load saved state on startup so the
+  // always load saved state on startup so the
   // title screen can read STATE.campaign1Complete and show the [INCOMING TRANSMISSION]
   // button. Previously STATE only got loaded when the player explicitly chose to
   // resume; now STATE always reflects the save, but we still gate the resume prompt
@@ -6508,7 +6487,7 @@
     STATE.campaign1Complete = true;
   }
 
-  // Phase 2: point GAME_DATA.cases/ranks at whichever campaign the save says
+  // point GAME_DATA.cases/ranks at whichever campaign the save says
   // is active. For brand-new saves and all existing C1 players this is a
   // no-op (currentCampaign defaults to 0 → C1 arrays).
   setActiveCampaign(STATE.currentCampaign || 0);
