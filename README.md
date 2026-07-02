@@ -16,7 +16,9 @@ Every case is a real puzzle in plant and space biology.
 
 ## The cases
 
-Each case is wrapped around a real concept in space botany:
+Each case is wrapped around a real concept in space botany.
+
+### Campaign 1 · Solar Agricultural Authority
 
 | Where | The science |
 |---|---|
@@ -27,7 +29,18 @@ Each case is wrapped around a real concept in space botany:
 | Europa · sub-surface bunker | Cosmic radiation, the invisible enemy of space farming |
 | First-contact bonus cases | The "wood wide web" of space, mother trees, and first words |
 
-**A second campaign** — *Federation Liaison*, under the interstellar **Concord** — unlocks once you've earned your stripes: cross-species cases across alien worlds, from a Vressk orbital habitat to an ocean world at Kepler-186f, working alongside your alien counterpart, Zel'keth.
+### Campaign 2 · Federation Liaison (The Concord)
+
+Unlocks once you've earned your stripes — cross-species cases across alien worlds, working alongside your alien counterpart, **Zel'keth**.
+
+| Where | The science |
+|---|---|
+| Vressk Territory · Kepler-442b orbit | Centrifugal gravity and the gradient problem |
+| Mars · Olympia District | Buzz pollination — when contact isn't enough |
+| Kepler-186f · ocean world | Different chlorophylls, different colors of light |
+| Drift Vessel Thal-Oren · inter-system transit | Circadian signaling — when darkness is a nutrient |
+| Concord Neutral Zone · Lagrange Point 5 | Hormesis — when the hazard is the nutrient |
+| Earth · a restored terrace | The wood wide web — underground networks that connect ecosystems |
 
 ## Running it
 
