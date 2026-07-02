@@ -1,0 +1,45 @@
+# 🌱 Space Sprout Sleuth
+
+*A clicking detective game about the science of growing food in space.*
+
+Crops are failing across the solar system, and the **Solar Agricultural Authority (SAA)** needs a sleuth. As a rookie agent, you travel from orbiting greenhouses to Martian domes to a bunker beneath the ice of Europa, working out why the plants aren't thriving — questioning the crew, reading the logs, examining the plants, and checking the sensors until the evidence points to a diagnosis.
+
+Every case is a real puzzle in plant and space biology.
+
+## How to play
+
+- **Take the case.** Each one drops you into a greenhouse somewhere in the solar system with a plant problem to solve.
+- **Investigate four ways.** Talk to the crew, review the mission logs, examine the plants directly, and check the sensor readings — revisit any of them as often as you like.
+- **Read the room.** The crew aren't interchangeable NPCs. Each has a personality and a mood; push too hard or too rudely and they'll clam up, cutting off a line of evidence.
+- **Gather clues & diagnose.** Clues log to your case file and unlock deeper questions. When the evidence adds up, make your diagnosis — and back it with what you found.
+- **Climb the ladder.** Solve cases well to rise through the SAA ranks, from *Trainee* to *Xenobotanist*.
+
+## The cases
+
+Each case is wrapped around a real concept in space botany:
+
+| Where | The science |
+|---|---|
+| International Space Station · Low Earth Orbit | Gravitropism — how plants know which way is down |
+| Lunar South Pole · Shackleton Crater | The pollination problem — no bees in space |
+| Mars · Arcadia Planitia | Light quality — not all photons are equal |
+| Orbital Research Station · L2 | The dark side of light — why plants need night |
+| Europa · sub-surface bunker | Cosmic radiation, the invisible enemy of space farming |
+| First-contact bonus cases | The "wood wide web" of space, mother trees, and first words |
+
+**A second campaign** — *Federation Liaison*, under the interstellar **Concord** — unlocks once you've earned your stripes: cross-species cases across alien worlds, from a Vressk orbital habitat to an ocean world at Kepler-186f, working alongside your alien counterpart, Zel'keth.
+
+## Running it
+
+The game is a single, self-contained `index.html` — **no build step, no dependencies, no server required.**
+
+- **Play locally:** open `index.html` in a modern browser (Chrome, Edge, Firefox, or Safari).
+- **Host it:** serve the repository folder from any static web host.
+
+Game content lives in `space_sprout_sleuth_data.js` (plus `campaign_2_data.js` for the second campaign); the pixel art is in `sprites/`.
+
+## About
+
+Space Sprout Sleuth is a retro-pixel edutainment game about the botany of growing food beyond Earth — gravity, pollination, light quality, circadian rhythm, radiation, and more — wrapped in a lighthearted detective story. Built with plain HTML, CSS, and Canvas.
+
+Set in the same universe: **[Hunger, Harvest, & History](https://github.com/InterstellarHarvest/Hunger-Harvest-History)** — a Temporal Agricultural Archive agent threading back through the history of agriculture on Earth. 🌱
