@@ -1,5 +1,7 @@
 # 🌱 Space Sprout Sleuth
 
+▶ **[Play it in your browser](https://interstellarharvest.github.io/Space-Sprout-Sleuth/)**
+
 *A clicking detective game about the science of growing food in space.*
 
 Crops are failing across the solar system, and the **Solar Agricultural Authority (SAA)** needs a sleuth. As a rookie agent, you travel from orbiting greenhouses to Martian domes to a bunker beneath the ice of Europa, working out why the plants aren't thriving — questioning the crew, reading the logs, examining the plants, and checking the sensors until the evidence points to a diagnosis.
