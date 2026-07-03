@@ -44,15 +44,6 @@ Unlocks once you've earned your stripes — cross-species cases across alien wor
 | Concord Neutral Zone · Lagrange Point 5 | Hormesis — when the hazard is the nutrient |
 | Earth · a restored terrace | The wood wide web — underground networks that connect ecosystems |
 
-## Running it
-
-The game is a single, self-contained `index.html` — **no build step, no dependencies, no server required.**
-
-- **Play locally:** open `index.html` in a modern browser (Chrome, Edge, Firefox, or Safari).
-- **Host it:** serve the repository folder from any static web host.
-
-Game content lives in `space_sprout_sleuth_data.js` (plus `campaign_2_data.js` for the second campaign); the pixel art is in `sprites/`.
-
 ## About
 
 Space Sprout Sleuth is a retro-pixel edutainment game about the botany of growing food beyond Earth — gravity, pollination, light quality, circadian rhythm, radiation, and more — wrapped in a lighthearted detective story. Built with plain HTML, CSS, and Canvas.
