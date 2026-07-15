@@ -1,4 +1,4 @@
-# 🌱 Space Sprout Sleuth
+# <img src="https://raw.githubusercontent.com/InterstellarHarvest/Space-Sprout-Sleuth/main/sprites/title_sprout.png" width="32" height="30" alt=""> Space Sprout Sleuth
 
 ▶ **[Play it in your browser](https://interstellarharvest.github.io/Space-Sprout-Sleuth/)**
 
@@ -48,4 +48,4 @@ Unlocks once you've earned your stripes — cross-species cases across alien wor
 
 Space Sprout Sleuth is a retro-pixel edutainment game about the botany of growing food beyond Earth — gravity, pollination, light quality, circadian rhythm, radiation, and more — wrapped in a lighthearted detective story. Built with plain HTML, CSS, and Canvas.
 
-Set in the same universe: **[Hunger, Harvest, & History](https://github.com/InterstellarHarvest/Hunger-Harvest-History)** — a Temporal Agricultural Archive agent threading back through the history of agriculture on Earth. 🌱
+Set in the same universe: **[Hunger, Harvest, & History](https://github.com/InterstellarHarvest/Hunger-Harvest-History)** — a Temporal Agricultural Archive agent threading back through the history of agriculture on Earth.
