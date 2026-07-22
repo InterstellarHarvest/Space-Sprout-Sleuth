@@ -135,7 +135,7 @@ const GAME_DATA = {
               bonusInsight: true,
               moodShift: 1,
               options: [
-                { label: "Exactly. No gravity means no orientation signal.", goto: "validate_theory" },
+                { label: "Exactly. In microgravity, the usual gravity cue is too weak to guide orientation.", goto: "validate_theory" },
                 { label: "The logs suggest physical guides could help.", goto: "guide_discussion" },
                 { label: "I need to check a few more things.", goto: "exit_friendly" }
               ]
@@ -468,7 +468,7 @@ const GAME_DATA = {
               ]
             },
             gravity: {
-              text: "═══ GRAVITATIONAL DATA ═══\n\nGravitational Acceleration: 0.00 g\nStatus: MICROGRAVITY ENVIRONMENT\n\nNote: Standard for Low Earth Orbit facility. Station maintains freefall trajectory around Earth.",
+              text: "═══ GRAVITATIONAL DATA ═══\n\nEnvironment: MICROGRAVITY\nApparent weight: NEAR ZERO\n\nNote: Standard for a Low Earth Orbit facility. The station and everything inside it are continuously falling around Earth, so the usual gravity cue is too weak to guide plant orientation.",
               revealsClue: "ZERO_GRAVITY",
               options: [
                 { label: "Is microgravity affecting the plants?", goto: "gravity_plant_note" },
@@ -516,7 +516,7 @@ const GAME_DATA = {
               ]
             },
             env_factors: {
-              text: "KEY ENVIRONMENTAL DIFFERENCES FROM EARTH:\n\n1. Gravitational acceleration: 0.00 g\n2. Radiation exposure: elevated (shielded)\n3. Air circulation: fan-driven (no convection)\n4. Light source: artificial LEDs\n\nGravity differential is most significant deviation from terrestrial conditions.",
+              text: "KEY ENVIRONMENTAL DIFFERENCES FROM EARTH:\n\n1. Environment: microgravity / apparent weightlessness\n2. Radiation exposure: elevated (shielded)\n3. Air circulation: fan-driven (no convection)\n4. Light source: artificial LEDs\n\nGravity differential is most significant deviation from terrestrial conditions.",
               options: [
                 { label: "Back to main menu", goto: "start" },
                 { label: "Exit terminal", goto: "exit" }
@@ -871,7 +871,7 @@ const GAME_DATA = {
             portrait:   "portrait_sensors.png",
             actionIcon: "icon_sensors.png"
           },
-          text: "Nutrient levels nominal. Water delivery functional. Air temp 22\u00b0C. Humidity 65%. Light cycle 16h/8h.\n\n\u26a0\ufe0f Gravitational acceleration: 0.00 g.",
+          text: "Nutrient levels nominal. Water delivery functional. Air temp 22\u00b0C. Humidity 65%. Light cycle 16h/8h.\n\n\u26a0\ufe0f Environment: microgravity \u2014 the normal downward orientation cue is greatly reduced.",
           clueTag: "ZERO_GRAVITY",
           learned: "The module is in microgravity — zero g."
         },
@@ -899,7 +899,7 @@ const GAME_DATA = {
           },
           text: "Previous mission log: \"Earth-based crop training assumes gravitropism for root guidance. Without gravity vector, roots default to random growth. Recommend installing directional light guides or physical root channels to provide alternative orientation cues.\"",
           clueTag: "GRAVITROPISM_MISSING",
-          learned: "Plants use gravity to orient roots. No gravity = no orientation."
+          learned: "Plants normally use gravity to orient roots. In microgravity, statoliths do not settle normally, so roots lose a reliable “down” cue."
         }
       ],
 
@@ -934,7 +934,7 @@ const GAME_DATA = {
       explanation: {
         title: "Gravitropism: How Plants Know Which Way Is Down",
         body: "On Earth, plants sense gravity using specialized cells called statocytes, which contain tiny starch-filled granules (statoliths). These granules settle to the bottom of the cell like sand in an hourglass, telling the root \"that way is down \u2014 grow toward it.\" This process is called gravitropism, and it's one of the most fundamental orientation systems in plant biology.\n\nIn microgravity, statoliths don't settle. They float. The plant loses its primary sense of direction. Roots grow randomly, often curling into tight balls, and stems may not orient toward light efficiently. NASA's Veggie experiment on the ISS solved this with specially designed \"plant pillows\" that use wicking material to guide roots toward water, and LED light banks positioned to give stems a strong directional cue.",
-        funFact: "Astronaut Scott Kelly grew the first space-harvested red romaine lettuce in 2015 as part of the Veg-01 experiment. He described the taste as \"kind of like arugula.\""
+        funFact: "NASA's Veggie system began operating on the ISS in 2014. In August 2015, Kjell Lindgren harvested red romaine lettuce and shared it with Scott Kelly and Kimiya Yui — the first time a station-grown crop was officially served to the crew. An earlier Veg-01 crop had been returned to Earth for analysis."
       }
     },
 
@@ -1520,7 +1520,7 @@ const GAME_DATA = {
       explanation: {
         title: "The Pollination Problem: No Bees in Space",
         body: "Tomatoes are self-pollinating \u2014 their flowers contain both male and female parts \u2014 but they still need physical movement to transfer pollen from anther to stigma. On Earth, this happens via wind, vibration from buzzing bees (\"buzz pollination\"), or simple jostling from weather. In a sealed greenhouse with nearly still air and no insects, that transfer simply never happens.\n\nThe solution is surprisingly low-tech. NASA experiments use small fans to create airflow, electric toothbrush-style vibrators touched to flower stems, or simple finger-flicking. Buzz pollination is so important to tomato production on Earth that commercial greenhouses pay for bumblebee colonies. In space, the crew becomes the bees.",
-        funFact: "In the 1990s, NASA briefly studied using actual bumblebees in space habitats. The bees could fly in microgravity after a brief confused period, but maintaining a healthy hive in a sealed habitat proved impractical."
+        funFact: "NASA flew worker honeybees in a short microgravity flight study on STS-3 in 1982. In 1984, a student experiment carried about 3,300 honeybees aboard STS-41C. The bees initially collided with the enclosure walls, but adapted their flight during the week-long mission and built honeycomb in orbit."
       }
     },
 
@@ -1811,14 +1811,14 @@ const GAME_DATA = {
               ]
             },
             pipe_details: {
-              text: "FIBER OPTIC LIGHT PIPE DATA\n---------------------------\nCable type: Multi-strand borosilicate\nLength: 12m (surface to hab floor)\nIntake condition: Dust accumulation\n  noted (last cleaned: 47 sols ago)\n\nTotal transmission efficiency: 68%\nNote: Wavelength-specific attenuation\n  data requires full spectral analysis.",
+              text: "FIBER OPTIC LIGHT PIPE DATA\n---------------------------\nCable type: Multi-strand full-spectrum silica\nLength: 12m (surface to hab floor)\nSurface collector filter:\n  Replacement unit installed 47 sols ago\n  Part number not recorded\n\nTotal transmission efficiency: 68%\nNote: Wavelength-specific transmission\n  requires full spectral analysis.",
               options: [
                 { label: "Back to main menu", goto: "start" },
                 { label: "Exit terminal", goto: "exit" }
               ]
             },
             spectral_analysis: {
-              text: "SPECTRAL ANALYSIS - LIGHT PIPES\n-------------------------------\nSurface intake vs hab output:\n\nBlue  (400-500nm): 92% transmission\nGreen (500-600nm): 88% transmission\nRed   (600-700nm): 31% transmission !!\nDeep red (700nm+): 12% transmission !!\n\n!! WARNING: Severe attenuation in red\nspectrum. Causes: glass composition +\n12m cable length + Mars dust coating\non intake optics.\n\nRed delivery: CRITICALLY INSUFFICIENT\nfor chlorophyll biosynthesis.",
+              text: "SPECTRAL ANALYSIS - LIGHT PIPES\n-------------------------------\nSurface intake vs hab output:\n\nBlue  (400-500nm): 92% transmission\nGreen (500-600nm): 88% transmission\nRed   (600-700nm): 31% transmission !!\nDeep red (700nm+): 12% transmission !!\n\n!! WARNING: Selective red rejection\nis occurring at the surface collector.\nLikely cause: wrong-model thermal\ncontrol filter or optical coating.\n\nMars dust lowers total transmission,\nbut does not explain blue and green\npassing while red is rejected.\n\nRed delivery: CRITICALLY INSUFFICIENT\nfor normal chlorophyll development.",
               bonusInsight: true,
               options: [
                 { label: "Back to main menu", goto: "start" },
@@ -1969,7 +1969,7 @@ const GAME_DATA = {
               ]
             },
             lighting_docs: {
-              text: "LIGHTING SYSTEM DOCUMENTATION\n-----------------------------\nPrimary: Fiber optic light pipes\n  12m borosilicate glass cables\n  Surface collector -> ceiling diffuser\n  Rated for full-spectrum transmission\n\nSupplemental: White LED panels (4000K)\n  Broad-spectrum, ~30% of total PAR\n\nCombined PAR: 280 umol/m2/s\nDesign note: 'PAR adequate for all\ncrop types in rotation.'\n\nSpectral analysis: NOT PERFORMED\n(PAR reading deemed sufficient)",
+              text: "LIGHTING SYSTEM DOCUMENTATION\n-----------------------------\nPrimary: Fiber optic light pipes\n  12m full-spectrum silica guides\n  Surface collector -> ceiling diffuser\n  Rated for full PAR transmission\n\nSurface collector includes a replaceable\nthermal-control filter.\nRequired model: FS-7 FULL SPECTRUM\n\nSupplemental: White LED panels (4000K)\n  Broad-spectrum, ~30% of total PAR\n\nCombined PAR: 280 umol/m2/s\nDesign note: 'PAR adequate for all\ncrop types in rotation.'\n\nSpectral analysis: NOT PERFORMED\n(PAR reading deemed sufficient)",
               options: [
                 { label: "Search: light spectrum requirements", goto: "spectrum_search" },
                 { label: "Back to main menu", goto: "start" },
@@ -2003,7 +2003,7 @@ const GAME_DATA = {
               ]
             },
             fiber_optic_search: {
-              text: "SEARCH: 'FIBER OPTIC TRANSMISSION'\n----------------------------------\nTechnical brief: Wavelength-dependent\nattenuation in borosilicate fiber.\n\nOver 12m cable length:\n- Blue (400-500nm): ~8% loss\n- Green (500-600nm): ~12% loss\n- Red (600-700nm): ~45% loss (!!)\n- Deep red (>700nm): ~65% loss (!!)\n\nContributing factors:\n- Glass composition (silica/boron ratio)\n- Cable length (exponential attenuation)\n- Surface dust on intake collector\n- Mars atmospheric filtering at source\n\nRecommendation: Supplement with\ntargeted red-spectrum LED arrays\n(640-680nm peak) for any crops\nrequiring active chlorophyll synthesis.",
+              text: "SEARCH: 'COLLECTOR FILTER TRANSMISSION'\n----------------------------------\nTechnical brief: Spectral filters in\nsolar collection systems.\n\nCorrect filter — FS-7 FULL SPECTRUM:\n- Passes visible PAR from 400-700nm\n- Rejects excess infrared heat\n\nIncorrect filter — BP-4 BLUE PASS:\n- Passes blue and green wavelengths\n- Rejects most red and deep red\n- Intended for algae imaging systems\n\nMaintenance record:\n- Filter replaced 47 sols ago\n- Installed part number: NOT LOGGED\n\nRecommendation: Inspect collector,\nreplace with FS-7, and verify output\nwith a spectrometer before planting.",
               bonusInsight: true,
               options: [
                 { label: "Back to main menu", goto: "start" },
@@ -2104,8 +2104,8 @@ const GAME_DATA = {
 
       explanation: {
         title: "Light Quality: Not All Photons Are Equal",
-        body: "Plants don't just need \"enough\" light \u2014 they need the right light. Chlorophyll biosynthesis has a critical light-dependent step: the enzyme protochlorophyllide oxidoreductase converts protochlorophyllide into chlorophyllide, and this reaction specifically requires photons in the red wavelength range (around 600\u2013700nm). If those wavelengths are missing, the plant can't complete chlorophyll production, even if total light intensity seems adequate. New leaves are affected first because older leaves already built their chlorophyll; new tissue needs to manufacture it fresh.\n\nFiber optic light pipes, while clever for routing sunlight underground on Mars, can attenuate certain wavelengths depending on the glass composition and length of the cable. This is why space greenhouse designs always include supplemental LED arrays with tunable spectra.",
-        funFact: "This is why many indoor farm LEDs glow purple or pink \u2014 they're combining the red (~660nm) and blue (~450nm) wavelengths plants need most. Green light mostly bounces off leaves (which is why plants look green to us), so smart growers skip it to save energy."
+        body: "Plants do not just need \"enough\" light \u2014 they need a usable spectrum. In many flowering plants, the light-dependent enzyme protochlorophyllide oxidoreductase helps convert protochlorophyllide into chlorophyllide during chlorophyll production. New leaves are affected first when this pathway is disrupted because developing tissue must manufacture new chlorophyll.\n\nIn this habitat, the total PAR reading looked adequate because blue and green photons were still reaching the crop. A wrong replacement filter at the surface collector was selectively rejecting much of the red output, so the total-light number concealed a serious spectral deficit. Mars dust can reduce the amount of sunlight reaching a collector, but it would not explain this particular pattern of blue and green transmission with severe red loss.\n\nThe engineering lesson is to measure spectrum as well as total intensity. Space greenhouses also benefit from independently controlled, tunable LED backup rather than relying on one optical pathway.",
+        funFact: "Many indoor farm fixtures emphasize red and blue because chlorophyll absorbs those wavelengths strongly, but green light is not wasted. It penetrates deeper into leaves and crop canopies and can support photosynthesis in tissues that surface-absorbed red and blue light do not reach as effectively."
       }
     },
 
@@ -2153,7 +2153,7 @@ const GAME_DATA = {
                 { label: "Maybe it's a seasonal cycle?", goto: "pushed_too_far", requires: { flagSet: "vasquez_wrong_nutrients" } },
                 { label: "Are you sure it's not contamination?", goto: "pushed_too_far", requires: { flagSet: "vasquez_wrong_infection" } },
                 { label: "The microscopy shows light damage, not infection.", goto: "photooxidative_insight", requires: { clueFound: "PHOTOOXIDATIVE_DAMAGE" } },
-                { label: "The setup manual says dark periods are essential.", goto: "dark_period_insight", requires: { clueFound: "DARK_PERIOD_REQUIRED" } },
+                { label: "The manual says this reactor needs a recovery interval or lower controlled light.", goto: "dark_period_insight", requires: { clueFound: "DARK_PERIOD_REQUIRED" } },
                 { label: "Sensors confirm 24/0 light with no independent control.", goto: "no_dark_insight", requires: { clueFound: "NO_DARK_PERIOD" } }
               ]
             },
@@ -2262,7 +2262,7 @@ const GAME_DATA = {
               ]
             },
             repair_insight: {
-              text: "Repair systems? So the light isn't just providing energy \u2014 it's also causing damage? And normally the cells have time to fix that during... during the dark period. Which they're not getting anymore.",
+              text: "Repair systems? So the light is not just providing energy \u2014 under these conditions it is causing damage faster than the cells can compensate. A scheduled dark or low-light interval would cut the photon load long enough for the culture to recover.",
               bonusInsight: true,
               moodShift: 1,
               options: [
@@ -2271,7 +2271,7 @@ const GAME_DATA = {
               ]
             },
             dark_needed: {
-              text: "Of course. The dark period isn't downtime \u2014 it's when the cells do maintenance. Without it, damage accumulates until the culture collapses. Then the survivors slowly rebuild, and the cycle repeats.",
+              text: "Of course. For this reactor, the scheduled dark period was the simplest way to keep the daily light dose within its validated range. Without independent control, continuous corridor lighting pushes damage faster than repair until the culture collapses. Then the survivors rebuild and the cycle repeats.",
               bonusInsight: true,
               moodShift: 1,
               options: [
@@ -2280,7 +2280,7 @@ const GAME_DATA = {
               ]
             },
             ros_explanation: {
-              text: "ROS \u2014 reactive oxygen species. Free radicals from photosynthesis. I should have thought of that. Four months of perfect operation because they had a dark period. Six weeks of crashes because they don't. It's so obvious now.",
+              text: "ROS \u2014 reactive oxygen species generated during photosynthesis. The reactor was stable under 16/8 and began crashing after the switch to uncontrolled 24/0 exposure. That does not mean every spirulina culture requires night, but it does mean this reactor's current light regime exceeds what it can safely process.",
               bonusInsight: true,
               options: [
                 { label: "We need to restore the dark period.", goto: "solution_path" },
@@ -2288,7 +2288,7 @@ const GAME_DATA = {
               ]
             },
             dark_period_insight: {
-              text: "The manual says... let me see. Dark period essential for cellular repair, protein synthesis, ROS neutralization. And we've been running 24/0 since Roth's change. I've been looking at nutrients and temperature when the answer was the light schedule all along.",
+              text: "The manual says this reactor was validated at 12–16 hours of light per day at its current mixing rate and culture density. Continuous operation requires independent intensity control and different operating conditions. We have been running 24/0 from the corridor lights with no control at all.",
               bonusInsight: true,
               moodShift: 1,
               options: [
@@ -2297,7 +2297,7 @@ const GAME_DATA = {
               ]
             },
             no_dark_insight: {
-              text: "24/0 with no independent control. So every time Roth runs the hab lights around the clock, the bioreactor gets hammered. The spirulina never gets a break. That has to be the problem.",
+              text: "24/0 with no independent control. Every time Roth runs the corridor lights around the clock, the reactor receives an excessive daily light dose. Restoring the old schedule is the quickest safe fix; independent dimming and better process control would be the longer-term solution.",
               bonusInsight: true,
               moodShift: 1,
               options: [
@@ -2345,7 +2345,7 @@ const GAME_DATA = {
               options: [
                 { label: "The microscopy shows light damage, not infection.", goto: "photooxidative_insight", requires: { clueFound: "PHOTOOXIDATIVE_DAMAGE" } },
                 { label: "Sensors confirm 24/0 light with no independent control.", goto: "no_dark_insight", requires: { clueFound: "NO_DARK_PERIOD" } },
-                { label: "The manual says dark periods are essential.", goto: "dark_period_insight", requires: { clueFound: "DARK_PERIOD_REQUIRED" } },
+                { label: "The manual says this reactor needs a recovery interval or lower controlled light.", goto: "dark_period_insight", requires: { clueFound: "DARK_PERIOD_REQUIRED" } },
                 { label: "I'm still investigating.", goto: "exit_neutral" }
               ]
             },
@@ -2435,7 +2435,7 @@ const GAME_DATA = {
               ]
             },
             photoperiod_crossref: {
-              text: "+----------------------------------+\n|  CROSS-REFERENCE ANALYSIS        |\n+----------------------------------+\n\nManual spec:  12-16h light / day\nActual:       24h light / day\nDeviation:    +8 to +12h excess\n\nManual warns: continuous light\ncauses photooxidative stress and\nculture collapse in 1-2 weeks.\n\nActual collapse onset: 7 days.\nWithin predicted range.",
+              text: "+----------------------------------+\n|  CROSS-REFERENCE ANALYSIS        |\n+----------------------------------+\n\nValidated reactor schedule:\n  12-16h light / day at current\n  mixing and culture density\nActual: 24h uncontrolled light\nDeviation: +8 to +12h exposure\n\nManual warns: under THIS reactor's\ncurrent operating conditions,\ncontinuous illumination can cause\nphotooxidative stress and collapse.\n\nActual collapse onset: 7 days.\nWithin predicted range.",
               bonusInsight: true,
               options: [
                 { label: "Back to main menu", goto: "start" }
@@ -2520,7 +2520,7 @@ const GAME_DATA = {
               ]
             },
             photoperiod_entry: {
-              text: "+----------------------------------+\n|  BIOREACTOR SETUP MANUAL v2.4    |\n|  Section 4.2: Photoperiod        |\n+----------------------------------+\n\nOptimal spirulina photoperiod:\n  12-16 hours light\n  8-12 hours dark\n\nDark period is ESSENTIAL for:\n  - Cellular repair processes\n  - Protein synthesis\n  - Neutralizing reactive oxygen\n    species (ROS) accumulation\n\n!! WARNING: Continuous illumination\n   will cause photooxidative stress\n   and culture collapse within\n   1-2 weeks.",
+              text: "+----------------------------------+\n|  BIOREACTOR SETUP MANUAL v2.4    |\n|  Section 4.2: Light Management   |\n+----------------------------------+\n\nValidated operating schedule for\nthis reactor configuration:\n  12-16 hours light\n  8-12 hours dark or low-light\n\nOperating assumptions:\n  - Current culture density\n  - Current mixing rate\n  - PAR within validated range\n\nContinuous operation is possible\nonly with independent intensity,\nmixing, and density control.\n\n!! WARNING: Uncontrolled 24/0\nillumination in this configuration\ncan cause photooxidative stress\nand culture collapse.",
               revealsClue: "DARK_PERIOD_REQUIRED",
               options: [
                 { label: "Search: why is the dark period needed?", goto: "dark_period_detail" },
@@ -2529,7 +2529,7 @@ const GAME_DATA = {
               ]
             },
             dark_period_detail: {
-              text: "+----------------------------------+\n|  Section 4.2.1: Dark Period      |\n|  Biological Rationale            |\n+----------------------------------+\n\nDuring photosynthesis, light energy\ndrives carbon fixation but also\ngenerates reactive oxygen species\n(ROS) as unavoidable byproducts.\n\nDuring the dark period, cells:\n  1. Repair ROS-damaged proteins\n  2. Complete protein synthesis\n  3. Run antioxidant pathways\n  4. Rebuild photosystem components\n\nWithout darkness, ROS accumulates\nfaster than repair can compensate.\nResult: culture crash in 7-14 days.",
+              text: "+----------------------------------+\n|  Section 4.2.1: Recovery Load    |\n|  Biological Rationale            |\n+----------------------------------+\n\nPhotosynthetic electron transport can\ngenerate reactive oxygen species (ROS),\nespecially when absorbed light exceeds\nthe culture's ability to use or dissipate\nthat energy.\n\nCells repair photosystems and run\nantioxidant pathways in both light and\ndark conditions. In this reactor, a dark\nor lower-light interval reduces the daily\nphoton load enough for repair to keep up.\n\nWithout intensity control, ROS damage\noutpaces recovery and the culture crashes.",
               bonusInsight: true,
               options: [
                 { label: "Search: bioreactor setup specifications", goto: "setup_specs" },
@@ -2545,7 +2545,7 @@ const GAME_DATA = {
               ]
             },
             continuous_light: {
-              text: "+----------------------------------+\n|  SEARCH: continuous light        |\n|  3 results                       |\n+----------------------------------+\n\nResult 1 - Setup Manual 4.2:\n\"Continuous illumination will cause\nphotooxidative stress and culture\ncollapse within 1-2 weeks.\"\n\nResult 2 - Maintenance Log Day 8:\n\"Scheduled dark period: 2200-0600.\nAutomated blackout confirmed.\"\n\nResult 3 - Cmdr Order #4471:\n\"Effective Day 121: all hab\nlighting to 24/0 continuous.\nNo exceptions.\"",
+              text: "+----------------------------------+\n|  SEARCH: continuous light        |\n|  3 results                       |\n+----------------------------------+\n\nResult 1 - Setup Manual 4.2:\n\"Continuous operation requires\nindependent light and process control.\nDo not expose this configuration to\nuncontrolled 24/0 corridor lighting.\"\n\nResult 2 - Maintenance Log Day 8:\n\"Scheduled recovery interval:\n2200-0600. Automated blackout confirmed.\"\n\nResult 3 - Cmdr Order #4471:\n\"Effective Day 121: all hab\nlighting to 24/0 continuous.\nNo exceptions.\"",
               bonusInsight: true,
               options: [
                 { label: "Search: spirulina light requirements", goto: "photoperiod_entry" },
@@ -2553,7 +2553,7 @@ const GAME_DATA = {
               ]
             },
             photooxidative_search: {
-              text: "+----------------------------------+\n|  SEARCH: photooxidative stress   |\n|  2 results                       |\n+----------------------------------+\n\nResult 1 - Setup Manual 4.2.1:\n\"ROS accumulation under continuous\nlight exceeds cellular repair\ncapacity. Antioxidant enzymes\n(SOD, catalase) cannot compensate\nwithout dark-period synthesis.\"\n\nResult 2 - Troubleshooting Guide:\n\"If culture shows photooxidative\ndamage, FIRST check light/dark\ncycle compliance.\"",
+              text: "+----------------------------------+\n|  SEARCH: photooxidative stress   |\n|  2 results                       |\n+----------------------------------+\n\nResult 1 - Setup Manual 4.2.1:\n\"When absorbed light exceeds carbon\nfixation, mixing, and protective capacity,\nROS damage can outpace repair. Reduce\nintensity or add a recovery interval.\"\n\nResult 2 - Troubleshooting Guide:\n\"If culture shows photooxidative\ndamage, FIRST compare total daily\nlight exposure with validated settings.\"",
               bonusInsight: true,
               options: [
                 { label: "Search: spirulina light requirements", goto: "photoperiod_entry" },
@@ -2618,9 +2618,9 @@ const GAME_DATA = {
             portrait:   "portrait_logs.png",
             actionIcon: "icon_logs.png"
           },
-          text: "Bioreactor setup manual: \"Optimal spirulina photoperiod: 12\u201316 hours light, 8\u201312 hours dark. Dark period is essential for cellular repair, protein synthesis, and preventing reactive oxygen species (ROS) accumulation.\"\n\n\u26a0\ufe0f WARNING: Continuous illumination will cause photooxidative stress and culture collapse within 1\u20132 weeks.",
+          text: "Bioreactor setup manual: \"This reactor configuration was validated at 12\u201316 hours of light per day with a scheduled dark or low-light recovery interval. Continuous operation requires independent intensity, mixing, and culture-density control.\"\n\n\u26a0\ufe0f WARNING: Uncontrolled 24/0 illumination can cause photooxidative stress and culture collapse.",
           clueTag: "DARK_PERIOD_REQUIRED",
-          learned: "Manual warns: continuous light kills the culture. Dark period is essential."
+          learned: "The reactor manual warns that uncontrolled 24/0 exposure exceeds this system's validated operating range."
         }
       ],
 
@@ -2633,7 +2633,7 @@ const GAME_DATA = {
         },
         {
           id: "light",
-          label: "Continuous 24hr lighting is destroying the algae \u2014 the dark period is essential for cellular repair.",
+          label: "Uncontrolled 24-hour lighting is causing recurrent photoinhibition in this reactor. Restore the validated light/recovery schedule now and add independent intensity control.",
           isCorrect: true
         },
         {
@@ -2653,9 +2653,9 @@ const GAME_DATA = {
       rankUpText: "Even in space, biology needs rest. You proved that darkness isn't downtime \u2014 it's when cells do their most critical repairs.",
 
       explanation: {
-        title: "The Dark Side of Light: Why Plants Need Night",
-        body: "Photosynthesis is only half the story. During the light period, photosystems capture energy and produce sugars \u2014 but they also generate reactive oxygen species (ROS) as a byproduct, which damage cellular components. During the dark period, cells run essential repair processes, complete protein synthesis, and neutralize accumulated ROS. Without this recovery time, damage builds up faster than repairs can handle. The culture crashes, a small resistant population survives, regrows... and crashes again.\n\nThis principle extends beyond algae. Most plants need a dark period for proper growth \u2014 it's when they convert sugars into structural materials, regulate hormone cycles, and carry out maintenance. The lesson for space habitat design: biological systems and crew convenience sometimes conflict, and life support equipment needs independent environmental controls.",
-        funFact: "The circadian clock is so important to plants that Arabidopsis seedlings grown under continuous light in space experiments showed epigenetic changes \u2014 their gene expression patterns shifted to \"force\" an internal rhythm even without external dark cues."
+        title: "The Dark Side of Light: Why Bioreactors Need Light Control",
+        body: "Photosynthesis captures light energy, but more light is not automatically better. When a culture absorbs photons faster than it can use or safely dissipate the energy, photosynthetic electron transport can generate reactive oxygen species and damage pigments, proteins, and membranes. Whether continuous illumination works depends on the organism and on reactor conditions such as photon flux, cell density, mixing, nutrient supply, temperature, and dilution rate.\n\nThis spirulina reactor had operated safely on a validated 16/8 schedule. When the shared corridor lighting changed to 24/0, the reactor had no independent dimming or blackout control. Its daily photon dose rose sharply, photooxidative damage outpaced recovery, and the culture entered a crash-and-regrowth cycle. Restoring the old schedule is the fastest remedy; the better engineering fix is independent control of light intensity and reactor conditions.\n\nThe lesson for space-habitat design is not that every photosynthetic organism requires night. It is that biological life-support equipment needs its own validated environmental controls rather than inheriting settings chosen for human convenience.",
+        funFact: "Long-duration continuous cultivation of Limnospira has been demonstrated in a controlled air-lift photobioreactor developed for regenerative space life support. In that system, photoinhibition depended on light level and culture density and was reversible when illumination was reduced."
       }
     },
 
@@ -3190,7 +3190,7 @@ const GAME_DATA = {
 
       explanation: {
         title: "Cosmic Radiation: The Invisible Enemy of Space Farming",
-        body: "Earth's magnetic field and thick atmosphere shield surface life from most cosmic radiation. The ISS and lunar bases get some protection from proximity to Earth's magnetosphere. But Europa orbits within Jupiter's intense radiation belts \u2014 the most powerful in the solar system. Even beneath Europa's ice crust, secondary particle cascades (neutrons and other particles generated when primary radiation hits rock and ice) can create a persistent low-level radiation field.\n\nSeedlings are especially vulnerable because radiation damages DNA, and young plants have huge numbers of rapidly dividing cells at their root tips and shoot tips. A mature plant can tolerate more damage because most of its cells aren't actively dividing. Solutions include additional shielding (water walls, regolith packing), selecting radiation-tolerant crop varieties, shorter-cycle crops, and strategic placement of grow chambers in the most shielded areas.",
+        body: "Earth's magnetic field and thick atmosphere shield surface life from much of the space-radiation environment. The ISS remains in low Earth orbit inside Earth's magnetosphere, and its structure adds further shielding. The Moon is different: it has almost no atmosphere and no global magnetic field, so lunar habitats require their own local shielding. The Moon passes through parts of Earth's magnetotail for a few days during some orbits, but that protection is partial and intermittent. Europa, meanwhile, orbits inside Jupiter's intense radiation environment. Even beneath ice, interactions between energetic particles and shielding materials can produce secondary radiation that must be considered in habitat design.\n\nSeedlings are especially vulnerable because radiation damages DNA, and young plants have huge numbers of rapidly dividing cells at their root tips and shoot tips. A mature plant can tolerate more damage because most of its cells aren't actively dividing. Solutions include additional shielding (water walls, regolith packing), selecting radiation-tolerant crop varieties, shorter-cycle crops, and strategic placement of grow chambers in the most shielded areas.",
         funFact: "Tardigrades \u2014 the famously indestructible micro-animals \u2014 survive extreme radiation partly through a unique protein called Dsup (Damage Suppressor) that physically wraps around DNA to shield it. Scientists have experimentally transferred the Dsup gene into plant cells, significantly boosting their radiation tolerance. Future space crops might carry tardigrade genes."
       }
     },
