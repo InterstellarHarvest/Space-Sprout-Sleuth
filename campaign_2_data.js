@@ -3267,7 +3267,7 @@ const CAMPAIGN_2_DATA = {
               text: "'On my homeworld, the biological conduits are well-characterized. Subterranean filaments that connect plant root systems and facilitate resource sharing. My species can detect the chemical wake they leave.' Vorn-Shael's frills fold inward. 'I detect no such wake here. If Earth has an equivalent organism, it is absent from this soil.'",
               bonusInsight: true,
               options: [
-                { label: "Earth does have an equivalent. Mycorrhizal fungi.", goto: "mycorrhizal_confirm", requires: { clueFound: "MYCORRHIZAL_NETWORK" } },
+                { label: "Earth does have an equivalent. Mycorrhizal fungi.", goto: "kess_correlation", requires: { clueFound: "MYCORRHIZAL_NETWORK" } },
                 { label: "I need to find out what Earth's equivalent is.", goto: "exit_friendly" }
               ]
             },
@@ -3469,8 +3469,8 @@ const CAMPAIGN_2_DATA = {
               options: [
                 { label: "I'm investigating why the garden won't heal. What's your role here?", goto: "role" },
                 { label: "What do you think of the summit?", goto: "summit_opinion" },
-                { label: "The fix requires moving soil between zones. Are there regulatory issues?", goto: "regulation_direct", requires: { clueFound: "MYCORRHIZAL_NETWORK" } },
-                { label: "There's legal precedent for an exemption. Would the Concord grant one?", goto: "exemption_question", requires: { clueFound: "DATABASE_PRECEDENT" } },
+                { label: "The fix requires moving soil between zones. Are there regulatory issues?", goto: "biosafety_overview", requires: { clueFound: "MYCORRHIZAL_NETWORK" } },
+                { label: "There's legal precedent for an exemption. Would the Concord grant one?", goto: "exemption_history", requires: { clueFound: "DATABASE_PRECEDENT" } },
                 { label: "I appreciate the Concord sending observers.", goto: "diplomatic_approach" },
                 { label: "Must be strange watching humans struggle with their own dirt.", goto: "wrong_tone" },
                 { label: "I'll talk to the other delegates first.", goto: "exit_neutral" }

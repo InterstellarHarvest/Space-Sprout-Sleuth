@@ -2079,7 +2079,7 @@
           <p>Push too hard, repeat yourself, or ask rudely and their mood drops. A locked-out crew member can cut off entire lines of evidence. Some personalities forgive; some don't. Read the room.</p>
 
           <h3>CLUES &amp; DIAGNOSIS</h3>
-          <p>Clues you've uncovered are logged to your case file and unlock deeper questions. The <b>Diagnose</b> button lights up once you have enough evidence to reasonably call it &mdash; but you can press early. Guessing without clues still works; you just miss bonus insight and risk a rank hit on a wrong call.</p>
+          <p>Clues you've uncovered are logged to your case file and unlock deeper questions. The <b>Diagnose</b> button stays locked until you've uncovered every clue in the case &mdash; once you have them all, it lights up and you can make your call. A wrong diagnosis still risks a rank hit, so weigh the evidence before you commit.</p>
 
           <h3>RANK &amp; PROGRESSION</h3>
           <p>Solve cases well to climb the SAA career ladder. Sloppy diagnoses cost rank; thorough, evidence-backed ones earn it.</p>
@@ -6179,7 +6179,7 @@
           markFlag(F.diagnose);
           setTimeout(() => showSteps([{
             anchor: '#diagnose-btn', title: 'READY TO DIAGNOSE',
-            body: "<b>You've gathered enough evidence.</b> Click Diagnose when you're ready to call it. Guessing early still works, but you'll miss bonus insight."
+            body: "<b>You've uncovered every clue.</b> Diagnose is now unlocked &mdash; click it when you're ready to make your call."
           }]), 600);
         }
       } catch(e) {}
