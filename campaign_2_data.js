@@ -1429,7 +1429,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             cant_use_red: {
-              text: "'It is not that it cannot use red light. It is that it was never asked to. In forty million years of evolution, no red photon has reached the zhal-kelp bed. The pigments that would absorb red were never developed. The kelp has chlorophyll c and phycobiliproteins \u2014 tuned to blue and green. Red passes through it like wind through a net.'",
+              text: "'It is not that the kelp cannot use any red light. Its light-harvesting system is simply optimized for the blue-green photons that dominate its native water. A red-heavy lamp delivers far less usable energy than its total brightness suggests. The kelp has chlorophyll a and c plus blue-green accessory pigments; red contributes, but inefficiently compared with the spectrum it evolved under.'",
               revealsClue: "KELP_DYING_NEW_DOME",
               bonusInsight: true,
               options: [
@@ -1485,7 +1485,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             spectrum_insight: {
-              text: "'62% red.' Tei-sal's patches flash. 'There it is. 62% of the light output is in a range the kelp cannot absorb. Another 18% is blue \u2014 partially usable. Less than 5% is in the blue-green sweet spot. The dome is functionally dark to the kelp despite being blindingly bright to human visitors.'",
+              text: "'62% red.' Tei-sal's patches flash. 'There it is. Most of the output is concentrated where the kelp captures energy least efficiently. Another 18% is blue \u2014 partly useful. Less than 5% is in its strongest blue-green range. The dome is not literally dark, but its usable photon supply is far below what the total PAR number implies.'",
               revealsClue: "KELP_DYING_NEW_DOME",
               bonusInsight: true,
               moodShift: 1,
@@ -1532,7 +1532,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             realization: {
-              text: "'So you see it now. The lights are not broken. The kelp is not broken. The specification was incomplete. Earth photosynthesis runs on chlorophyll a and b \u2014 tuned to red and blue. Deep-ocean photosynthesis runs on chlorophyll c and phycobiliproteins \u2014 tuned to blue-green. A grow light optimized for one is functionally dark to the other.'",
+              text: "'So you see it now. The lights are not broken. The kelp is not broken. The specification was incomplete. Earth crop lights emphasize wavelengths suited to terrestrial plant pigments. Deep-water algae use different light-harvesting complexes, including chlorophyll c and accessory pigments that capture blue-green light efficiently. A spectrum optimized for one organism can be a poor energy match for another.'",
               options: [
                 { label: "Replace the lights with blue-green spectrum fixtures.", goto: "solution" },
                 { label: "This isn't anyone's fault \u2014 just different biology.", goto: "diplomatic_resolution" }
@@ -1762,7 +1762,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             chlorophyll_variants: {
-              text: "\u2014\u2014\u2014 CHLOROPHYLL VARIANTS \u2014 CONCORD SURVEY \u2014\u2014\u2014\n\nChlorophyll a + b (terrestrial plants, most Earth crops):\n  Absorption peaks: 430nm (blue) + 662nm (red).\n  Grow-light standard: red-blue mix.\n\nChlorophyll c + phycobiliproteins (marine algae, Oolian kelp):\n  Absorption peaks: 460\u2013540nm (blue-green).\n  Red absorption: negligible.\n  Grow-light standard: blue-green only.\n\n\u26a0 ADVISORY: A grow light optimized for chlorophyll a+b is functionally dark to chlorophyll c organisms. Spectral requirements MUST be specified per species, not per 'plant.'",
+              text: "\u2014\u2014\u2014 LIGHT-HARVESTING PIGMENTS \u2014 CONCORD SURVEY \u2014\u2014\u2014\n\nChlorophyll a + b (terrestrial plants,\nmost Earth crops):\n  Strong absorption in blue and red.\n  Common grow-light design: red-blue\n  emphasis with broader-spectrum fill.\n\nChlorophyll a + c with accessory pigments\n(brown algae, diatoms, Oolian analogues):\n  Strong blue-green light harvesting.\n  Red contribution: possible but less\n  efficient in this species.\n  Recommended zhal-kelp spectrum:\n  blue-green dominant with balanced fill.\n\n\u26a0 ADVISORY: Total photon flux alone is\nnot enough. Spectral requirements must\nbe specified for the actual organism.",
               revealsClue: "CHLOROPHYLL_C_BLUE_GREEN",
               options: [
                 { label: "[spectrum] Action spectra details", goto: "action_spectra" },
@@ -1860,14 +1860,14 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See database entry.",
           clueTag: "CHLOROPHYLL_C_BLUE_GREEN",
-          learned: "Zhal-kelp uses chlorophyll c + phycobiliproteins — tuned to blue-green. Earth grow lights are functionally dark to it."
+          learned: "Zhal-kelp uses a blue-green-optimized light-harvesting system. A red-heavy Earth crop spectrum provides much less usable energy than the total PAR reading suggests."
         }
       ],
 
       diagnoses: [
         {
           id: "wrong_spectrum",
-          label: "The Earth grow lights emit a red-heavy spectrum optimized for terrestrial plants. Zhal-kelp uses blue-green-tuned pigments and cannot use red light — the dome is effectively dark to the kelp.",
+          label: "The Earth grow lights are red-heavy and poorly matched to zhal-kelp's blue-green-optimized pigments. The dome is bright, but the kelp receives too few efficiently absorbed photons.",
           isCorrect: true
         },
         {
@@ -1894,8 +1894,8 @@ const CAMPAIGN_2_DATA = {
 
       explanation: {
         title: "Different Chlorophylls, Different Colors of Light",
-        body: "We tend to think of photosynthesis as one thing: plants use light to make food. But the light-harvesting machinery varies enormously between species, because it evolved to match whatever light was available in each organism's habitat.\n\nTerrestrial plants use chlorophyll a and b, which absorb red (660nm) and blue (440nm) wavelengths most efficiently. This makes sense: sunlight at the Earth's surface is rich in both. Grow lights for agriculture are designed to match \u2014 heavy on red and blue.\n\nMarine algae in deep water face a different reality. Seawater is a powerful filter: red wavelengths are completely absorbed in the first 10 meters. By 40 meters depth, only blue and green light (460\u2013540nm) remains. Deep-ocean organisms evolved different pigments to capture what's available: chlorophyll c and accessory phycobiliproteins, which absorb blue-green light and are nearly transparent to red.\n\nThis is why the zhal-kelp starved under 'perfectly good' grow lights. The lights were bright \u2014 280 \u00b5mol/m\u00b2/s of total photon flux. But 62% of that flux was red, which the kelp's pigments couldn't absorb. The dome was functionally dark to an organism calibrated to deep-ocean wavelengths.",
-        funFact: "Earth's deep-ocean kelp forests face the same physics. Giant kelp (Macrocystis) grows from the ocean floor up toward the surface precisely because it needs more blue-green light than reaches the bottom. The fronds that stay deep are dark-adapted with high concentrations of accessory pigments; the surface canopy uses standard chlorophyll a. One organism, two photosynthetic strategies, depending on depth."
+        body: "Photosynthesis is not powered by one universal pigment recipe. Light-harvesting systems vary among organisms because they evolved under different spectra.\n\nTerrestrial crop plants use chlorophyll a and b and commonly absorb blue and red light strongly. Many grow lights therefore emphasize those regions, often with broader-spectrum light included as well.\n\nBrown algae and diatoms use chlorophyll a and c with accessory pigments such as fucoxanthin that expand strong light harvesting into the blue-green region. Water removes longer red wavelengths more rapidly than blue-green wavelengths, although the exact spectrum depends on depth, particles, and dissolved material. The fictional zhal-kelp is even more strongly adapted to the blue-green light of its native habitat.\n\nThe new dome delivered plenty of total photons, but most were concentrated in a region the kelp used inefficiently. The habitat was not literally dark; it was spectrally mismatched. This is why biological specifications must include spectrum, not merely total intensity.",
+        funFact: "Brown algae such as giant kelp use chlorophyll a and c together with fucoxanthin, an accessory pigment that helps capture blue-green light. Kelp forests still occur in relatively shallow, sunlit coastal water because even well-adapted pigments cannot photosynthesize where too little light remains."
       },
 
       callHomeHints: {
@@ -2504,7 +2504,7 @@ const CAMPAIGN_2_DATA = {
                 { label: "The sensors show zero background radiation inside the vault.", goto: "radiation_insight", requires: { clueFound: "RADIATION_ZERO" } },
                 { label: "The bloom's DNA-repair pathway has shut down completely.", goto: "pathway_insight", requires: { clueFound: "DNA_REPAIR_PATHWAY_INACTIVE" } },
                 { label: "The karreth homeworld has 8.4 mSv/day background radiation.", goto: "homeworld_insight", requires: { clueFound: "KARRETH_HOMEWORLD_HIGH_RAD" } },
-                { label: "Concord records describe obligate radiation dependence. Hormesis.", goto: "database_insight", requires: { clueFound: "HORMESIS_OBLIGATE_RADIATION" } },
+                { label: "Concord records describe an obligate radiation-triggered pathway.", goto: "database_insight", requires: { clueFound: "HORMESIS_OBLIGATE_RADIATION" } },
                 { label: "Kel-tor. I am Rhessi. I know what radiation means to biology.", goto: "rhessi_greeting", requires: { playerSpecies: "rhessi" } },
                 { label: "I've seen what happens when species-specific needs are ignored.", goto: "alien_rapport", requires: { playerSpeciesNot: "human" } },
                 { label: "Maybe the nutrient mix is missing something.", goto: "wrong_guess_nutrients" },
@@ -2619,7 +2619,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             database_insight: {
-              text: "'Hormesis.' Kel-tor closes their eyes briefly. 'The Concord documented this. They have records of obligate radiation dependence. And they still built a vault with zero background radiation for a species that requires it.' A long silence. 'At least the record exists. Your report will have citations.'",
+              text: "'The Concord documented this.' Kel-tor closes their eyes briefly. 'An obligate radiation-triggered pathway — rare, species-specific, and nothing like the response of ordinary organisms. And they still built a vault with zero background radiation for a species whose medicinal pathway requires that trigger.' A long silence. 'At least the record exists. Your report will have citations.'",
               revealsClue: "BLOOMS_INERT",
               bonusInsight: true,
               moodShift: 2,
@@ -2847,7 +2847,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             hormesis: {
-              text: "\u2014\u2014\u2014 RADIATION HORMESIS \u2014 CONCORD SURVEY \u2014\u2014\u2014\n\nRadiation hormesis: a biological response in which low-level ionizing radiation is required as a functional metabolic input, not merely tolerated.\n\nKnown obligate radiation-dependent species in Concord records: 5, including karreth bloom and Rhessi (partial dependence).\n\nMechanism: continuous low-level DNA damage activates repair pathways that produce essential metabolic byproducts. Removing radiation shuts down the pathway and eliminates the byproducts.\n\n\u26a0 ADVISORY: Species from high-radiation worlds should NOT be housed in radiation-free environments. The Concord Universal Shielding Protocol does not account for this requirement. A species-specific amendment has been proposed but not yet adopted.",
+              text: "\u2014\u2014\u2014 OBLIGATE RADIATION-TRIGGERED METABOLISM \u2014\u2014\u2014\n\nConcord classification: a rare, fictional\nbiological system in which a low-level\nionizing-radiation signal activates a\nspecies-specific metabolic pathway.\n\nKnown Concord examples: 5, including\nthe karreth bloom. The exact mechanisms\nare species-specific and should not be\ngeneralized to other organisms.\n\nKarreth mechanism: low-level DNA damage\nactivates a repair cascade whose byproducts\ninclude essential karrethins. Removing the\ntrigger shuts down that pathway.\n\n\u26a0 ADVISORY: This Concord category is not\nequivalent to a general claim that low-dose\nradiation benefits Earth organisms.",
               revealsClue: "HORMESIS_OBLIGATE_RADIATION",
               options: [
                 { label: "[karreth] Karreth-specific data", goto: "karreth_bio" },
@@ -2857,7 +2857,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             karreth_bio: {
-              text: "\u2014\u2014\u2014 KARRETH BLOOM \u2014 RADIOBIOLOGY \u2014\u2014\u2014\n\nDNA-repair pathway: constitutively active under native conditions (8.4 mSv/day). Produces karrethins (medicinal compounds) as repair byproduct.\n\nUnder zero radiation: pathway deactivates within 60\u201390 days. Karrethin production drops to <10% of baseline. Pathway reactivation requires restoration of radiation stimulus; recovery expected within 14\u201321 days.\n\nRecommended artificial radiation source: sealed cesium-137 or cobalt-60, calibrated to deliver 7\u20139 mSv/day to growth chamber. External vault shielding remains intact.\n\nEarth parallel: Certain fungi (Cladosporium sphaerospermum) growing inside the Chernobyl reactor use melanin to convert ionizing radiation into metabolic energy via radiosynthesis.",
+              text: "\u2014\u2014\u2014 KARRETH BLOOM \u2014 RADIOBIOLOGY \u2014\u2014\u2014\n\nDNA-repair pathway: constitutively active under native conditions (8.4 mSv/day). Produces karrethins (medicinal compounds) as repair byproduct.\n\nUnder zero radiation: pathway deactivates within 60\u201390 days. Karrethin production drops to <10% of baseline. Pathway reactivation requires restoration of radiation stimulus; recovery expected within 14\u201321 days.\n\nRecommended artificial radiation source: sealed cesium-137 or cobalt-60, calibrated to deliver 7\u20139 mSv/day to growth chamber. External vault shielding remains intact.\n\nEarth comparison: Laboratory studies have found that ionizing radiation can alter the electron-transfer properties of melanin and can enhance growth or metabolic activity in some melanized fungi under particular conditions. Researchers have proposed a possible energy-capture role, but this is not established as radiation-powered photosynthesis and the fungi are not known to require radiation.",
               revealsClue: "HORMESIS_OBLIGATE_RADIATION",
               bonusInsight: true,
               options: [
@@ -2874,7 +2874,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             rhessi_bio: {
-              text: "\u2014\u2014\u2014 RHESSI RADIATION BIOLOGY \u2014\u2014\u2014\n\nThe Rhessi evolved on Rhess-IV under 12 mSv/day background radiation. Their biology exhibits partial radiation dependence:\n\n- Melanin-analogue in integument converts ionizing radiation to supplemental metabolic energy\n- Immune system uses radiation-induced damage as a calibration signal\n- DNA-repair pathways are constitutively active and produce beneficial secondary metabolites\n\nRhessi individuals in low-radiation environments report fatigue, reduced immune function, and metabolic inefficiency. Full radiation dependence is debated; partial dependence is documented.\n\nNote: The Rhessi are the Concord's foremost experts on radiation biology. Their delegation was not consulted during the design of the Concord Botanical Vault.",
+              text: "\u2014\u2014\u2014 RHESSI RADIATION BIOLOGY \u2014\u2014\u2014\n\nThe Rhessi evolved on Rhess-IV under 12 mSv/day background radiation. Their biology exhibits partial radiation dependence:\n\n- Melanin-analogue in integument is radioprotective and may contribute to species-specific energy handling\n- Immune system uses radiation-induced damage as a calibration signal\n- DNA-repair pathways are constitutively active and produce beneficial secondary metabolites\n\nRhessi individuals in low-radiation environments report fatigue, reduced immune function, and metabolic inefficiency. Within the fictional Concord record, partial dependence is documented for this species; it should not be treated as an Earth biological generalization.\n\nNote: The Rhessi are the Concord's foremost experts on radiation biology. Their delegation was not consulted during the design of the Concord Botanical Vault.",
               options: [
                 { label: "[back] Return to search", goto: "start" },
                 { label: "[exit] Close database", goto: "exit_done" }
@@ -2954,7 +2954,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See database entry.",
           clueTag: "HORMESIS_OBLIGATE_RADIATION",
-          learned: "Radiation hormesis: karreth (and some other Concord species) require low-level radiation as a metabolic input, not a hazard."
+          learned: "Concord records report that the fictional karreth bloom requires a low-level radiation trigger for the repair pathway that produces karrethins."
         }
       ],
 
@@ -3017,9 +3017,9 @@ const CAMPAIGN_2_DATA = {
       rankUpText: "Sometimes the most dangerous environment is the safest one. You just learned that protection can be a prison when the thing you're protecting needs what you're protecting it from.",
 
       explanation: {
-        title: "Hormesis: When the Hazard Is the Nutrient",
-        body: "Radiation is usually harmful. DNA strand breaks, cell death, cancer \u2014 the standard story. But some organisms didn't just learn to survive radiation; they learned to need it.\n\nThe karreth bloom evolved on a world with 8.4 mSv per day of background radiation. Over hundreds of millions of years, its biology integrated that radiation into core metabolic pathways. The DNA-repair enzymes that fix radiation-induced strand breaks also produce karrethins \u2014 the medicinal compounds the Concord values. The repair process IS the production process. No damage means no repair, and no repair means no compounds.\n\nThis is an extreme form of radiation hormesis \u2014 a phenomenon in which low-level radiation exposure is not just tolerated but required. On Earth, certain fungi inside the Chernobyl reactor use melanin to convert ionizing radiation directly into metabolic energy, a process called radiosynthesis. The Rhessi species exhibits partial radiation dependence: their immune systems and melanin-analogue skin function best under continuous low-level exposure.\n\nThe Concord's Universal Shielding Protocol was designed by and for radiation-sensitive species. It assumes all radiation is harmful and mandates maximum shielding. For most of the galaxy, this is correct. For species from high-radiation worlds, it is lethally wrong. The karreth bloom case is the thesis statement of Campaign 2: species-blind policies fail biology. Understanding the organism comes first; policy should follow.",
-        funFact: "In 2020, researchers found that Cladosporium sphaerospermum \u2014 a common black mold \u2014 growing inside the Chernobyl reactor was not only surviving but actively growing TOWARD the radiation source. The fungus uses melanin to absorb ionizing radiation and convert it to chemical energy, similar to how chlorophyll converts sunlight. NASA has proposed using radiotrophic fungi as biological radiation shields for future Mars habitats."
+        title: "When a Hazard Becomes a Biological Trigger",
+        body: "Ionizing radiation is usually biologically damaging because it can break molecules, generate reactive species, and damage DNA. The karreth bloom is fictional alien biology built around an unusual exception: on its high-radiation homeworld, a low-level radiation signal became integrated into a repair pathway that also produces karrethins. Remove the signal, and the valuable pathway switches off.\n\nThis should not be read as a claim that Earth organisms generally benefit from or require ionizing radiation. On Earth, melanin is well established as radioprotective in fungi. Laboratory experiments have also reported increased growth or metabolic activity in some melanized fungi under particular high-radiation conditions and changes in melanin's electron-transfer properties. Those findings led researchers to propose possible radiation-energy capture, but the mechanism and ecological importance remain under study and are not equivalent to ordinary photosynthesis.\n\nThe case's established lesson is an engineering and policy lesson: a universal safety standard can fail when it ignores species-specific requirements. The radiation-dependent karreth pathway itself remains clearly labeled science fiction.",
+        funFact: "Melanized fungi can be unusually radiation resistant. A 2007 laboratory study found that ionizing radiation changed melanin's electronic properties and enhanced growth or metabolic activity in several melanized fungi under specific conditions. The authors described energy capture as an intriguing possibility, not a confirmed form of fungal photosynthesis."
       },
 
       callHomeHints: {
@@ -3390,7 +3390,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             function_fragment: {
-              text: "'What do they do...' The lights cycle through warm amber \u2014 the memory surfacing. 'They carry. Phosphorus. Nitrogen. Water. Carbon. Chemical signals \u2014 warnings about predators, information about drought. A mature plant with surplus can feed a struggling seedling through the network. The network makes the soil a single cooperative organism instead of a collection of competing individuals.'",
+              text: "'What do they do...' The lights cycle through warm amber \u2014 the memory surfacing. 'Fungal hyphae extend beyond individual roots. They help plants acquire phosphorus, nitrogen, and water in exchange for plant carbon. One fungal individual can sometimes connect multiple roots, so substances and signals may move through shared pathways \u2014 but the direction and benefit depend on the species and conditions. The soil is not one cooperative mind. It is a network of negotiated partnerships.'",
               bonusInsight: true,
               moodShift: 1,
               options: [
@@ -3764,7 +3764,7 @@ const CAMPAIGN_2_DATA = {
       diagnoses: [
         {
           id: "mycorrhizal",
-          label: "Mycorrhizal network disruption \u2014 the soil's underground fungal connections were never restored after the industrial damage. Isolated patches of healthy ground can't share nutrients across the unconnected zones.",
+          label: "Loss of compatible mycorrhizal partners \u2014 the restored soil chemistry is suitable, but the fungal-root partnerships needed for efficient nutrient acquisition and connected growth were not re-established. A controlled inoculation trial is warranted.",
           isCorrect: true
         },
         {
@@ -3788,12 +3788,12 @@ const CAMPAIGN_2_DATA = {
       ],
 
       solutionChoice: {
-        prompt: "Your diagnosis is correct \u2014 the mycorrhizal network was destroyed by industrial contamination and never restored. The fix is cross-zone inoculation from the healthy original beds. But Concord biosafety regulations technically forbid the transfer. How do you proceed?",
+        prompt: "Your diagnosis is supported \u2014 the restored beds appear to be missing compatible mycorrhizal partners after the industrial damage. A controlled inoculation trial using soil or cultured fungi from the healthy original beds is the best-supported next step, with monitoring to test whether connectivity and plant performance improve. But Concord biosafety regulations technically forbid the transfer. How do you proceed?",
         options: [
           {
             label: "Apply for the exemption: use the legal precedent from Case GC-2201 to formally request Concord approval before inoculating.",
             bonusPoints: 0,
-            response: "The formal application is filed. The precedent is strong. Weeks later, approval comes through. The inoculation begins \u2014 slowly, through legitimate channels. The garden will heal. Eventually.\n\nIlreth-Mar nods approvingly. 'The system works. It is slow, but it works.'",
+            response: "The formal application is filed. The precedent is strong. Weeks later, approval comes through. The monitored inoculation trial begins \u2014 slowly, through legitimate channels. The garden will heal. Eventually.\n\nIlreth-Mar nods approvingly. 'The system works. It is slow, but it works.'",
             novaClosing: "The garden will heal. It took forty years to get here and it'll take a few more to finish. But we did it right.",
             zelkethClosing: "You honored the system. The garden recovers. The precedent strengthens. Patience is its own kind of courage."
           },
@@ -3801,7 +3801,7 @@ const CAMPAIGN_2_DATA = {
             label: "Inoculate now, file paperwork after: the garden has waited forty years. Do the right thing immediately and accept procedural consequences.",
             bonusPoints: 10,
             bonusLabel: "Pragmatic",
-            response: "You walk to the thriving beds, take a handful of living soil, and work it into the dead zones yourself. Nova watches with tears in her eyes. The paperwork can wait.\n\nThe Concord notes the violation. Ilreth-Mar is displeased. Nova is quietly, fiercely proud. The garden begins healing that afternoon.",
+            response: "You walk to the thriving beds, take a handful of living soil, and work it into the dead zones yourself. Nova watches with tears in her eyes. The paperwork can wait.\n\nThe Concord notes the violation. Ilreth-Mar is displeased. Nova is quietly, fiercely proud. The inoculation trial begins that afternoon; recovery will be measured over the coming weeks.",
             novaClosing: "You did what I couldn't do for forty years \u2014 you stopped asking permission and started fixing. Thank you.",
             zelkethClosing: "The garden heals. The Concord will have questions. But some questions are worth answering after the fact."
           },
@@ -3820,9 +3820,9 @@ const CAMPAIGN_2_DATA = {
       rankUpText: "The deepest connections are the ones you can't see. You just learned that restoring a place means restoring its relationships \u2014 not just its chemistry. And sometimes the hardest part isn't finding the answer. It's changing the rules that stand in its way.",
 
       explanation: {
-        title: "The Wood Wide Web: Underground Networks That Connect Ecosystems",
-        body: "Beneath every healthy forest, meadow, and garden lies an invisible network. Mycorrhizal fungi \u2014 thread-like hyphae thinner than a human hair \u2014 connect the root systems of plants across an entire ecosystem. Through this network, plants share phosphorus, nitrogen, water, carbon, and chemical defense signals. A mature tree can subsidize a struggling seedling. A plant under insect attack can warn its neighbors. The network is so fundamental that ecologist Suzanne Simard called it the 'wood wide web.'\n\nMore than 90% of Earth's plant species form mycorrhizal partnerships. The fungi get carbon from the plants; the plants get access to nutrients and water the fungi can reach with their vast hyphal networks. It's not charity \u2014 it's mutualism, the same principle that underpins the Zhel'ii three-who-are-one symbiosis you encountered in Campaign 1.\n\nWhen soil is industrially contaminated, the mycorrhizal network is destroyed along with everything else. Standard restoration focuses on chemistry: remove toxins, correct pH, add nutrients, rebuild organic matter. These are necessary \u2014 but they don't restore the network. The fungi must be physically reintroduced from healthy, established soil. Without them, the restored land is a collection of isolated patches that can't share resources. The chemistry is right. The biology is missing. The garden grows in fragments.",
-        funFact: "In 2023, the Society for the Protection of Underground Networks (SPUN) published the first global map of mycorrhizal fungi, revealing that these networks store 13 billion tons of carbon \u2014 roughly equivalent to 36% of annual global fossil fuel emissions. Protecting underground fungal networks is now recognized as a climate strategy, not just an ecological one."
+        title: "Mycorrhizae: Underground Partnerships in Ecosystems",
+        body: "Many land plants form partnerships with mycorrhizal fungi. The fungi grow fine hyphae through soil, receive carbon compounds from plants, and help their plant partners obtain resources such as phosphorus, nitrogen, and water. A single fungal individual can colonize more than one root system, creating a common mycorrhizal network.\n\nExperiments show that carbon, nutrients, water, and signaling compounds can sometimes move among organisms associated with these networks. What those movements mean ecologically is still debated. The amount transferred, the direction of transfer, and whether a receiving plant benefits vary with fungal species, plant species, soil conditions, competition, and experimental design. Current evidence does not support a universal claim that mature 'mother trees' preferentially feed seedlings or that forests behave as one cooperative organism.\n\nIndustrial disturbance can damage soil fungal communities as well as soil chemistry. Restoration may therefore need to rebuild biological partnerships, but inoculation is not a guaranteed one-step cure. Fungal identity, host compatibility, soil conditions, contamination risk, and monitoring all matter. In this fictional case, the evidence makes missing compatible mycorrhizal partners a plausible limiting factor, so a controlled inoculation trial is the scientifically responsible next step.",
+        funFact: "In 2026, researchers produced the first global map estimating the density of arbuscular mycorrhizal fungal networks, calculating about 110 quadrillion kilometers of living hyphae in Earth's topsoils. A separate 2023 synthesis estimated that plants allocate about 13.12 gigatons of CO\u2082-equivalent carbon to mycorrhizal mycelium each year \u2014 an annual carbon flux, not a measurement of permanent carbon storage."
       },
 
       // No callHomeHints — we are home.
