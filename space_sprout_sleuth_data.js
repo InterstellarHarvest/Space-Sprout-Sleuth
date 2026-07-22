@@ -2683,7 +2683,7 @@ const GAME_DATA = {
           type: "conversation",
           speaker: "Commander Torres",
           personality: "stoic",
-          moodStart: 0,
+          startMood: 0,
           nodes: {
             start: {
               text: "[Commander Torres stands by the seedling trays, arms crossed. She barely glances up as you enter.]\n\nDr. Nova. You've been briefed?",
