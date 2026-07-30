@@ -4,7 +4,7 @@
 
 *A clicking detective game about the science of growing food in space.*
 
-Crops are failing across the solar system, and the **Solar Agricultural Authority (SAA)** needs a sleuth. As a rookie agent, you travel from orbiting greenhouses to Martian domes to a bunker beneath the ice of Europa, working out why the plants aren't thriving — questioning the crew, reading the logs, examining the plants, and checking the sensors until the evidence points to a diagnosis.
+Crops are failing across the solar system, and the **Solar Agricultural Agency (SAA)** needs a sleuth. As a rookie agent, you travel from orbiting greenhouses to Martian domes to a bunker beneath the ice of Europa, working out why the plants aren't thriving — questioning the crew, reading the logs, examining the plants, and checking the sensors until the evidence points to a diagnosis.
 
 Every case is a real puzzle in plant and space biology.
 
@@ -20,7 +20,7 @@ Every case is a real puzzle in plant and space biology.
 
 Each case is wrapped around a real concept in space botany.
 
-### Campaign 1 · Solar Agricultural Authority
+### Campaign 1 · Solar Agricultural Agency
 
 | Where | The science |
 |---|---|

@@ -3236,7 +3236,7 @@ const GAME_DATA = {
           startMood: 0,
           nodes: {
             start: {
-              text: "Greetings-welcome, Dr. Nova of the Solar Agricultural Authority. This unit is designated [TRANSLATOR APPROXIMATION: Zel'keth].\n\nThe three-who-are-one have entered cessation-of-function. This began... [TRANSLATOR: calculating time units] ...approximately three of your day-cycles after we accepted docking-invitation with your station.\n\nWe have examined our own systems. Atmosphere is nominal. Light is nominal. Temperature is nominal. We do not understand.\n\nYour species has expertise in growing life where it should not grow. We have observed this. We ask for your [TRANSLATOR: eyes? perspective? outside thinking?].",
+              text: "Greetings-welcome, Dr. Nova of the Solar Agricultural Agency. This unit is designated [TRANSLATOR APPROXIMATION: Zel'keth].\n\nThe three-who-are-one have entered cessation-of-function. This began... [TRANSLATOR: calculating time units] ...approximately three of your day-cycles after we accepted docking-invitation with your station.\n\nWe have examined our own systems. Atmosphere is nominal. Light is nominal. Temperature is nominal. We do not understand.\n\nYour species has expertise in growing life where it should not grow. We have observed this. We ask for your [TRANSLATOR: eyes? perspective? outside thinking?].",
               options: [
                 { label: "Tell me about the three-who-are-one.", goto: "symbiosis_detail" },
                 { label: "What happened three days ago?", goto: "timeline" },
