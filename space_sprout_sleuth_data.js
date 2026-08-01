@@ -2134,7 +2134,7 @@ const GAME_DATA = {
           fps: 3, scale: 1
         }
       },
-      briefing: "Urgent dispatch, Dr. Nova. The spirulina algae bioreactor at Hayes Orbital Station keeps crashing every 6\u20138 days \u2014 the culture goes cloudy, pH swings wildly, and productivity drops to near zero before slowly recovering. Dr. Vasquez is at her wit's end. Get to L2 and investigate.",
+      briefing: "Urgent dispatch, Dr. Nova. The spirulina photobioreactor at Hayes Orbital Station keeps crashing every 6\u20138 days \u2014 the culture goes cloudy, pH swings wildly, and productivity drops to near zero before slowly recovering. Dr. Vasquez is at her wit's end. Get to L2 and investigate.",
 
       sources: {
         crew: {
@@ -2202,7 +2202,7 @@ const GAME_DATA = {
               ]
             },
             evidence_needed: {
-              text: "You're right. If I can show him exactly why the bioreactor needs darkness \u2014 with data \u2014 maybe he'll listen. The setup manual should have the specifications.",
+              text: "You're right. If I can show him exactly why this reactor needs a controlled recovery interval \u2014 with data \u2014 maybe he'll listen. The setup manual should have the specifications.",
               options: [
                 { label: "I'll find what we need.", goto: "exit_friendly" },
                 { label: "Let me check the sensors first.", goto: "exit_neutral" }
@@ -2257,7 +2257,7 @@ const GAME_DATA = {
               moodShift: 1,
               options: [
                 { label: "Continuous light overwhelms the cells' repair systems.", goto: "repair_insight" },
-                { label: "The cells need darkness to recover from light stress.", goto: "dark_needed" },
+                { label: "This reactor needs a controlled recovery interval.", goto: "dark_needed" },
                 { label: "I'm still putting the pieces together.", goto: "exit_friendly" }
               ]
             },
@@ -2276,14 +2276,14 @@ const GAME_DATA = {
               moodShift: 1,
               options: [
                 { label: "That's exactly the pattern you're seeing.", goto: "solution_path" },
-                { label: "We need to restore the dark period.", goto: "roth_solution" }
+                { label: "We need to restore the validated recovery interval.", goto: "roth_solution" }
               ]
             },
             ros_explanation: {
               text: "ROS \u2014 reactive oxygen species generated during photosynthesis. The reactor was stable under 16/8 and began crashing after the switch to uncontrolled 24/0 exposure. That does not mean every spirulina culture requires night, but it does mean this reactor's current light regime exceeds what it can safely process.",
               bonusInsight: true,
               options: [
-                { label: "We need to restore the dark period.", goto: "solution_path" },
+                { label: "We need to restore the validated recovery interval.", goto: "solution_path" },
                 { label: "Let me confirm with the sensor data.", goto: "exit_friendly" }
               ]
             },
@@ -2301,7 +2301,7 @@ const GAME_DATA = {
               bonusInsight: true,
               moodShift: 1,
               options: [
-                { label: "The culture needs 8\u201312 hours of darkness to recover.", goto: "solution_path" },
+                { label: "This reactor needs its validated dark or low-light recovery interval.", goto: "solution_path" },
                 { label: "We need to separate the bioreactor lighting.", goto: "roth_solution" }
               ]
             },
@@ -2650,7 +2650,7 @@ const GAME_DATA = {
         }
       ],
 
-      rankUpText: "Even in space, biology needs rest. You proved that darkness isn't downtime \u2014 it's when cells do their most critical repairs.",
+      rankUpText: "Even in space, biological life-support systems need validated operating conditions. You proved that independent reactor controls keep light exposure within a safe range.",
 
       explanation: {
         title: "The Dark Side of Light: Why Bioreactors Need Light Control",
