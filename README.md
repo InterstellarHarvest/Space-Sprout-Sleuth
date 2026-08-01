@@ -27,7 +27,7 @@ Each case is wrapped around a real concept in space botany.
 | International Space Station · Low Earth Orbit | Gravitropism — how plants know which way is down |
 | Lunar South Pole · Shackleton Crater | The pollination problem — no bees in space |
 | Mars · Arcadia Planitia | Light quality — not all photons are equal |
-| Orbital Research Station · L2 | The dark side of light — why plants need night |
+| Orbital Research Station · L2 | Light stress and reactor control — when continuous illumination exceeds a system’s safe operating range |
 | Europa · sub-surface bunker | Cosmic radiation, the invisible enemy of space farming |
 | First-contact bonus cases | The "wood wide web" of space, mother trees, and first words |
 
