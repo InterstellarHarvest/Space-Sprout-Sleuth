@@ -2759,7 +2759,7 @@ const GAME_DATA = {
               ]
             },
             shielding_doubt: {
-              text: "The primary cosmic radiation, yes. The secondary cascades \u2014 neutrons generated when primaries hit the ice and rock around us \u2014 that's harder to stop. Engineering said the residual dose would be within tolerance. But tolerance for what? People. Not necessarily plants.",
+              text: "The shielding reduces primary energetic particles from Jupiter's radiation environment. But when energetic particles strike the ice, rock, and shielding materials, they can produce secondary radiation. Engineering modeled residual ionizing radiation in the habitat, but the crop-specific biological assessment was never completed. Crew and crop risk need separate evaluations.",
               bonusInsight: true,
               options: [
                 { label: "Seedlings might be more vulnerable than adults.", goto: "vulnerability" },
@@ -2767,7 +2767,7 @@ const GAME_DATA = {
               ]
             },
             vulnerability: {
-              text: "Seedlings are all growing tips. Rapidly dividing cells. If there's something damaging DNA during replication... that would explain why they germinate fine but fall apart once they start real growth.",
+              text: "Seedlings depend on actively dividing cells in their growing tips. Ionizing radiation can damage DNA in dividing and nondividing cells, but damage can be especially disruptive in meristems because continued growth depends on successful cell division. That could explain why they germinate but fail as active growth begins.",
               bonusInsight: true,
               options: [
                 { label: "I'll check the radiation monitors.", goto: "exit_neutral" },
@@ -2775,7 +2775,7 @@ const GAME_DATA = {
               ]
             },
             radiation_reading: {
-              text: "53 millisieverts per day. That's above human occupational limits. We're shielded enough for short-duration crew rotation, but those seedlings are in it 24/7 with no protection beyond what the room provides.",
+              text: "The monitor flags elevated ionizing radiation in the grow chamber. The exposure includes residual primary and modeled secondary radiation, but the crop-specific biological assessment is incomplete. Crew and crop risk must be assessed separately.",
               bonusInsight: true,
               options: [
                 { label: "The seedlings show DNA damage consistent with radiation.", goto: "radiation_plus_dna", requires: { clueFound: "DNA_DAMAGE_PATTERN" } },
@@ -2784,10 +2784,10 @@ const GAME_DATA = {
               ]
             },
             dna_connection: {
-              text: "DNA damage. In the growing tips. That's why the spots are random \u2014 it's not a systemic nutrient issue, it's individual cells failing at division. The damage happens wherever cells are actively replicating.",
+              text: "The growing tips show cellular abnormalities consistent with DNA damage. Ionizing radiation can damage dividing and nondividing cells, while damage in meristems is especially disruptive because continued growth depends on cell division.",
               bonusInsight: true,
               options: [
-                { label: "The radiation here is 53 mSv per day.", goto: "dna_plus_radiation", requires: { clueFound: "HIGH_RADIATION" } },
+                { label: "The radiation monitor flags elevated exposure.", goto: "dna_plus_radiation", requires: { clueFound: "HIGH_RADIATION" } },
                 { label: "The shielding assessment was never finished.", goto: "dna_plus_shielding", requires: { clueFound: "SHIELDING_INSUFFICIENT" } },
                 { label: "I'll keep investigating.", goto: "exit_neutral" }
               ]
@@ -2797,13 +2797,13 @@ const GAME_DATA = {
               bonusInsight: true,
               setsFlag: "torres_discussed_shielding",
               options: [
-                { label: "The radiation reads 53 mSv per day in here.", goto: "shielding_plus_radiation", requires: { clueFound: "HIGH_RADIATION" } },
-                { label: "The seedlings show DNA replication damage.", goto: "shielding_plus_dna", requires: { clueFound: "DNA_DAMAGE_PATTERN" } },
+                { label: "The radiation monitor flags elevated exposure in here.", goto: "shielding_plus_radiation", requires: { clueFound: "HIGH_RADIATION" } },
+                { label: "The seedlings show DNA damage in meristematic tissue.", goto: "shielding_plus_dna", requires: { clueFound: "DNA_DAMAGE_PATTERN" } },
                 { label: "I'll gather more data.", goto: "exit_neutral" }
               ]
             },
             radiation_plus_dna: {
-              text: "High radiation. DNA damage in dividing cells. That's the mechanism. The secondary cascades are hitting the seedlings right where they're most vulnerable \u2014 the meristems, where every cell is copying its DNA.",
+              text: "Elevated ionizing radiation. Abnormalities consistent with DNA damage in actively growing tissue. That's the likely mechanism. Modeled secondary radiation can reach the seedlings, and damage in the meristems is especially disruptive because growth depends on cell division.",
               bonusInsight: true,
               options: [
                 { label: "The shielding was designed for crew, not crops.", goto: "full_picture", requires: { clueFound: "SHIELDING_INSUFFICIENT" } },
@@ -2812,7 +2812,7 @@ const GAME_DATA = {
               ]
             },
             dna_plus_radiation: {
-              text: "53 mSv per day, and cells replicating with damaged DNA. Adults tolerate it because most of their cells aren't dividing. Seedlings are nothing but dividing cells. The dose that's acceptable for crew is lethal for crops.",
+              text: "The monitor flags elevated exposure, and the seedlings show DNA damage in actively growing tissue. Ionizing radiation can damage dividing and nondividing cells, but meristem damage can halt growth because new roots and shoots depend on cell division. The separate crop assessment was never completed.",
               bonusInsight: true,
               options: [
                 { label: "The shielding was never assessed for plants.", goto: "full_picture", requires: { clueFound: "SHIELDING_INSUFFICIENT" } },
@@ -2821,39 +2821,39 @@ const GAME_DATA = {
               ]
             },
             radiation_plus_shielding: {
-              text: "Designed for crew. Assessed for crew. Adequate for crew. Nobody asked whether 53 mSv per day would kill wheat seedlings because nobody thought to ask.",
+              text: "Designed around the crew exposure plan. Assessed for crew operations. The crop-specific assessment was never completed. The radiation monitor now flags elevated exposure, and the plant evidence shows damage consistent with ionizing radiation.",
               options: [
-                { label: "The seedlings show DNA damage in rapidly dividing cells.", goto: "full_picture", requires: { clueFound: "DNA_DAMAGE_PATTERN" } },
-                { label: "Seedlings are more vulnerable than mature plants.", goto: "solution_discuss" },
+                { label: "The seedlings show DNA damage in meristematic tissue.", goto: "full_picture", requires: { clueFound: "DNA_DAMAGE_PATTERN" } },
+                { label: "Damage in seedling meristems can disrupt growth.", goto: "solution_discuss" },
                 { label: "I'll examine the plants.", goto: "exit_neutral" }
               ]
             },
             shielding_plus_radiation: {
-              text: "53 mSv in a facility where the biological shielding was never assessed. That number is above human occupational limits. For rapidly dividing plant cells, it could be catastrophic.",
+              text: "The monitor flags elevated ionizing radiation in a facility where crop shielding was never assessed. That establishes exposure, not biological effect; the meristem abnormalities provide separate evidence of damage, and the incomplete crop assessment leaves the risk unresolved.",
               options: [
-                { label: "The seedlings confirm it \u2014 DNA damage in every growing tip.", goto: "full_picture", requires: { clueFound: "DNA_DAMAGE_PATTERN" } },
+                { label: "The seedlings provide biological evidence \u2014 DNA damage in growing tips.", goto: "full_picture", requires: { clueFound: "DNA_DAMAGE_PATTERN" } },
                 { label: "We need additional shielding for the grow chamber.", goto: "solution_discuss" },
                 { label: "I'll check the plants.", goto: "exit_neutral" }
               ]
             },
             shielding_plus_dna: {
-              text: "Untested shielding. DNA replication errors. The engineering team designed this outpost to keep people alive, not to grow food. Different requirements.",
+              text: "Incomplete crop shielding assessment. DNA damage in meristematic tissue. The engineering team assessed crew exposure but left plant requirements unverified. Different systems require separate risk assessments.",
               options: [
-                { label: "The radiation monitor confirms it \u2014 53 mSv per day.", goto: "full_picture", requires: { clueFound: "HIGH_RADIATION" } },
+                { label: "The radiation monitor confirms elevated exposure.", goto: "full_picture", requires: { clueFound: "HIGH_RADIATION" } },
                 { label: "The grow chamber needs its own shielding.", goto: "solution_discuss" },
                 { label: "I'll check the sensors.", goto: "exit_neutral" }
               ]
             },
             dna_plus_shielding: {
-              text: "DNA damage plus an incomplete shielding assessment. The construction team flagged it as pending and moved on. Now we're seeing exactly the biological effects they should have tested for.",
+              text: "DNA damage plus an incomplete crop shielding assessment. The construction team flagged it as pending and moved on. Now the elevated exposure and plant damage show why a separate crop assessment was necessary.",
               options: [
-                { label: "Radiation sensors show 53 mSv per day.", goto: "full_picture", requires: { clueFound: "HIGH_RADIATION" } },
+                { label: "Radiation sensors show elevated exposure.", goto: "full_picture", requires: { clueFound: "HIGH_RADIATION" } },
                 { label: "We need better shielding for the grow chamber.", goto: "solution_discuss" },
                 { label: "I'll check the radiation data.", goto: "exit_neutral" }
               ]
             },
             full_picture: {
-              text: "Secondary particle cascades. 53 mSv per day. Shielding designed for humans, not assessed for plants. DNA damage in every rapidly dividing cell. The outpost can keep people alive but it can't grow food. Not without additional shielding.",
+              text: "Modeled secondary radiation. Elevated grow-chamber exposure. Crew exposure assessed separately; crop protection not verified. DNA damage in meristematic tissue. The converging evidence points to inadequate protection for plant cultivation.",
               bonusInsight: true,
               options: [
                 { label: "Water walls around the grow chamber would help.", goto: "solution_discuss" },
@@ -2946,7 +2946,7 @@ const GAME_DATA = {
               ]
             },
             radiation_detail: {
-              text: "+----------------------------------+\n|  RADIATION MONITORING            |\n+----------------------------------+\n\nAmbient dose rate: 53.2 mSv/day\nStatus:  !! ABOVE THRESHOLD !!\n\nBreakdown:\n  Primary cosmic:    2.1 mSv/day\n  (shielded by 3m ice + panels)\n  Secondary cascade: 51.1 mSv/day\n  (neutrons from ice/rock)\n\nHuman crew limit:  50 mSv/year\nCurrent annual eq: 19,418 mSv/yr\n\nNote: Crew rotation limits\nexposure. Stationary biological\nsystems receive continuous dose.",
+              text: "+----------------------------------+\n|  RADIATION MONITORING            |\n+----------------------------------+\n\nAmbient ionizing radiation:\n  ELEVATED\nStatus:  !! ELEVATED !!\n\nSources:\n  Residual energetic particles from\n  Jupiter's radiation environment\n  Modeled secondary radiation from\n  surrounding materials\n\nCrop biological assessment:\n  INCOMPLETE\n\nNote: Exposure measurements do not\nby themselves establish biological\ndamage or risk. Assess crew and crop\nseparately.",
               revealsClue: "HIGH_RADIATION",
               options: [
                 { label: "Query: radiation effects on cellular division", goto: "cellular_query", requires: { clueFound: "DNA_DAMAGE_PATTERN" } },
@@ -2963,7 +2963,7 @@ const GAME_DATA = {
               ]
             },
             cellular_query: {
-              text: "+----------------------------------+\n|  QUERY: RADIATION + CELL DIV     |\n+----------------------------------+\n\nRadiation-induced DNA damage is\nproportional to replication rate.\n\nMeristematic cells (root tips,\nshoot tips) divide every 12-24h.\nEach division = exposure window\nfor strand breaks.\n\nAt 53 mSv/day, estimated DNA\ndouble-strand breaks per cell:\n  Dividing cells:  ~0.8/day\n  Quiescent cells: ~0.1/day\n\nSeedlings are 80%+ meristematic\ntissue. Mature plants: <5%.",
+              text: "+----------------------------------+\n|  QUERY: RADIATION + CELL DIV     |\n+----------------------------------+\n\nIonizing radiation can damage DNA\nin dividing and nondividing cells.\n\nMeristems at root and shoot tips\ncontain actively dividing cells.\nDamage there can disrupt cell\ndivision and halt new growth.\n\nThe observed abnormalities are\nconsistent with DNA damage, but\nvisible tissue cannot establish an\nexact number of strand breaks.",
               bonusInsight: true,
               options: [
                 { label: "Cross-reference: shielding efficacy", goto: "shielding_crossref", requires: { clueFound: "SHIELDING_INSUFFICIENT" } },
@@ -2971,7 +2971,7 @@ const GAME_DATA = {
               ]
             },
             shielding_crossref: {
-              text: "+----------------------------------+\n|  SHIELDING EFFICACY ANALYSIS     |\n+----------------------------------+\n\nPrimary radiation reduction: 94%\nSecondary cascade reduction: 12%\n\nDesign standard: human crew\n  (rotating, limited exposure)\nBiological assessment: INCOMPLETE\n\nFor continuous plant exposure:\n  Required reduction: >99%\n  Actual reduction:    41%\n  Deficit:             58%\n\nRecommendation: additional\nshielding required for any\nlong-duration biological system.",
+              text: "+----------------------------------+\n|  SHIELDING ASSESSMENT            |\n+----------------------------------+\n\nModel result:\n  Residual primary and secondary\n  ionizing radiation can reach the\n  grow chamber. Secondary radiation\n  may be generated when energetic\n  particles interact with shielding\n  and surrounding materials.\n\nCrew and crop require separate risk\nassessments.\nCrop biological assessment:\n  INCOMPLETE\n\nRecommendation: define and verify\nplant-specific protection criteria\nbefore long-duration cultivation.",
               bonusInsight: true,
               options: [
                 { label: "Back to main menu", goto: "start" }
@@ -2989,11 +2989,11 @@ const GAME_DATA = {
                 { label: "Examine seedlings under magnification", goto: "microscope" },
                 { label: "Check the brown spots", goto: "brown_spots" },
                 { label: "Examine root systems", goto: "roots" },
-                { label: "Compare to expected growth at this radiation level", goto: "radiation_comparison", requires: { clueFound: "HIGH_RADIATION" } }
+                { label: "Compare the radiation and plant evidence", goto: "radiation_comparison", requires: { clueFound: "HIGH_RADIATION" } }
               ]
             },
             microscope: {
-              text: "Under magnification, the growing tips tell the story. Cells in the meristems \u2014 the actively dividing tissue at root tips and shoot tips \u2014 are disorganized. Some cells have divided unevenly. Others contain fragmented nuclei. The damage is random, scattered, consistent with DNA replication errors rather than any systemic deficiency.",
+              text: "Under magnification, the growing tips tell the story. Cells in the meristems \u2014 the actively dividing tissue at root tips and shoot tips \u2014 are disorganized. Some cells have divided unevenly. Others contain fragmented nuclei. The scattered abnormalities are consistent with DNA damage in meristematic tissue.",
               revealsClue: "DNA_DAMAGE_PATTERN",
               options: [
                 { label: "What would cause random DNA errors?", goto: "dna_detail" },
@@ -3002,7 +3002,7 @@ const GAME_DATA = {
               ]
             },
             dna_detail: {
-              text: "The pattern is specific: damage concentrated in rapidly dividing tissue, random distribution across individual cells, no pathogen signature, no nutrient pattern. Something is disrupting DNA replication at the molecular level \u2014 hitting individual cells at random during their most vulnerable phase: copying their genome.",
+              text: "The observed damage is concentrated in actively growing tissue and scattered across individual cells. Ionizing radiation can injure dividing and nondividing cells. Damage in meristems can be especially disruptive because root and shoot growth depends on continued cell division. The tissue pattern is consistent with DNA damage, but exposure data is needed to connect it to a cause.",
               bonusInsight: true,
               options: [
                 { label: "Examine root systems", goto: "roots" },
@@ -3010,7 +3010,7 @@ const GAME_DATA = {
               ]
             },
             brown_spots: {
-              text: "The brown spots are necrotic \u2014 dead tissue. They're scattered randomly across the leaf surfaces, not following veins or edges. Each spot is a small cluster of cells that died during or shortly after division. The randomness rules out nutrient deficiency (which follows vein patterns) and pathogen attack (which spreads from infection points).",
+              text: "The brown spots are necrotic \u2014 dead tissue. They're scattered across the leaf surfaces rather than consistently following veins or edges. Each spot is a small cluster of dead cells. This pattern alone does not identify the cause or rule out nutrient deficiency or pathogen attack; compare it with the sensor and construction-log evidence.",
               setsFlag: "examined_spots",
               options: [
                 { label: "Examine seedlings under magnification", goto: "microscope" },
@@ -3019,7 +3019,7 @@ const GAME_DATA = {
               ]
             },
             roots: {
-              text: "The roots have developed \u2014 seedlings aren't failing to establish. But the root tips show the same disorganization as the shoot tips. Cells are dividing irregularly, with visible abnormalities under magnification. Whatever is damaging the seedlings is affecting all meristematic tissue equally.",
+              text: "The roots have developed \u2014 seedlings aren't failing to establish. But the root tips show the same disorganization as the shoot tips. Cells are dividing irregularly, with visible abnormalities under magnification. Whatever is damaging the seedlings is affecting meristematic tissue in both roots and shoots.",
               options: [
                 { label: "Examine seedlings under magnification", goto: "microscope" },
                 { label: "Check the brown spots", goto: "brown_spots" },
@@ -3027,7 +3027,7 @@ const GAME_DATA = {
               ]
             },
             radiation_comparison: {
-              text: "At 53 mSv per day, a seedling composed almost entirely of rapidly dividing meristematic cells would accumulate significant DNA damage within days. The timing matches: germination succeeds (minimal cell division needed), initial growth begins, then active meristematic growth triggers visible damage by day 5-8. The radiation dose that's manageable for a rotating human crew is devastating for stationary, rapidly dividing plant tissue.",
+              text: "The monitor flags elevated ionizing radiation, while microscopy shows abnormalities consistent with DNA damage in meristematic tissue. Ionizing radiation can damage dividing and nondividing cells, and meristem damage is especially disruptive because growth depends on cell division. The repeated timing is consistent with radiation-related injury, while the incomplete crop shielding assessment leaves the risk unverified.",
               bonusInsight: true,
               options: [
                 { label: "Examine seedlings under magnification", goto: "microscope" },
@@ -3050,12 +3050,12 @@ const GAME_DATA = {
               options: [
                 { label: "Search: radiation shielding specifications", goto: "construction_log" },
                 { label: "Search: outpost location selection", goto: "site_selection" },
-                { label: "Search: radiation dose data", goto: "radiation_search", requires: { clueFound: "HIGH_RADIATION" } },
+                { label: "Search: radiation monitoring data", goto: "radiation_search", requires: { clueFound: "HIGH_RADIATION" } },
                 { label: "Search: biological effects of radiation", goto: "dna_damage_search", requires: { clueFound: "DNA_DAMAGE_PATTERN" } }
               ]
             },
             construction_log: {
-              text: "+----------------------------------+\n|  CONSTRUCTION SPEC: SHIELDING    |\n+----------------------------------+\n\nRadiation shielding:\n  3m ice overburden\n  15cm polyethylene panels\n  Est. primary reduction: 94%\n\n!! NOTE: Secondary neutron cascade\n   from Jupiter magnetosphere\n   interaction with surrounding\n   ice/rock may elevate residual\n   dose.\n\n   Biological shielding assessment:\n   PENDING - awaiting crop trial\n   results.",
+              text: "+----------------------------------+\n|  CONSTRUCTION SPEC: SHIELDING    |\n+----------------------------------+\n\nRadiation shielding:\n  3m ice overburden\n  15cm polyethylene panels\n\nShielding model:\n  Primary energetic particles from\n  Jupiter's radiation environment\n  are reduced. Interactions with\n  surrounding ice, rock, and panels\n  may generate residual secondary\n  radiation.\n\nCrop biological assessment:\n  PENDING - awaiting crop trial\n  results.",
               revealsClue: "SHIELDING_INSUFFICIENT",
               options: [
                 { label: "Search: outpost location selection", goto: "site_selection" },
@@ -3064,14 +3064,14 @@ const GAME_DATA = {
               ]
             },
             site_selection: {
-              text: "+----------------------------------+\n|  SITE SELECTION REPORT           |\n+----------------------------------+\n\nEuropa subsurface site selected\nfor:\n  - Liquid water access (ice melt)\n  - Stable temperature (tidal)\n  - Structural ice for shielding\n\nKnown risks:\n  - Jupiter radiation belts\n    (highest in solar system)\n  - Secondary particle generation\n    in surrounding material\n  - Limited shielding options\n    beyond ice and regolith\n\nMitigation: depth + polyethylene.\nAssessment: adequate for human\ncrew on rotation schedules.",
+              text: "+----------------------------------+\n|  SITE SELECTION REPORT           |\n+----------------------------------+\n\nEuropa subsurface site selected\nfor:\n  - Liquid water access (ice melt)\n  - Stable temperature (tidal)\n  - Structural ice for shielding\n\nKnown risks:\n  - Energetic particles trapped in\n    Jupiter's radiation belts\n  - Secondary radiation generated\n    in surrounding materials\n  - Limited shielding options\n    beyond ice and regolith\n\nMitigation: depth + polyethylene.\nCrew and crop risk require separate\nassessment.",
               options: [
                 { label: "Search: radiation shielding specifications", goto: "construction_log" },
                 { label: "Close archive", goto: "exit" }
               ]
             },
             bio_shielding: {
-              text: "+----------------------------------+\n|  BIOLOGICAL SHIELDING REQS       |\n+----------------------------------+\n\nHuman crew:\n  Annual limit: 50 mSv/year\n  Rotation: 180 days max\n  Status: WITHIN LIMITS (marginal)\n\nPlant systems:\n  Tolerance varies by growth stage\n  Seedlings: HIGHLY SENSITIVE\n  (meristematic tissue vulnerable)\n  Mature plants: MODERATE tolerance\n\n  Recommended max for seedlings:\n  < 1 mSv/day continuous\n  Current measured: 53 mSv/day\n\n  !! SHIELDING INADEQUATE FOR\n     PLANT CULTIVATION !!",
+              text: "+----------------------------------+\n|  BIOLOGICAL SHIELDING REQS       |\n+----------------------------------+\n\nCrew and crop exposure require\nseparate risk assessments.\n\nPlant response depends on dose,\ndose rate, radiation quality,\nspecies, tissue, developmental\nstage, and repair capacity.\n\nMeristem damage can be especially\ndisruptive because growth relies on\ncell division.\n\nCrop biological assessment:\n  INCOMPLETE\nPlant protection criteria:\n  NOT YET VERIFIED",
               bonusInsight: true,
               options: [
                 { label: "Search: outpost location selection", goto: "site_selection" },
@@ -3079,7 +3079,7 @@ const GAME_DATA = {
               ]
             },
             radiation_search: {
-              text: "+----------------------------------+\n|  SEARCH: radiation dose data     |\n|  3 results                       |\n+----------------------------------+\n\nResult 1 - Construction Spec:\n\"Est. primary reduction: 94%.\nSecondary cascade: not fully\ncharacterized.\"\n\nResult 2 - Crew Medical Log:\n\"All personnel within acceptable\ndose limits per rotation schedule.\"\n\nResult 3 - Environmental Monitor:\n\"Ambient: 53.2 mSv/day.\nPrimary: 2.1. Secondary: 51.1.\nSecondary cascade is dominant\nradiation source in outpost.\"",
+              text: "+----------------------------------+\n|  SEARCH: radiation data          |\n|  3 results                       |\n+----------------------------------+\n\nResult 1 - Construction Spec:\n\"Primary energetic particles are\nreduced. Secondary radiation is not\nfully characterized.\"\n\nResult 2 - Risk Assessment:\n\"Crew and crop require separate\nexposure and risk assessments. Crop\nassessment remains incomplete.\"\n\nResult 3 - Environmental Monitor:\n\"Grow-chamber ionizing radiation:\nelevated. Modeled secondary\nradiation may contribute.\"",
               bonusInsight: true,
               options: [
                 { label: "Search: biological effects of radiation", goto: "dna_damage_search", requires: { clueFound: "DNA_DAMAGE_PATTERN" } },
@@ -3088,7 +3088,7 @@ const GAME_DATA = {
               ]
             },
             dna_damage_search: {
-              text: "+----------------------------------+\n|  SEARCH: biological effects      |\n|  2 results                       |\n+----------------------------------+\n\nResult 1 - Radiobiology Ref:\n\"Ionizing radiation causes DNA\ndouble-strand breaks. Damage rate\nproportional to dose and cell\ndivision rate. Meristematic tissue\n(actively dividing) is 8-10x more\nradiosensitive than quiescent.\"\n\nResult 2 - Ag Module Guidelines:\n\"For radiation >10 mSv/day,\nadditional shielding required for\ncrop cultivation. Water walls\n(20cm) reduce secondary neutrons\nby ~60%.\"",
+              text: "+----------------------------------+\n|  SEARCH: biological effects      |\n|  2 results                       |\n+----------------------------------+\n\nResult 1 - Radiobiology Ref:\n\"Ionizing radiation can damage DNA\nin dividing and nondividing cells.\nConsequences can be especially\ndisruptive in meristems because\ncontinued growth depends on cell\ndivision.\"\n\nResult 2 - Ag Module Guidelines:\n\"Crop response varies with exposure\nand biology. Verify plant-specific\nprotection criteria. Shielding can\nalter primary and secondary\nradiation, so performance must be\ntested.\"",
               bonusInsight: true,
               options: [
                 { label: "Search: biological shielding requirements", goto: "bio_shielding" },
@@ -3128,9 +3128,9 @@ const GAME_DATA = {
             portrait:   "portrait_sensors.png",
             actionIcon: "icon_sensors.png"
           },
-          text: "Nutrients optimal. Water pH 6.5. Temp 21\u00b0C. Humidity 60%. Light: full-spectrum LEDs, 16/8 cycle. CO\u2082 1000ppm.\n\n\u2622\ufe0f Radiation monitor: 53 mSv/day. [WARNING: ABOVE THRESHOLD]\nNote: Europa surface radiation heavily shielded by ice layer. Residual exposure from secondary particle cascades in surrounding rock.",
+          text: "Nutrients optimal. Water pH 6.5. Temp 21\u00b0C. Humidity 60%. Light: full-spectrum LEDs, 16/8 cycle. CO\u2082 1000ppm.\n\n\u2622\ufe0f Radiation monitor: ELEVATED. [WARNING: CROP ASSESSMENT INCOMPLETE]\nExposure includes residual energetic particles from Jupiter's radiation environment and modeled secondary radiation generated by interactions with surrounding materials. Crop-specific biological assessment: INCOMPLETE.",
           clueTag: "HIGH_RADIATION",
-          learned: "Radiation levels are 53 mSv/day \u2014 flagged above safe threshold."
+          learned: "The monitor flags elevated ionizing radiation in the grow chamber; crop risk requires a separate biological assessment."
         },
         {
           action: "plants",
@@ -3141,9 +3141,9 @@ const GAME_DATA = {
             portrait:   "portrait_europa.png",
             actionIcon: "icon_plants.png"
           },
-          text: "Seedlings show characteristic damage: brown necrotic spots scattered randomly on leaves (not following vein patterns). Growing tips appear disorganized under magnification \u2014 cells dividing irregularly. Root tips show similar disorganization. Damage consistent with DNA replication errors in rapidly dividing tissue.",
+          text: "Seedlings show characteristic damage: brown necrotic spots scattered randomly on leaves (not following vein patterns). Growing tips appear disorganized under magnification \u2014 cells dividing irregularly. Root tips show similar disorganization. The abnormalities are consistent with DNA damage in meristematic tissue.",
           clueTag: "DNA_DAMAGE_PATTERN",
-          learned: "Damage targets rapidly dividing cells \u2014 consistent with radiation-induced DNA errors."
+          learned: "Meristem abnormalities are consistent with DNA damage; ionizing radiation can damage dividing and nondividing cells."
         },
         {
           action: "logs",
@@ -3154,9 +3154,9 @@ const GAME_DATA = {
             portrait:   "portrait_logs.png",
             actionIcon: "icon_logs.png"
           },
-          text: "Outpost construction log: \"Radiation shielding: 3m ice overburden + 15cm polyethylene structural panels. Estimated shielding reduction: 94% of primary cosmic radiation.\"\n\n\u26a0\ufe0f Note: Secondary neutron cascade from Jupiter's magnetosphere interaction with surrounding ice/rock may elevate residual dose. Biological shielding assessment: PENDING \u2014 awaiting crop trial results.",
+          text: "Outpost construction log: \"Radiation shielding: 3m ice overburden + 15cm polyethylene structural panels. The shielding model indicates that primary energetic particles from Jupiter's radiation environment are reduced.\"\n\n\u26a0\ufe0f Note: Interactions with surrounding ice, rock, and shielding materials may generate residual secondary radiation. Crop-specific biological assessment: PENDING \u2014 awaiting crop trial results.",
           clueTag: "SHIELDING_INSUFFICIENT",
-          learned: "Shielding blocks primary radiation but secondary particles get through. Assessment never completed."
+          learned: "Shielding reduces primary energetic particles, but modeled secondary radiation remains possible. The crop assessment was never completed."
         }
       ],
 
@@ -3181,16 +3181,16 @@ const GAME_DATA = {
         },
         {
           id: "radiation",
-          label: "Radiation levels are too high \u2014 secondary particle cascades are causing DNA damage in rapidly dividing seedling cells.",
+          label: "The converging evidence indicates that elevated ionizing radiation \u2014 potentially including modeled secondary radiation \u2014 is damaging meristematic seedling tissue.",
           isCorrect: true
         }
       ],
 
-      rankUpText: "The final frontier's toughest enemy is invisible. You've learned that shielding crops from cosmic radiation may be humanity's greatest farming challenge yet.",
+      rankUpText: "The final frontier's toughest enemy is invisible. You've learned that protecting crops from ionizing space radiation may be one of humanity's greatest farming challenges.",
 
       explanation: {
-        title: "Cosmic Radiation: The Invisible Enemy of Space Farming",
-        body: "Earth's magnetic field and thick atmosphere shield surface life from much of the space-radiation environment. The ISS remains in low Earth orbit inside Earth's magnetosphere, and its structure adds further shielding. The Moon is different: it has almost no atmosphere and no global magnetic field, so lunar habitats require their own local shielding. The Moon passes through parts of Earth's magnetotail for a few days during some orbits, but that protection is partial and intermittent. Europa, meanwhile, orbits inside Jupiter's intense radiation environment. Even beneath ice, interactions between energetic particles and shielding materials can produce secondary radiation that must be considered in habitat design.\n\nSeedlings are especially vulnerable because radiation damages DNA, and young plants have huge numbers of rapidly dividing cells at their root tips and shoot tips. A mature plant can tolerate more damage because most of its cells aren't actively dividing. Solutions include additional shielding (water walls, regolith packing), selecting radiation-tolerant crop varieties, shorter-cycle crops, and strategic placement of grow chambers in the most shielded areas.",
+        title: "Ionizing Space Radiation: An Invisible Farming Hazard",
+        body: "Earth's magnetic field and thick atmosphere shield surface life from much of the space-radiation environment. The ISS remains in low Earth orbit inside Earth's magnetosphere, and its structure adds further shielding. The Moon is different: it has almost no atmosphere and no global magnetic field, so lunar habitats require their own local shielding. The Moon passes through parts of Earth's magnetotail for a few days during some orbits, but that protection is partial and intermittent. Europa, meanwhile, orbits Jupiter within a region of its magnetosphere populated by trapped energetic particles. Even beneath ice, interactions between energetic particles and shielding materials can produce secondary radiation that must be considered in habitat design.\n\nIonizing radiation can damage DNA in dividing and nondividing cells. Damage in meristems \u2014 the actively dividing tissues at root and shoot tips \u2014 can be especially disruptive because continued growth depends on successful cell division. Sensitivity depends on dose, dose rate, radiation quality, species, tissue, developmental stage, and repair capacity; human exposure criteria do not establish crop safety. In this fictional scenario, elevated monitor readings, meristem abnormalities consistent with DNA damage, and an incomplete crop-specific shielding assessment converge on the diagnosis. Possible responses include additional shielding (water walls, regolith packing), selecting radiation-tolerant crop varieties, shorter-cycle crops, and strategic placement of grow chambers in the most shielded areas.",
         funFact: "Tardigrades \u2014 the famously indestructible micro-animals \u2014 survive extreme radiation partly through a unique protein called Dsup (Damage Suppressor) that physically wraps around DNA to shield it. Scientists have experimentally transferred the Dsup gene into plant cells, significantly boosting their radiation tolerance. Future space crops might carry tardigrade genes."
       }
     },
