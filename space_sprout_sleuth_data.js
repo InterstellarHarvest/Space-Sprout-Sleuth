@@ -3010,7 +3010,7 @@ const GAME_DATA = {
               ]
             },
             brown_spots: {
-              text: "The brown spots are necrotic \u2014 dead tissue. They're scattered randomly across the leaf surfaces, not following veins or edges. Each spot is a small cluster of dead cells. The randomness rules out nutrient deficiency (which follows vein patterns) and pathogen attack (which spreads from infection points).",
+              text: "The brown spots are necrotic \u2014 dead tissue. They're scattered across the leaf surfaces rather than consistently following veins or edges. Each spot is a small cluster of dead cells. This pattern alone does not identify the cause or rule out nutrient deficiency or pathogen attack; compare it with the sensor and construction-log evidence.",
               setsFlag: "examined_spots",
               options: [
                 { label: "Examine seedlings under magnification", goto: "microscope" },
