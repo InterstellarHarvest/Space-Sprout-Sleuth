@@ -2775,7 +2775,7 @@ const GAME_DATA = {
               ]
             },
             radiation_reading: {
-              text: "The monitor flags elevated ionizing radiation above the grow chamber's verified warning level. The exposure includes residual primary and modeled secondary radiation, but the crop-specific biological assessment is incomplete. Crew and crop risk must be assessed separately.",
+              text: "The monitor flags elevated ionizing radiation in the grow chamber. The exposure includes residual primary and modeled secondary radiation, but the crop-specific biological assessment is incomplete. Crew and crop risk must be assessed separately.",
               bonusInsight: true,
               options: [
                 { label: "The seedlings show DNA damage consistent with radiation.", goto: "radiation_plus_dna", requires: { clueFound: "DNA_DAMAGE_PATTERN" } },
@@ -2784,7 +2784,7 @@ const GAME_DATA = {
               ]
             },
             dna_connection: {
-              text: "DNA damage in the growing tips. The cellular abnormalities are consistent with ionizing-radiation injury. Ionizing radiation can damage dividing and nondividing cells, while damage in meristems is especially disruptive because continued growth depends on cell division.",
+              text: "The growing tips show cellular abnormalities consistent with DNA damage. Ionizing radiation can damage dividing and nondividing cells, while damage in meristems is especially disruptive because continued growth depends on cell division.",
               bonusInsight: true,
               options: [
                 { label: "The radiation monitor flags elevated exposure.", goto: "dna_plus_radiation", requires: { clueFound: "HIGH_RADIATION" } },
@@ -2803,7 +2803,7 @@ const GAME_DATA = {
               ]
             },
             radiation_plus_dna: {
-              text: "Elevated ionizing radiation. DNA damage in actively growing tissue. That's the mechanism. Modeled secondary radiation can reach the seedlings, and damage in the meristems is especially disruptive because growth depends on cell division.",
+              text: "Elevated ionizing radiation. Abnormalities consistent with DNA damage in actively growing tissue. That's the likely mechanism. Modeled secondary radiation can reach the seedlings, and damage in the meristems is especially disruptive because growth depends on cell division.",
               bonusInsight: true,
               options: [
                 { label: "The shielding was designed for crew, not crops.", goto: "full_picture", requires: { clueFound: "SHIELDING_INSUFFICIENT" } },
@@ -2946,7 +2946,7 @@ const GAME_DATA = {
               ]
             },
             radiation_detail: {
-              text: "+----------------------------------+\n|  RADIATION MONITORING            |\n+----------------------------------+\n\nAmbient ionizing radiation:\n  ELEVATED\nStatus:  !! ABOVE GROW-CHAMBER\n             WARNING LEVEL !!\n\nSources:\n  Residual energetic particles from\n  Jupiter's radiation environment\n  Modeled secondary radiation from\n  surrounding materials\n\nCrop biological assessment:\n  INCOMPLETE\n\nNote: Exposure measurements do not\nby themselves establish biological\ndamage or risk. Assess crew and crop\nseparately.",
+              text: "+----------------------------------+\n|  RADIATION MONITORING            |\n+----------------------------------+\n\nAmbient ionizing radiation:\n  ELEVATED\nStatus:  !! ELEVATED !!\n\nSources:\n  Residual energetic particles from\n  Jupiter's radiation environment\n  Modeled secondary radiation from\n  surrounding materials\n\nCrop biological assessment:\n  INCOMPLETE\n\nNote: Exposure measurements do not\nby themselves establish biological\ndamage or risk. Assess crew and crop\nseparately.",
               revealsClue: "HIGH_RADIATION",
               options: [
                 { label: "Query: radiation effects on cellular division", goto: "cellular_query", requires: { clueFound: "DNA_DAMAGE_PATTERN" } },
@@ -3079,7 +3079,7 @@ const GAME_DATA = {
               ]
             },
             radiation_search: {
-              text: "+----------------------------------+\n|  SEARCH: radiation data          |\n|  3 results                       |\n+----------------------------------+\n\nResult 1 - Construction Spec:\n\"Primary energetic particles are\nreduced. Secondary radiation is not\nfully characterized.\"\n\nResult 2 - Risk Assessment:\n\"Crew and crop require separate\nexposure and risk assessments. Crop\nassessment remains incomplete.\"\n\nResult 3 - Environmental Monitor:\n\"Grow-chamber ionizing radiation:\nelevated above verified warning\nlevel. Modeled secondary radiation\nmay contribute.\"",
+              text: "+----------------------------------+\n|  SEARCH: radiation data          |\n|  3 results                       |\n+----------------------------------+\n\nResult 1 - Construction Spec:\n\"Primary energetic particles are\nreduced. Secondary radiation is not\nfully characterized.\"\n\nResult 2 - Risk Assessment:\n\"Crew and crop require separate\nexposure and risk assessments. Crop\nassessment remains incomplete.\"\n\nResult 3 - Environmental Monitor:\n\"Grow-chamber ionizing radiation:\nelevated. Modeled secondary\nradiation may contribute.\"",
               bonusInsight: true,
               options: [
                 { label: "Search: biological effects of radiation", goto: "dna_damage_search", requires: { clueFound: "DNA_DAMAGE_PATTERN" } },
@@ -3128,9 +3128,9 @@ const GAME_DATA = {
             portrait:   "portrait_sensors.png",
             actionIcon: "icon_sensors.png"
           },
-          text: "Nutrients optimal. Water pH 6.5. Temp 21\u00b0C. Humidity 60%. Light: full-spectrum LEDs, 16/8 cycle. CO\u2082 1000ppm.\n\n\u2622\ufe0f Radiation monitor: ELEVATED. [WARNING: ABOVE GROW-CHAMBER WARNING LEVEL]\nExposure includes residual energetic particles from Jupiter's radiation environment and modeled secondary radiation generated by interactions with surrounding materials. Crop-specific biological assessment: INCOMPLETE.",
+          text: "Nutrients optimal. Water pH 6.5. Temp 21\u00b0C. Humidity 60%. Light: full-spectrum LEDs, 16/8 cycle. CO\u2082 1000ppm.\n\n\u2622\ufe0f Radiation monitor: ELEVATED. [WARNING: CROP ASSESSMENT INCOMPLETE]\nExposure includes residual energetic particles from Jupiter's radiation environment and modeled secondary radiation generated by interactions with surrounding materials. Crop-specific biological assessment: INCOMPLETE.",
           clueTag: "HIGH_RADIATION",
-          learned: "The monitor flags elevated ionizing radiation above the grow-chamber warning level; crop risk requires a separate biological assessment."
+          learned: "The monitor flags elevated ionizing radiation in the grow chamber; crop risk requires a separate biological assessment."
         },
         {
           action: "plants",
@@ -3181,7 +3181,7 @@ const GAME_DATA = {
         },
         {
           id: "radiation",
-          label: "Elevated ionizing radiation \u2014 including modeled secondary radiation \u2014 is causing DNA damage in meristematic seedling tissue.",
+          label: "The converging evidence indicates that elevated ionizing radiation \u2014 potentially including modeled secondary radiation \u2014 is damaging meristematic seedling tissue.",
           isCorrect: true
         }
       ],
@@ -3190,7 +3190,7 @@ const GAME_DATA = {
 
       explanation: {
         title: "Ionizing Space Radiation: An Invisible Farming Hazard",
-        body: "Earth's magnetic field and thick atmosphere shield surface life from much of the space-radiation environment. The ISS remains in low Earth orbit inside Earth's magnetosphere, and its structure adds further shielding. The Moon is different: it has almost no atmosphere and no global magnetic field, so lunar habitats require their own local shielding. The Moon passes through parts of Earth's magnetotail for a few days during some orbits, but that protection is partial and intermittent. Europa, meanwhile, orbits within energetic particles trapped in Jupiter's magnetosphere. Even beneath ice, interactions between energetic particles and shielding materials can produce secondary radiation that must be considered in habitat design.\n\nIonizing radiation can damage DNA in dividing and nondividing cells. Damage in meristems \u2014 the actively dividing tissues at root and shoot tips \u2014 can be especially disruptive because continued growth depends on successful cell division. Sensitivity depends on dose, dose rate, radiation quality, species, tissue, developmental stage, and repair capacity; human exposure criteria do not establish crop safety. In this fictional scenario, elevated monitor readings, meristem abnormalities consistent with DNA damage, and an incomplete crop-specific shielding assessment converge on the diagnosis. Possible responses include additional shielding (water walls, regolith packing), selecting radiation-tolerant crop varieties, shorter-cycle crops, and strategic placement of grow chambers in the most shielded areas.",
+        body: "Earth's magnetic field and thick atmosphere shield surface life from much of the space-radiation environment. The ISS remains in low Earth orbit inside Earth's magnetosphere, and its structure adds further shielding. The Moon is different: it has almost no atmosphere and no global magnetic field, so lunar habitats require their own local shielding. The Moon passes through parts of Earth's magnetotail for a few days during some orbits, but that protection is partial and intermittent. Europa, meanwhile, orbits Jupiter within a region of its magnetosphere populated by trapped energetic particles. Even beneath ice, interactions between energetic particles and shielding materials can produce secondary radiation that must be considered in habitat design.\n\nIonizing radiation can damage DNA in dividing and nondividing cells. Damage in meristems \u2014 the actively dividing tissues at root and shoot tips \u2014 can be especially disruptive because continued growth depends on successful cell division. Sensitivity depends on dose, dose rate, radiation quality, species, tissue, developmental stage, and repair capacity; human exposure criteria do not establish crop safety. In this fictional scenario, elevated monitor readings, meristem abnormalities consistent with DNA damage, and an incomplete crop-specific shielding assessment converge on the diagnosis. Possible responses include additional shielding (water walls, regolith packing), selecting radiation-tolerant crop varieties, shorter-cycle crops, and strategic placement of grow chambers in the most shielded areas.",
         funFact: "Tardigrades \u2014 the famously indestructible micro-animals \u2014 survive extreme radiation partly through a unique protein called Dsup (Damage Suppressor) that physically wraps around DNA to shield it. Scientists have experimentally transferred the Dsup gene into plant cells, significantly boosting their radiation tolerance. Future space crops might carry tardigrade genes."
       }
     },
