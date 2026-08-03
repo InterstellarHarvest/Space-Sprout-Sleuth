@@ -4362,7 +4362,7 @@
       }, { once: true });
     }
 
-    // If case has a solution choice (e.g. Case 6b), show that before explanation.
+    // If case has a solution choice (e.g. Case 07), show that before explanation.
     // Otherwise, preserve an authored resolution/handoff before the science recap.
     if (caseData.solutionChoice) {
       showSolutionChoice(caseData, score);
@@ -5305,7 +5305,7 @@
     sceneFxRAF = requestAnimationFrame(tick);
   }
 
-  // ── Amber pulse effect (Case 6b genesis pod glow) ───────────────
+  // ── Amber pulse effect (Case 07 genesis pod glow) ───────────────
   let amberPulseImg = null;
   let amberPulsePhase = 0;
   let amberPulseRAF = null;
@@ -5584,7 +5584,7 @@
       const ci = GAME_DATA.cases.findIndex(c => c.id === cc.caseId);
       return ci >= 0 && ci <= 4;
     }).length >= 5 || STATE.currentCase >= 5;
-    // Case 6b (index 6): unlocked after Case 6 completed
+    // Case 07 (index 6): unlocked after Case 06 completed
     if (idx === 6) return STATE.completedCases.some(cc => cc.caseId === 'alien1');
     return false;
   }
@@ -6424,8 +6424,6 @@
     }
 
     function caseLabel(idx) {
-      if (idx === 5) return '6a';
-      if (idx === 6) return '6b';
       return idx + 1;
     }
 
