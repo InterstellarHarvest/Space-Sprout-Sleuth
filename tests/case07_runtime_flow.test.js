@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 
 const source = fs.readFileSync('index.html', 'utf8');
+const campaign2Source = fs.readFileSync('campaign_2_data.js', 'utf8');
 let assertions = 0;
 function matches(pattern, message) {
   assertions++;
@@ -57,6 +58,10 @@ matches(/STATE\.campaign1Complete = true;\n      saveState\(\);/, 'Campaign 1 vi
 matches(/INCOMING TRANSMISSION/, 'Campaign 1 victory communicates the unlocked follow-on campaign');
 matches(/function caseLabel\(idx\) \{\n      return idx \+ 1;\n    \}/, 'play-log events use curriculum case numbers 6 and 7');
 excludes(/function caseLabel\(idx\)[\s\S]{0,120}return '6[ab]'/, 'former 6a/6b labels are not emitted as current telemetry');
+assertions++;
+assert.doesNotMatch(campaign2Source, /Case File 6\/6b|Cases 6(?:\/| and )6b/, 'Campaign 2 player-facing continuity does not use 6b as current numbering');
+assertions++;
+assert.match(campaign2Source, /SAA Cases 06\\u201307/, 'Campaign 2 continuity identifies the predecessor sequence as Cases 06–07');
 const finalFunction = source.slice(
   source.indexOf('function finishFinalCase()'),
   source.indexOf('function nextCase()')
