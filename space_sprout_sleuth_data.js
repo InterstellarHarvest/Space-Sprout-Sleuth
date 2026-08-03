@@ -3500,17 +3500,17 @@ const GAME_DATA = {
               ]
             },
             organism_status: {
-              text: "\u2550\u2550\u2550 ORGANISM STATUS REPORT \u2550\u2550\u2550\n\nCanopy Organism: PHOTOSYNTHESIS ACTIVE\n  \u2514 Efficiency: 34% (nominal: 89%)\n  \u2514 Sugar output: REDUCED\n  \u2514 Bioluminescence: DIM\n\nRoot Organism: CHEMOSYNTHESIS ACTIVE\n  \u2514 Efficiency: 41% (nominal: 92%)\n  \u2514 Amino acid output: REDUCED\n  \u2514 Motility: SLUGGISH\n\nNetwork Organism: \u2588\u2588 DORMANT \u2588\u2588\n  \u2514 Signal activity: NONE\n  \u2514 Nutrient transfer: SUSPENDED\n  \u2514 Last detected signal: 72.4 hours ago\n\n\u26a0 WARNING: Symbiosis coordination offline.",
+              text: "\u2550\u2550\u2550 ORGANISM STATUS REPORT \u2550\u2550\u2550\n\nCanopy Organism: PHOTOSYNTHESIS ACTIVE\n  \u2514 Efficiency: 34% (nominal: 89%)\n  \u2514 Sugar output: REDUCED\n  \u2514 Bioluminescence: DIM\n\nRoot Organism: CHEMOSYNTHESIS ACTIVE\n  \u2514 Efficiency: 41% (nominal: 92%)\n  \u2514 Amino acid output: REDUCED\n  \u2514 Motility: SLUGGISH\n\nNetwork Organism: \u2588\u2588 DORMANT \u2588\u2588\n  \u2514 Signal activity: NONE\n  \u2514 Nutrient transfer: SUSPENDED\n  \u2514 Last detected signal: 72.1 hours ago\n\n\u26a0 WARNING: Symbiosis coordination offline.",
               setsFlag: "saw_organism_status",
               options: [
                 { label: "Query: Atmospheric composition", goto: "atmosphere" },
                 { label: "Query: Docking system logs", goto: "docking_logs" },
-                { label: "72.4 hours \u2014 that's almost exactly when docking occurred.", goto: "timing_match" },
+                { label: "72.1 hours \u2014 that's almost exactly when docking occurred.", goto: "timing_match" },
                 { label: "Exit interface", goto: "exit_neutral" }
               ]
             },
             timing_match: {
-              text: "\u2550\u2550\u2550 CORRELATION ANALYSIS \u2550\u2550\u2550\n\nDocking event timestamp: 72.1 hours ago\nLast network signal:     72.4 hours ago\nVariance: 0.3 hours\n\n\u26a0 CORRELATION: Network dormancy onset aligns with docking event to within measurement error.\n\nNote: Correlation does not confirm causation. However, no other significant system changes occurred within this timeframe.",
+              text: "\u2550\u2550\u2550 CORRELATION ANALYSIS \u2550\u2550\u2550\n\nDocking event timestamp: 72.4 hours ago\nLast network signal:     72.1 hours ago\nVariance: 0.3 hours\n\n\u26a0 CORRELATION: Network dormancy onset aligns with docking event to within measurement error.\n\nNote: Correlation does not confirm causation. However, no other significant system changes occurred within this timeframe.",
               setsFlag: "timing_correlation_found",
               options: [
                 { label: "Query: What systems activated during docking?", goto: "docking_logs" },
@@ -3545,7 +3545,7 @@ const GAME_DATA = {
               ]
             },
             docking_logs: {
-              text: "\u2550\u2550\u2550 DOCKING EVENT LOG \u2550\u2550\u2550\n\nTimestamp: 72.1 hours ago\n\nSequence:\n 1. Docking bridge extended (human-side)\n 2. Atmospheric seals established\n 3. Pressure equalization \u2014 COMPLETE\n 4. Atmospheric exchange \u2014 INITIATED\n 5. Human life support adjustments \u2014 ENGAGED\n    \u2514 Air scrubbers: ACTIVATED\n    \u2514 Filtration mode: STANDARD CONTAMINANT REMOVAL\n    \u2514 Filter database: HUMAN-STANDARD\n 6. Zhel'ora systems: NO CHANGES\n\n\u26a0 Note: Human scrubber activation was automatic. No manual override or alien-biology exception was configured.",
+              text: "\u2550\u2550\u2550 DOCKING EVENT LOG \u2550\u2550\u2550\n\nTimestamp: 72.4 hours ago\n\nSequence:\n 1. Docking bridge extended (human-side)\n 2. Atmospheric seals established\n 3. Pressure equalization \u2014 COMPLETE\n 4. Atmospheric exchange \u2014 INITIATED\n 5. Human life support adjustments \u2014 ENGAGED\n    \u2514 Air scrubbers: ACTIVATED\n    \u2514 Filtration mode: STANDARD CONTAMINANT REMOVAL\n    \u2514 Filter database: HUMAN-STANDARD\n 6. Zhel'ora systems: NO CHANGES\n\n\u26a0 Note: Human scrubber activation was automatic. No manual override or alien-biology exception was configured.",
               setsFlag: "saw_docking_logs",
               options: [
                 { label: "Query: Atmospheric composition", goto: "atmosphere" },
