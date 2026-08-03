@@ -55,6 +55,8 @@ matches(/if \(shouldRankUp\) STATE\.rank\+\+;[\s\S]*?saveState\(\);/, 'final ran
 matches(/showCaseVictory,\n    finishFinalCase,\n    showVictory,/, 'new final-flow handlers are exposed to inline controls');
 matches(/STATE\.campaign1Complete = true;\n      saveState\(\);/, 'Campaign 1 victory persists the Campaign 2 unlock');
 matches(/INCOMING TRANSMISSION/, 'Campaign 1 victory communicates the unlocked follow-on campaign');
+matches(/function caseLabel\(idx\) \{\n      return idx \+ 1;\n    \}/, 'play-log events use curriculum case numbers 6 and 7');
+excludes(/function caseLabel\(idx\)[\s\S]{0,120}return '6[ab]'/, 'former 6a/6b labels are not emitted as current telemetry');
 const finalFunction = source.slice(
   source.indexOf('function finishFinalCase()'),
   source.indexOf('function nextCase()')
