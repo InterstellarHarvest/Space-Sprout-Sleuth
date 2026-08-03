@@ -1907,7 +1907,7 @@ const CAMPAIGN_2_DATA = {
 
     // ── CASE 4: Zhel'ii Diaspora Habitat ─────────────────────────
     // Design-doc codename: "The Silent Grove". Mirrors Campaign 1 Case 4
-    // (photoperiod) + builds on Campaign 1 Case 6/6b (VOC signaling /
+    // (photoperiod) + builds on Campaign 1 Cases 06-07 (VOC signaling /
     // symbiosis). Includes the genesis pod callback. Home-species: Zhel'ii.
     {
       id: "silent_grove",
@@ -2340,7 +2340,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             symbiosis_data: {
-              text: "\u2014\u2014\u2014 THREE-WHO-ARE-ONE \u2014 SYMBIOSIS OVERVIEW \u2014\u2014\u2014\n\nA three-organism obligate symbiosis native to Zhel'ora. First encountered by humans during the Zhel'ora botanical vessel incident (ref: SAA Case File 6/6b).\n\nThe original genesis pod was successfully germinated in human care, validating cross-species cultivation. Descendants have been distributed to several Zhel'ii diaspora communities.\n\nKey vulnerability: the symbiosis depends entirely on VOC-mediated communication. Any factor that disrupts signaling (atmospheric filtering, circadian disruption, chemical interference) will cause the network to enter controlled dormancy. Dormancy is reversible if the disruption is identified and corrected within 6 months.",
+              text: "\u2014\u2014\u2014 THREE-WHO-ARE-ONE \u2014 SYMBIOSIS OVERVIEW \u2014\u2014\u2014\n\nA three-organism obligate symbiosis native to Zhel'ora. First encountered by humans during the Zhel'ora botanical vessel incident (ref: SAA Cases 06\u201307).\n\nThe original genesis pod was successfully germinated in human care, validating cross-species cultivation. Descendants have been distributed to several Zhel'ii diaspora communities.\n\nKey vulnerability: the symbiosis depends entirely on VOC-mediated communication. Any factor that disrupts signaling (atmospheric filtering, circadian disruption, chemical interference) will cause the network to enter controlled dormancy. Dormancy is reversible if the disruption is identified and corrected within 6 months.",
               options: [
                 { label: "[back] Return to search", goto: "start" },
                 { label: "[exit] Close database", goto: "exit_done" }
@@ -2455,7 +2455,7 @@ const CAMPAIGN_2_DATA = {
 
       explanation: {
         title: "Circadian Signaling: When Darkness Is a Nutrient",
-        body: "Plants don't just photosynthesize during the day and rest at night. They use the transition between light and dark as a timing signal \u2014 a zeitgeber \u2014 that synchronizes an enormous range of metabolic processes. Defense compounds are synthesized at night. Stomata cycles are reset at dawn. Jasmine releases its scent in darkness. The dark period isn't downtime. It's when the most important work happens.\n\nThe Zhel'ii three-who-are-one symbiosis takes this further. The network's volatile signaling compounds \u2014 the 'voice' that coordinates the vine, the fungal mat, and the fern-analogue \u2014 are produced almost exclusively during the dark period. The biosynthetic pathway that makes these compounds is suppressed during photosynthesis because the metabolic resources are allocated elsewhere. Only when the lights go off does the network redirect energy from growth to communication.\n\nContinuous light doesn't just prevent rest. It locks the internal clock in a state where the signaling pathway never activates. The clock needs periodic darkness to reset, the same way a pendulum needs to swing back before it can swing forward. Without the reset, the clock drifts to a permanent 'midday' reading where VOC production is at its minimum \u2014 and stays there.\n\nThis case required stacking two principles: photoperiodism (the need for periodic darkness, from Campaign 1 Case 4) and VOC-mediated symbiotic signaling (from Campaign 1 Cases 6 and 6b). Neither principle alone explains the silence. Together, they reveal that the caretakers' well-intentioned kindness \u2014 more light for more energy \u2014 was precisely what silenced the grove.",
+        body: "Plants don't just photosynthesize during the day and rest at night. They use the transition between light and dark as a timing signal \u2014 a zeitgeber \u2014 that synchronizes an enormous range of metabolic processes. Defense compounds are synthesized at night. Stomata cycles are reset at dawn. Jasmine releases its scent in darkness. The dark period isn't downtime. It's when the most important work happens.\n\nThe Zhel'ii three-who-are-one symbiosis takes this further. The network's volatile signaling compounds \u2014 the 'voice' that coordinates the vine, the fungal mat, and the fern-analogue \u2014 are produced almost exclusively during the dark period. The biosynthetic pathway that makes these compounds is suppressed during photosynthesis because the metabolic resources are allocated elsewhere. Only when the lights go off does the network redirect energy from growth to communication.\n\nContinuous light doesn't just prevent rest. It locks the internal clock in a state where the signaling pathway never activates. The clock needs periodic darkness to reset, the same way a pendulum needs to swing back before it can swing forward. Without the reset, the clock drifts to a permanent 'midday' reading where VOC production is at its minimum \u2014 and stays there.\n\nThis case required stacking two principles: photoperiodism (the need for periodic darkness, from Campaign 1 Case 04) and VOC-mediated symbiotic signaling (from Campaign 1 Cases 06 and 07). Neither principle alone explains the silence. Together, they reveal that the caretakers' well-intentioned kindness \u2014 more light for more energy \u2014 was precisely what silenced the grove.",
         funFact: "Many Earth plants are more metabolically active at night than during the day. CAM photosynthesis plants (like cacti) open their stomata only at night to fix carbon dioxide. Rubber trees produce most of their latex at night. And the 'dawn chorus' of birdsong at sunrise? Plants have their own version: a burst of VOC emissions at the light-to-dark transition that scientists call the 'dusk pulse.'"
       },
 
@@ -2470,7 +2470,7 @@ const CAMPAIGN_2_DATA = {
     // Design-doc codename: "Too Clean a Room". Mirrors Campaign 1 Case 5
     // (radiation) but inverted — radiation as nutrient, not enemy. Also
     // lands the Concord political arc. Includes solution choice reusing
-    // the existing SOLUTION_CHOICE screen state from Case 6b.
+    // the existing SOLUTION_CHOICE screen state from Case 07.
     {
       id: "too_clean_room",
       name: "Concord Botanical Vault",
@@ -3659,7 +3659,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             soil_network: {
-              text: "\u2014\u2014\u2014 UNDERGROUND NETWORKS \u2014 CROSS-SPECIES SURVEY \u2014\u2014\u2014\n\nEarth: Mycorrhizal fungi (multiple phyla). Symbiotic. Transport via hyphal network.\nVorn-Shael homeworld: Crystalline filament organisms. Mutualistic. Transport via mineral conduits.\nZhel'ii: Three-who-are-one VOC signaling (aerial, not subterranean).\nOolian: Kelp anchor-root networks (marine equivalent).\n\nCommon principle: healthy ecosystems rely on biological connectivity between organisms. When the connecting organism is removed, the ecosystem fragments into isolated zones \u2014 even if the chemistry of each zone is individually adequate.\n\nThis principle was demonstrated in Campaign 1 Cases 6/6b (Zhel'ii symbiosis disruption) and Campaign 2 Case 4 (circadian signaling disruption).",
+              text: "\u2014\u2014\u2014 UNDERGROUND NETWORKS \u2014 CROSS-SPECIES SURVEY \u2014\u2014\u2014\n\nEarth: Mycorrhizal fungi (multiple phyla). Symbiotic. Transport via hyphal network.\nVorn-Shael homeworld: Crystalline filament organisms. Mutualistic. Transport via mineral conduits.\nZhel'ii: Three-who-are-one VOC signaling (aerial, not subterranean).\nOolian: Kelp anchor-root networks (marine equivalent).\n\nCommon principle: healthy ecosystems rely on biological connectivity between organisms. When the connecting organism is removed, the ecosystem fragments into isolated zones \u2014 even if the chemistry of each zone is individually adequate.\n\nThis principle was demonstrated in Campaign 1 Cases 06\u201307 (Zhel'ii symbiosis disruption) and Campaign 2 Case 04 (circadian signaling disruption).",
               bonusInsight: true,
               options: [
                 { label: "[back] Return to search", goto: "start" },
