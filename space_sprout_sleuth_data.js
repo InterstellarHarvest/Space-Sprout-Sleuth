@@ -3879,7 +3879,7 @@ const GAME_DATA = {
       }
     },
 
-    // ── CASE 6b: The Gift (BONUS) ───────────────────────────────────
+    // ── CASE 07: The Gift (formerly Case 6b) ────────────────────────
     {
       id: "alien2",
       name: "The Gift",
@@ -3899,7 +3899,7 @@ const GAME_DATA = {
         sceneAlt:  "sprites/scene_xenobio2.png",
         sceneAltFx: "amberPulse"
       },
-      briefing: "The genesis pod has been secured in the SAA Xenobiology Lab. We've recreated every measurable condition from the Zhel'ora \u2014 atmosphere, light spectrum, temperature, humidity. The scrubbers are off.\n\nThe pod won't germinate.\n\nZel'keth assures us it's viable, but they don't seem to understand why it isn't responding either. Their exact words: 'We place genesis pods near the mature growth. That is how it is done. We had not considered why.'\n\nDr. Nova, humanity's first alien biological sample is sitting inert in a lab. Figure out what it needs.",
+      briefing: "The genesis pod has been secured in the SAA Xenobiology Lab. We've recreated every target condition we knew to measure from the Zhel'ora \u2014 primary atmosphere, light spectrum, temperature, and humidity. The chamber remains isolated, and its scrubbers are disabled under the monitored protocol established after Case 6.\n\nThe pod won't germinate.\n\nZel'keth assures us it's viable, but they don't seem to understand why it isn't responding either. Their exact words: 'We place genesis pods near the mature growth. That is how it is done. We had not considered why.'\n\nDr. Nova, humanity's first alien biological sample is sitting inert in a contained lab. Figure out what measured variable is missing and recommend a safe way to test it.",
 
       actionLabels: {
         crew:    "Consult Liaison",
@@ -3922,7 +3922,7 @@ const GAME_DATA = {
                 { label: "Why near established growth specifically?", goto: "proximity_detail" },
                 { label: "Could the mature network be sending something to the pod?", goto: "network_signal_idea" },
                 { label: "Have you ever germinated a pod away from mature growth?", goto: "isolated_germination" },
-                { label: "Our atmosphere is 'too clean' \u2014 no trace VOCs detected.", goto: "too_clean", requires: { clueFound: "MISSING_VOCS" } },
+                { label: "Our atmosphere is 'too clean' \u2014 almost all trace biological compounds are absent.", goto: "too_clean", requires: { clueFound: "MISSING_VOCS" } },
                 { label: "The pod is waiting for a specific germination trigger.", goto: "trigger_discussion", requires: { clueFound: "WAITING_FOR_TRIGGER" } },
                 { label: "Your archives mention a 'germination cascade compound.'", goto: "compound_discussion", requires: { clueFound: "GERMINATION_COMPOUND" } },
                 { label: "Maybe the pod was damaged during transfer.", goto: "wrong_damage" },
@@ -3941,7 +3941,7 @@ const GAME_DATA = {
               ]
             },
             canopy_reach: {
-              text: "Within the canopy's reach... [Zel'keth considers, colors cycling]\n\nPhysically, genesis pods are placed within [TRANSLATOR: calculating] perhaps 2-3 of your meters from the nearest mature growth. Close enough to be within the atmosphere that the network maintains.\n\nThe atmosphere that the network maintains...\n\n[Colors shift to intrigued teal]\n\nDr. Nova, you have given me a thought. The mature network fills the air with its signals \u2014 its volatile compounds. Genesis pods placed nearby would be immersed in those compounds.\n\nIs it possible that the pod needs to [TRANSLATOR: hear? smell? detect?] the network's signals to awaken?",
+              text: "Within the canopy's reach... [Zel'keth considers, colors cycling]\n\nPhysically, genesis pods are placed within perhaps 2-3 of your meters from the nearest mature growth, along the same airflow.\n\nThe atmosphere that the network maintains...\n\n[Colors shift to intrigued teal]\n\nThe mature network releases many trace compounds. A nearby pod would encounter them. That makes a network-derived chemical cue a testable hypothesis \u2014 not yet a diagnosis. We still need evidence that the pod is viable, that the lab lacks a relevant compound, and that a receptor-cue mechanism exists.",
               moodShift: 1,
               portraitOverride: "portrait_alien_intrigued.png",
               setsFlag: "zelketh_canopy_insight",
@@ -3951,7 +3951,7 @@ const GAME_DATA = {
               ]
             },
             wake_up_call: {
-              text: "[Zel'keth's entire form glows with excited teal]\n\nA wake-up call! A chemical signal that says 'you are not alone \u2014 begin growing \u2014 we will support you!'\n\nOf course! The genesis pod would not waste its one chance at germination without confirmation that a support network exists. Evolution would select for this \u2014 pods that germinate in isolation die. Pods that wait for the network survive.\n\n[TRANSLATOR: revelation? eureka? the-moment-of-understanding?]\n\nBut Dr. Nova \u2014 you have no mature network in your laboratory. The pod is waiting for a signal that will never come. Unless...",
+              text: "[Zel'keth's entire form glows with excited teal]\n\nA possible wake-up cue! In our metaphor it might say, 'established growth is nearby.' But tradition and an appealing evolutionary story are not enough to prove the mechanism.\n\nIf isolated pods historically remained dormant while nearby pods germinated, a network-derived cue would explain the pattern. We must still identify a matching receptor response and archival record before exposing the pod to anything.\n\n[TRANSLATOR: promising-hypothesis?]\n\nYour laboratory has no mature network, so this is a missing-variable hypothesis worth testing.",
               moodShift: 1,
               portraitOverride: "portrait_alien_intrigued.png",
               options: [
@@ -3960,31 +3960,31 @@ const GAME_DATA = {
               ]
             },
             solution_hint: {
-              text: "[Zel'keth's colors pulse with hope and excitement]\n\nBring the signal to the pod! Yes! But how?\n\nThe mature three-who-are-one aboard the Zhel'ora produce the signal constantly as part of their normal activity. If we could get the signal to your laboratory...\n\n[Colors settle into thoughtful amber]\n\nThere are possibilities, Dr. Nova. I will think on this. Perhaps you should examine what your instruments and archives can tell us about the specific compound. Then we can determine the best approach.\n\nThe three-who-are-one on my ship are healthy again, thanks to you. Perhaps they can help their offspring, even at a distance.",
+              text: "[Zel'keth's colors pulse with cautious hope]\n\nIf the evidence confirms a network-derived cue, we would need to deliver it without opening an uncontrolled biological pathway.\n\n[Colors settle into thoughtful amber]\n\nFirst identify the compound, receptor response, range, and archived timing. Then compare proximity, capture, and synthesis for containment, dose, verification, reversibility, and authorization.\n\nThe three-who-are-one on my ship are healthy again, thanks to you. They may provide the authentic reference \u2014 if both teams agree.",
               setsFlag: "zelketh_willing_to_help",
               options: [
                 { label: "I'll identify the compound. Then we'll figure out delivery.", goto: "exit_positive" },
-                { label: "Could your ship dock closer to the lab?", goto: "proximity_option_early" }
+                { label: "The archive confirms the cue. Could your ship dock closer under containment?", goto: "proximity_option_early", requires: { clueFound: "GERMINATION_COMPOUND" } }
               ]
             },
             proximity_option_early: {
-              text: "[Zel'keth's colors brighten]\n\nDock closer? The Zhel'ora could relocate to the xenobiology port if your station permits. The mature network's signals might reach the pod through the station structure.\n\nIt would be the simplest solution \u2014 no extraction, no synthesis. Just... proximity. The way it has always been done.\n\n[TRANSLATOR: elegance? simplicity? the beauty of the obvious?]\n\nBut we should confirm that the pod truly needs this signal before making arrangements. Your archives may have the answer.",
+              text: "[Zel'keth's colors brighten]\n\nDock closer? The Zhel'ora could relocate to the xenobiology port if both teams authorize it. A short, sealed transfer line could carry a monitored sample of the mature network's air directly into the pod chamber; the compound cannot pass through walls or closed compartments.\n\nIt would preserve proximity without extracting or synthesizing the cue.\n\n[TRANSLATOR: elegance? simplicity? the beauty of the obvious?]\n\nBut we should confirm that the pod truly needs this cue, define a safe exposure range, and verify containment before making arrangements. Your archives may have the answer.",
               moodShift: 1,
               options: [
                 { label: "Good thinking. Let me verify in the archives first.", goto: "exit_positive" }
               ]
             },
             network_signal_idea: {
-              text: "[Zel'keth pauses, colors cycling through deep thought]\n\nThe mature network sending something... Yes. The mature three-who-are-one constantly produce volatile compounds \u2014 their communication system. Any genesis pod placed nearby would be bathed in those compounds.\n\nWe never isolated which compound triggers germination because we never needed to. There was always a mature network present.\n\nYour species has a concept... [TRANSLATOR SEARCHING: 'mother tree?' 'nurse log?'] \u2014 an established organism that supports new growth. The three-who-are-one may require the same relationship. A new pod needs to hear the voice of the family before it will awaken.",
+              text: "[Zel'keth pauses, colors cycling through deep thought]\n\nThe mature network sending something... Yes. The mature three-who-are-one constantly release chemical signals. Any genesis pod placed nearby would encounter those compounds.\n\nWe never isolated which compound triggers germination because we never needed to. There was always a mature network present.\n\nYour species has concepts such as nurse plants and mycorrhizal partnerships, though their effects vary by species and setting. They are analogies, not proof of our mechanism. The three-who-are-one may require a network-derived cue. In our metaphor: a new pod waits to hear the voice of the family before it awakens.",
               moodShift: 1,
               setsFlag: "zelketh_mother_tree_concept",
               options: [
-                { label: "Mother trees \u2014 exactly. Seedlings need the network to survive.", goto: "earth_parallel_6b" },
+                { label: "Earth partnerships are a useful analogy, but we need Zhel'ii evidence.", goto: "earth_parallel_6b" },
                 { label: "I need to find the specific trigger compound.", goto: "exit_neutral" }
               ]
             },
             earth_parallel_6b: {
-              text: "[Zel'keth's colors glow with warm recognition]\n\nAgain the parallel! Your Earth seedlings depend on the [TRANSLATOR: myco-rhizal? fungal-web?] network to survive their first months. Without connection to established organisms, they struggle and often die.\n\nThe genesis pod is the same. It will not commit to germination \u2014 its one irreversible act \u2014 without confirmation that a support system exists.\n\n[Colors shift to grateful gold]\n\nDr. Nova, your understanding of your own world's biology is teaching us about ours. This is... [TRANSLATOR: beautiful? humbling? exactly why we came?].",
+              text: "[Zel'keth's colors glow with warm recognition]\n\nA careful parallel! Orchid seeds normally rely on compatible fungi in nature, and mycorrhizal associations can affect seedling establishment in some systems. But Earth seedlings do not all require a shared network, and claims of universal 'mother-tree' support are debated.\n\nThe Zhel'ii archive, not the Earth analogy, must establish what this pod requires. If it confirms a network-derived cue, the pod may delay its irreversible germination process until that cue reaches a threshold.\n\n[Colors shift to grateful gold]\n\nYour caution teaches us too, Dr. Nova: compare worlds, but do not confuse them.",
               moodShift: 2,
               portraitOverride: "portrait_alien_grateful.png",
               options: [
@@ -3994,6 +3994,7 @@ const GAME_DATA = {
             },
             isolated_germination: {
               text: "[Zel'keth's colors dim with uncertainty]\n\nGerminated in isolation? No. Never. This has never been attempted, as far as I know.\n\nWhy would it be? There is always mature growth available. Genesis pods are precious \u2014 you would not risk one by placing it somewhere without the support of established three-who-are-one.\n\n[Colors shift to puzzled gray]\n\nYour question implies that isolation itself might be the problem. That without nearby mature growth, the pod cannot or will not germinate.\n\nThis is... a possibility I had not considered. We assumed the pod simply needed the right physical conditions. Perhaps it needs something more... [TRANSLATOR: social? biological? relational?].",
+              revealsClue: "PROXIMITY_REQUIRED",
               setsFlag: "zelketh_isolation_insight",
               options: [
                 { label: "Could the mature network be sending a chemical trigger?", goto: "network_signal_idea" },
@@ -4001,7 +4002,7 @@ const GAME_DATA = {
               ]
             },
             too_clean: {
-              text: "[Zel'keth's colors shift rapidly \u2014 recognition]\n\nToo clean! Again! Your instruments detect no trace volatile compounds in the laboratory air?\n\nWhen we solved the scrubber problem, we restored the network's voice aboard the Zhel'ora. But your laboratory was always silent \u2014 it never had a network's voice to begin with.\n\nThe pod is in a room with perfect atmosphere for Zhel'ii biology... but without the chemical conversation that says 'life is here, it is safe to grow.'\n\n[TRANSLATOR: irony? parallel? we have learned this lesson before?]\n\nClean air. Again, clean air is the problem. Not what is present \u2014 what is absent.",
+              text: "[Zel'keth's colors shift rapidly \u2014 recognition]\n\nToo clean! Again! Your instruments detect almost none of the trace biological compounds found near mature growth?\n\nCase 6 showed that human processing removed the network's chemical signals aboard the Zhel'ora. Here, the contained laboratory never had a mature network to produce them.\n\nThe pod's primary target conditions match, but the living chemical context does not. 'Clean air is the problem' is only a shorthand: the evidence points to one missing cue, not to adding an unfiltered ecosystem.",
               moodShift: 1,
               setsFlag: "zelketh_clean_air_again",
               options: [
@@ -4016,7 +4017,7 @@ const GAME_DATA = {
               ]
             },
             trigger_discussion: {
-              text: "[Zel'keth tilts their head]\n\nA specific germination trigger? You believe the pod is actively waiting for a signal?\n\nThis makes sense with what we know. On our world, seeds that germinate in poor conditions die. Seeds that wait for confirmation of good conditions survive. Evolution would select for a trigger requirement.\n\n[Colors cycle through understanding]\n\nOn Earth, some seeds wait for fire. Some wait for cold. Some wait for digestion by animals. The genesis pod waits for... the voice of the family?\n\nDr. Nova, you understand alien biology better than we understand our own agricultural traditions.",
+              text: "[Zel'keth tilts their head]\n\nA specific germination trigger? You believe the pod is actively waiting for a cue?\n\nThis makes sense with what we know. On our world, pods that delay germination until suitable conditions may survive more often. But we still need direct evidence for this pod.\n\n[Colors cycle through understanding]\n\nOn Earth, species differ: some seeds respond to heat or smoke chemicals, some to cold stratification, and gut passage can scarify or damage seeds depending on the plant and animal. The genesis pod may wait for what our metaphor calls 'the voice of the family.'\n\nLet us verify the mechanism in Zhel'ii records.",
               moodShift: 1,
               options: [
                 { label: "The archives might tell us what compound triggers germination.", goto: "exit_neutral" },
@@ -4030,12 +4031,12 @@ const GAME_DATA = {
               options: [
                 { label: "Could your ship dock closer so the signal reaches the pod?", goto: "solution_proximity" },
                 { label: "Could we extract a sample of the compound from your network?", goto: "solution_extract" },
-                { label: "We could synthesize it \u2014 we have the chemical formula.", goto: "solution_synthesize", requires: { clueFound: "GERMINATION_COMPOUND" } },
+                { label: "Could synthesis work if the full structure and formulation are validated?", goto: "solution_synthesize", requires: { clueFound: "GERMINATION_COMPOUND" } },
                 { label: "I need to think about the best approach.", goto: "exit_neutral" }
               ]
             },
             solution_proximity: {
-              text: "[Zel'keth's colors brighten immediately]\n\nYes! The Zhel'ora could relocate to the xenobiology docking port. The mature network's signals would pass through the station walls \u2014 not perfectly, but enough.\n\nSimple! Elegant! Very human thinking.\n\n[TRANSLATOR: admiration? delight? this-is-why-we-asked-for-help?]\n\nThe mature three-who-are-one would do what they have always done \u2014 send the signal that says 'you are not alone.' And the genesis pod would hear it, and awaken.\n\nNo extraction. No synthesis. Just... proximity. The way it has always been done, with a small adjustment for the distance between our species.",
+              text: "[Zel'keth's colors brighten immediately]\n\nYes! With station and Zhel'ii authorization, the Zhel'ora could relocate to the xenobiology port. A sealed, independently monitored transfer line would connect the mature cultivation plume to the pod chamber over less than three meters. The cue cannot cross the station wall by itself.\n\nNo direct extraction. No unverified synthesis. We would begin below the archived exposure range, confirm the compound at the pod, monitor both atmospheres, and close the line if any unexpected organism or compound appears.\n\n[TRANSLATOR: admiration? shared caution?]\n\nProximity, but with containment and a reversible test.",
               moodShift: 1,
               setsFlag: "discussed_proximity_solution",
               options: [
@@ -4044,21 +4045,21 @@ const GAME_DATA = {
               ]
             },
             solution_extract: {
-              text: "[Zel'keth considers, colors cycling through thought]\n\nA sample of the germination compound... yes, a small extraction would not harm the collective. The mature network produces far more than it needs.\n\nWe can provide a [TRANSLATOR: bottle? vial? seed-of-communication?] of the compound. Your scientists may study it, synthesize more when needed.\n\nThis approach is... [TRANSLATOR: pragmatic? practical? less poetic but effective?]. It gives you independence. You would not need the Zhel'ora nearby for future germination attempts.\n\nIs independence what you want, Dr. Nova? Or connection?",
+              text: "[Zel'keth considers, colors cycling through thought]\n\nA captured sample of the germination cue may be possible, but we cannot assume an extraction is pure, harmless to the collective, or stable at a known dose. It could carry other Zhel'ii compounds or cells.\n\nWith Zhel'ii consent, a closed sampler could collect a small amount for identity, purity, concentration, and sterility checks before any exposure. The chamber would remain contained, and the first dose would be reversible until the pod crosses its germination threshold.\n\nThis approach is practical but less certain than a monitored natural plume. It requires joint authorization and verification, not merely a bottle.",
               moodShift: 0,
               setsFlag: "discussed_extract_solution",
               options: [
                 { label: "Let's try proximity first \u2014 connection sounds right.", goto: "solution_proximity" },
-                { label: "We could also synthesize it ourselves \u2014 we have the formula.", goto: "solution_synthesize", requires: { clueFound: "GERMINATION_COMPOUND" } },
+                { label: "Could a validated synthetic candidate reduce future extraction?", goto: "solution_synthesize", requires: { clueFound: "GERMINATION_COMPOUND" } },
                 { label: "I need to think about this.", goto: "exit_neutral" }
               ]
             },
             solution_synthesize: {
-              text: "[Zel'keth goes very still. Colors shift through complex patterns \u2014 awe? concern? admiration?]\n\nYour species can create the voice of the network? [TRANSLATOR: astonishment? admiration? slight concern?]\n\nThis is... impressive. The three-who-are-one would accept a synthesized signal. Biology does not distinguish between a natural compound and an identical synthetic one.\n\nBut please \u2014 verify the formulation carefully. A wrong note in the germination signal could produce... [TRANSLATOR STRUGGLING: malformation? discord? bad music?]. The pod trusts this signal completely.\n\n[Colors settle to respectful amber]\n\nYour species masters chemistry as we master cultivation. Different strengths. Perhaps that is also why this works.",
+              text: "[Zel'keth goes very still. Colors shift through complex patterns \u2014 awe? concern?]\n\nYour species might reproduce the cue? A molecular formula gives atom counts, not connectivity, three-dimensional configuration, purity, carrier, or safe dose. The archives provide a structural model, but no human synthesis has been validated.\n\nAn actually identical molecule could bind the same receptor, but we cannot assume we have made an identical or safely formulated product. Compare it with an authentic sample, verify structure and stereochemistry, test receptor binding outside the pod, and obtain joint authorization before a contained microdose.\n\n[Colors settle to respectful amber]\n\nScientific achievement begins with admitting what the formula does not tell us.",
               moodShift: 1,
               setsFlag: "discussed_synthesize_solution",
               options: [
-                { label: "We'll be careful. The pod will hear the right signal.", goto: "exit_positive" },
+                { label: "Only after authentic-standard and contained receptor tests.", goto: "exit_positive" },
                 { label: "Maybe proximity is safer \u2014 let your network do it naturally.", goto: "solution_proximity" }
               ]
             },
@@ -4116,7 +4117,7 @@ const GAME_DATA = {
               ]
             },
             micro_stimuli: {
-              text: "\u2550\u2550\u2550 MICRO-STIMULI RESPONSE DATA \u2550\u2550\u2550\n\nThe pod's outer membrane shows receptor sites that\nrespond to specific chemical signatures:\n\n \u2022 Light wavelengths: RESPONSIVE (confirms viability)\n \u2022 Temperature changes: RESPONSIVE (confirms viability)\n \u2022 Atmospheric pressure: RESPONSIVE (confirms viability)\n \u2022 Complex organic volatiles: RECEPTOR SITES ACTIVE\n   \u2514 Receptor type: HIGHLY SPECIFIC\n   \u2514 Target compound: UNKNOWN (not in human database)\n   \u2514 Receptor density: EXTREMELY HIGH\n   \u2514 Position: Concentrated on pod surface facing outward\n\n\u26a0 The pod has many more chemical receptors than\n  environmental receptors. It is optimized for\n  detecting a specific volatile compound.\n\nThis compound is NOT present in the lab atmosphere.",
+              text: "\u2550\u2550\u2550 MICRO-STIMULI RESPONSE DATA \u2550\u2550\u2550\n\nThe pod's outer membrane responds to controlled stimuli:\n\n \u2022 Light wavelengths: RESPONSIVE (supports viability)\n \u2022 Temperature changes: RESPONSIVE (supports viability)\n \u2022 Atmospheric pressure: RESPONSIVE (supports viability)\n \u2022 Complex organic ligands: RECEPTOR RESPONSE ACTIVE\n   \u2514 Selectivity: HIGH in preliminary binding tests\n   \u2514 Target compound: UNKNOWN (not in human database)\n   \u2514 Receptor density: EXTREMELY HIGH\n   \u2514 Position: Concentrated on outward pod surface\n\nThe response pattern supports a chemical-cue hypothesis,\nbut does not identify the ligand or safe dose. No matching\nligand is detected in the lab atmosphere.",
               setsFlag: "pod_has_chemical_receptors",
               options: [
                 { label: "Scan: Atmospheric analysis", goto: "atmosphere" },
@@ -4125,17 +4126,17 @@ const GAME_DATA = {
               ]
             },
             atmosphere: {
-              text: "\u2550\u2550\u2550 LAB ATMOSPHERIC ANALYSIS \u2550\u2550\u2550\n\nAtmospheric Match to Zhel'ora: 99.7%\n\n Component          \u2502 Lab    \u2502 Zhel'ora \u2502 Match\n \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n Primary gas mix    \u2502 \u2713      \u2502 \u2713        \u2502 100%\n Temperature        \u2502 18.4\u00b0C \u2502 18.2\u00b0C   \u2502 99.9%\n Humidity           \u2502 71%    \u2502 72%      \u2502 98.6%\n Light spectrum     \u2502 MATCHED\u2502 \u2014        \u2502 99.1%\n Pressure           \u2502 MATCHED\u2502 \u2014        \u2502 100%\n Trace VOC profile  \u2502 MINIMAL\u2502 COMPLEX  \u2502 1.4%\n\n\u26a0 ANOMALY: Trace VOC match is 1.4%\n\nLab atmosphere matches Zhel'ora in all primary\nparameters. The only significant difference is\ntrace volatile organic compounds.\n\nZhel'ora cultivation area: 847+ distinct VOCs\nLab atmosphere: 12 residual compounds\n\nThe lab atmosphere is 'clean' \u2014 no complex organics.",
+              text: "\u2550\u2550\u2550 LAB ENVIRONMENTAL ANALYSIS \u2550\u2550\u2550\n\nPrimary-condition similarity index: 99.7%\n(composite instrument result; excludes trace compounds)\n\n Component          \u2502 Lab       \u2502 Zhel'ora  \u2502 Difference\n \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n Primary gas targets\u2502 WITHIN     \u2502 WITHIN    \u2502 within tolerance\n Temperature        \u2502 18.4\u00b0C    \u2502 18.2\u00b0C   \u2502 +0.2\u00b0C\n Humidity           \u2502 71%       \u2502 72%      \u2502 -1 percentage point\n Light spectrum     \u2502 MATCHED   \u2502 REFERENCE\u2502 within tolerance\n Pressure           \u2502 MATCHED   \u2502 REFERENCE\u2502 within tolerance\n Trace identifiers  \u2502 12        \u2502 847+     \u2502 1.4% coverage*\n\n* 12 \u00f7 847 \u00d7 100 = 1.416...%, rounded to 1.4%.\n\n\u26a0 ANOMALY: Primary targets match, but almost all\ntrace biological compounds are absent.\n\nThe lab is 'clean' because it was built without a\nliving Zhel'ii network; this is not proof that every\nbiologically necessary condition has been reproduced.",
               revealsClue: "MISSING_VOCS",
               options: [
-                { label: "99.7% match but missing almost all volatile compounds.", goto: "voc_gap" },
+                { label: "Primary targets match, but almost all trace biological compounds are missing.", goto: "voc_gap" },
                 { label: "Scan: Pod status", goto: "pod_status" },
                 { label: "Scan: Environmental comparison", goto: "comparison" },
                 { label: "Exit console", goto: "exit_neutral" }
               ]
             },
             voc_gap: {
-              text: "\u2550\u2550\u2550 VOC GAP ANALYSIS \u2550\u2550\u2550\n\nThe 847+ compounds present in the Zhel'ora's\ncultivation area include:\n\n \u2022 Network signaling compounds: ~340\n \u2022 Metabolic byproducts: ~290\n \u2022 Environmental/growth markers: ~217\n\nOur lab has NONE of these because we built a\nclean-room environment from scratch. We matched\nthe primary atmospheric components but never\nintroduced the trace compounds that a living\necosystem naturally produces.\n\nWe recreated the Zhel'ora's air.\nWe did NOT recreate the Zhel'ora's ecosystem.\n\nThe difference between a sterile room and a\nliving environment is the chemical conversation\nhappening in the background.",
+              text: "\u2550\u2550\u2550 TRACE-COMPOUND GAP ANALYSIS \u2550\u2550\u2550\n\nThe 847+ identifiers in the Zhel'ora cultivation area include:\n \u2022 Network signaling compounds: at least 340\n \u2022 Metabolic byproducts: approximately 290\n \u2022 Environmental/growth markers: approximately 217\n\nThe lab's 12 residual identifiers do not match this\nZhel'ii set. The chamber was built from scratch and\nreproduces primary target conditions, not the chemical\noutput of a living ecosystem.\n\nThis narrows the missing-variable search to trace\nbiological compounds; it does not show which one matters.\nReceptor and archive evidence are still required.",
               setsFlag: "understood_voc_gap",
               options: [
                 { label: "Scan: Can we identify the specific germination trigger?", goto: "trigger_search" },
@@ -4144,14 +4145,15 @@ const GAME_DATA = {
               ]
             },
             trigger_search: {
-              text: "\u2550\u2550\u2550 GERMINATION TRIGGER SEARCH \u2550\u2550\u2550\n\nCross-referencing pod receptor data with known\nZhel'ora volatile compound profiles...\n\nThe pod's high-density chemical receptors are\ncalibrated for a SPECIFIC compound \u2014 not the\ngeneral VOC mix.\n\nCompound class: Complex organic volatile\nMolecular weight: HEAVY (unusual for a volatile)\nPersistence: SHORT-LIVED in open atmosphere\nSource: Likely produced by network organism\n         during normal signaling activity\n\nThis compound is NOT in the human chemistry\ndatabase. Formula unavailable from sensor data\nalone.\n\nRecommendation: Check Zhel'ii botanical archives\nfor germination-specific compound data.",
+              text: "\u2550\u2550\u2550 GERMINATION CUE SEARCH \u2550\u2550\u2550\n\nCross-referencing pod receptor responses with known\nZhel'ora chemical profiles...\n\nThe pod responds selectively to one component, not\nto the general trace-compound mixture. Receptor\nresponse alone does not identify its full structure.\n\nCompound class: Large organic signaling compound\nTransport: FICTIONAL aerosol-borne carrier droplets\nPersistence: SHORT-LIVED outside the source plume\nSource: Likely released by a mature network\n\nAt roughly 890 Da, the molecule would not be treated\nas an ordinary Earth plant VOC. Zhel'ii records must\nverify its carrier, structure, concentration, and role.\n\nRecommendation: Check the botanical archives.",
               options: [
                 { label: "Scan: Pod status", goto: "pod_status" },
                 { label: "Exit console", goto: "exit_neutral" }
               ]
             },
             comparison: {
-              text: "\u2550\u2550\u2550 ENVIRONMENTAL COMPARISON \u2550\u2550\u2550\n\n Lab (Current)          \u2502 Zhel'ora (Cultivation Bay)\n \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n Clean atmosphere       \u2502 Living atmosphere\n No organisms present   \u2502 Mature three-who-are-one\n 12 trace compounds     \u2502 847+ trace compounds\n Sterile surfaces       \u2502 Biofilm-coated surfaces\n Static environment     \u2502 Dynamic chemical exchange\n Pod status: DORMANT    \u2502 (no pod present)\n\nKey differences:\n1. No mature network organism to produce signals\n2. No volatile compound ecosystem\n3. No chemical 'context' for the pod\n\nThe lab is physically correct but biologically empty.\nIt's a house with no family inside.",
+              text: "\u2550\u2550\u2550 ENVIRONMENTAL COMPARISON \u2550\u2550\u2550\n\n Lab (Current)          \u2502 Zhel'ora (Cultivation Bay)\n \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n Clean atmosphere       \u2502 Living atmosphere\n No organisms present   \u2502 Mature three-who-are-one\n 12 trace identifiers   \u2502 847+ trace identifiers\n Sterile surfaces       \u2502 Biofilm-coated surfaces\n Static environment     \u2502 Dynamic chemical exchange\n Pod status: DORMANT    \u2502 (no pod present)\n\nKey differences:\n1. No mature network organism to release compounds\n2. No trace biological-compound mixture\n3. No verified germination cue at the pod\n\nThe measured physical targets match, but the lab has\nnot reproduced the living system that generated them.",
+              revealsClue: "MISSING_VOCS",
               setsFlag: "saw_comparison",
               options: [
                 { label: "Scan: Atmospheric analysis", goto: "atmosphere" },
@@ -4160,7 +4162,7 @@ const GAME_DATA = {
               ]
             },
             mature_growth_diff: {
-              text: "\u2550\u2550\u2550 MATURE GROWTH PROXIMITY ANALYSIS \u2550\u2550\u2550\n\nComparing atmosphere at varying distances from\nmature three-who-are-one aboard Zhel'ora:\n\n Distance \u2502 VOC Conc. \u2502 Germination Compound*\n \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n 0-1m     \u2502 HIGH      \u2502 DETECTABLE\n 1-3m     \u2502 MODERATE  \u2502 DETECTABLE\n 3-5m     \u2502 LOW       \u2502 TRACE\n 5-10m    \u2502 MINIMAL   \u2502 UNDETECTABLE\n >10m     \u2502 NONE      \u2502 ABSENT\n\n* Compound identified in Zhel'ii archives\n  as 'germination-cascade trigger'\n\nThe germination compound is SHORT-LIVED and\ndoes not persist far from its source. A genesis\npod must be within ~3m of an active network to\ndetect it.\n\nOur lab is approximately 40m from the Zhel'ora's\ncultivation bay through station corridors.",
+              text: "\u2550\u2550\u2550 MATURE GROWTH PROXIMITY ANALYSIS \u2550\u2550\u2550\n\nComparing contained air samples at varying distances\nfrom mature three-who-are-one aboard Zhel'ora:\n\n Distance \u2502 Carrier level \u2502 Germination cue*\n \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n 0-1m     \u2502 HIGH          \u2502 ABOVE THRESHOLD\n 1-3m     \u2502 MODERATE      \u2502 ABOVE THRESHOLD\n 3-5m     \u2502 LOW           \u2502 BELOW THRESHOLD\n 5-10m    \u2502 MINIMAL       \u2502 UNDETECTABLE\n >10m     \u2502 NONE          \u2502 ABSENT\n\n* Fictional aerosol-borne cue identified in archives.\n  Carrier droplets hydrolyze outside the source plume.\n\nThe pod requires a sustained above-threshold exposure\nwithin ~3m along an open or sealed airflow path.\n\nCurrent separation: ~40m through closed station\ncorridors and bulkheads; no shared airflow path.",
               setsFlag: "saw_proximity_data",
               options: [
                 { label: "40m is too far. We need to get the signal closer.", goto: "distance_problem" },
@@ -4169,14 +4171,14 @@ const GAME_DATA = {
               ]
             },
             distance_problem: {
-              text: "\u2550\u2550\u2550 DISTANCE ASSESSMENT \u2550\u2550\u2550\n\nCurrent configuration: Pod 40m from nearest\nmature network through station corridors.\n\nOptions for reducing distance:\n\n A) Relocate Zhel'ora to xenobiology docking port\n    \u2514 Distance: ~2m through station hull\n    \u2514 Feasibility: HIGH (requires station approval)\n    \u2514 Compound could penetrate through hull vents\n\n B) Transport pod to Zhel'ora cultivation bay\n    \u2514 Distance: 0m (direct proximity)\n    \u2514 Feasibility: MODERATE (containment concerns)\n\n C) Extract compound and apply directly\n    \u2514 Requires compound identification and extraction\n    \u2514 Feasibility: MODERATE\n\n D) Synthesize compound\n    \u2514 Requires exact chemical formula\n    \u2514 Feasibility: UNKNOWN (formula not in human DB)",
+              text: "\u2550\u2550\u2550 DISTANCE AND CONTAINMENT ASSESSMENT \u2550\u2550\u2550\n\nCurrent configuration: Pod ~40m from the nearest\nmature network, behind closed corridors and bulkheads.\nNo supported transport path exists.\n\nOptions:\n\n A) Relocate Zhel'ora to xenobiology port\n    \u2514 Source-to-pod line: <3m, sealed and monitored\n    \u2514 Requires joint docking/biosafety authorization\n    \u2514 Reversible before germination threshold\n\n B) Transport pod to cultivation bay\n    \u2514 Direct proximity but highest cross-contamination\n    \u2514 Not recommended without a new containment plan\n\n C) Capture and characterize authentic cue\n    \u2514 Variable dose/purity; contamination screening needed\n\n D) Synthesize candidate cue\n    \u2514 Formula alone insufficient; structure, carrier, dose,\n      authentic-standard comparison, and validation required",
               options: [
                 { label: "Scan: Pod status", goto: "pod_status" },
                 { label: "Exit console", goto: "exit_neutral" }
               ]
             },
             replicate_compound: {
-              text: "\u2550\u2550\u2550 COMPOUND REPLICATION ANALYSIS \u2550\u2550\u2550\n\nGermination-cascade compound (from Zhel'ii archives):\n\n Molecular weight: 847 amu\n Stability: LOW (degrades within minutes in open air)\n Complexity: HIGH (multi-ring organic structure)\n\nSynthesis feasibility:\n \u2514 Chemical formula: AVAILABLE (from archives)\n \u2514 Lab equipment: SUFFICIENT\n \u2514 Synthesis time: ~4 hours\n \u2514 Confidence: 94% match achievable\n\n\u26a0 Note: 94% molecular match may be sufficient.\n  Biological systems often accept near-matches\n  for signaling compounds. However, the archives\n  warn about formulation accuracy.\n\nAlternative: Direct extraction from mature network\n \u2514 Compound would be 100% biologically authentic\n \u2514 Requires Zhel'ii cooperation (likely granted)",
+              text: "\u2550\u2550\u2550 COMPOUND REPLICATION ANALYSIS \u2550\u2550\u2550\n\nFictional germination-cue compound (archives):\n Formula: C\u2084\u2087H\u2086\u2083N\u2085O\u2088S\u2082\n Average molecular mass calculation:\n 47(12.011) + 63(1.008) + 5(14.007)\n + 8(15.999) + 2(32.06) = 890.168 \u2248 890.17 Da\n Transport: aerosol carrier; rapid hydrolysis outside plume\n\nSynthesis readiness:\n \u2514 Formula: AVAILABLE (atom counts only)\n \u2514 Translated structure/stereochemistry: PARTIAL\n \u2514 Carrier and safe dose: UNVERIFIED\n \u2514 Authentic reference material: REQUIRED\n \u2514 Four-hour synthesis claim: REJECTED\n\nA near-match cannot be assumed to activate the receptor\nor be safe. Capture of authentic material also requires\npurity, concentration, cell-contamination, and consent\nchecks. Recommendation: prefer a reversible, contained\nnatural-plume test; treat extraction or synthesis as\nhigher-uncertainty alternatives.",
               options: [
                 { label: "Scan: Pod status", goto: "pod_status" },
                 { label: "Exit console", goto: "exit_neutral" }
@@ -4220,7 +4222,7 @@ const GAME_DATA = {
               ]
             },
             what_signal: {
-              text: "That's the question, isn't it?\n\nYou've seen this pattern before in Earth biology. Seeds that won't germinate without a specific trigger:\n\n\u2022 Fire-dependent seeds (like some eucalyptus) wait for heat from bushfire\n\u2022 Cold-stratification seeds wait for winter to pass\n\u2022 Scarification seeds wait to be digested by animals\n\u2022 Smoke-responsive seeds detect chemical compounds from fire\n\nEach evolved the requirement because it guarantees germination only in favorable conditions. A eucalyptus seed that germinates without fire would sprout in shade and die.\n\nWhat condition would guarantee survival for a symbiotic organism that depends on a network? The presence of an existing network.",
+              text: "That's the question, isn't it?\n\nEarth seeds provide qualified analogies, not a universal rule:\n\n\u2022 In some fire-adapted species, heat opens water gaps or smoke chemicals such as karrikins stimulate germination\n\u2022 Some physiologically dormant seeds respond to a species-specific cold, moist period\n\u2022 Mechanical, chemical, or animal-gut scarification can improve or reduce germination depending on the seed and treatment\n\u2022 Water, oxygen, temperature, light, and internal hormone state interact differently among species\n\nThese cues can make germination more likely under particular conditions; none guarantees a favorable outcome. For this fictional symbiont, an existing network may supply a cue \u2014 but the Zhel'ii evidence must establish that link.",
               revealsClue: "WAITING_FOR_TRIGGER",
               options: [
                 { label: "The pod needs to detect a nearby network. A chemical signal.", goto: "chemical_trigger" },
@@ -4229,7 +4231,7 @@ const GAME_DATA = {
               ]
             },
             chemical_trigger: {
-              text: "A chemical signal from a mature network \u2014 a 'germination cascade compound' that says: 'You are not alone. A support network exists here. Begin growing.'\n\nThe pod would detect this compound through its outer membrane receptors. Once confirmed, the irreversible germination process begins.\n\nWithout the signal, the pod waits. It could wait indefinitely \u2014 centuries, perhaps. A survival mechanism that ensures pods only germinate where they'll be supported.\n\nIn your lab, the atmosphere is perfect. The temperature is perfect. But there is no network. No voice saying 'it's safe.' The pod hears only silence.",
+              text: "A chemical cue from a mature network \u2014 an incidental signaling byproduct that the pod interprets as evidence of nearby established growth. Zel'keth's phrase 'you are not alone' is a metaphor for receptor binding, not literal hearing or intent.\n\nA sustained above-threshold exposure would activate the outer membrane receptors. Exposure can be stopped before the downstream germination commitment; after that point, the archive describes germination as irreversible.\n\nWithout the cue, the viable pod remains dormant. In the lab, the measured physical targets match, but no mature network is present and no cue reaches the receptors.",
               setsFlag: "understood_chemical_trigger",
               options: [
                 { label: "Look at the pod's receptor structures", goto: "receptors" },
@@ -4237,7 +4239,7 @@ const GAME_DATA = {
               ]
             },
             membrane: {
-              text: "The outer membrane is a masterpiece of biological engineering. Translucent, iridescent, and covered in structures too small to see clearly without magnification.\n\nUnder the lab's microscope attachment, the surface resolves into a dense forest of molecular receptors \u2014 protein structures embedded in the membrane, each one shaped to receive a specific molecule.\n\nThere are two types:\n\n\u2022 ENVIRONMENTAL receptors (sparse): Detect light, temperature, pressure. These are reporting 'conditions favorable.'\n\n\u2022 CHEMICAL receptors (dense): Shaped for a complex organic molecule. Thousands of them, covering the outer surface. All currently unoccupied. All waiting.\n\nThe pod has orders of magnitude more chemical receptors than environmental ones. Whatever this chemical signal is, detecting it is the pod's primary function while dormant.",
+              text: "The outer membrane is translucent, iridescent, and covered in structures too small to resolve without magnification.\n\nUnder the lab's microscope attachment, the surface shows dense candidate receptor proteins. Binding sites can favor particular molecular features, but shape alone cannot identify a ligand or prove the full mechanism.\n\nThere are two response groups:\n\n\u2022 PHYSICAL-CUE receptors (sparse): respond to light, temperature, and pressure; current responses confirm viability and favorable target conditions.\n\n\u2022 CHEMICAL-CUE receptors (dense): bind selectively to an unknown complex organic compound. They are currently unoccupied.\n\nThe density makes chemical reception a strong candidate for the dormant pod's gating system. The archive and a controlled response test are still needed to identify the cue and safe threshold.",
               setsFlag: "examined_membrane",
               options: [
                 { label: "Look at the chemical receptors more closely", goto: "receptors" },
@@ -4247,7 +4249,7 @@ const GAME_DATA = {
               ]
             },
             receptors: {
-              text: "Under high magnification, the chemical receptors are extraordinary. Each one is a lock waiting for its key \u2014 a protein cradle shaped for a single specific molecule.\n\nThe receptor shape suggests a large, complex organic volatile \u2014 unusual for an airborne compound. Most atmospheric signals are small, simple molecules. This one is hefty. That explains why it doesn't travel far and degrades quickly.\n\nThe receptor density tells you everything: this isn't a secondary sensor. This is the primary germination gate. No signal, no germination. Period.\n\nThe compound these receptors are waiting for is almost certainly produced by the mature network organism during normal activity. A signal that naturally fills the air near established growth. A signal that says 'family is here.'",
+              text: "Under high magnification, the candidate chemical receptors form repeated binding pockets. Their geometry suggests selectivity for a large organic ligand, but receptor appearance cannot reveal the ligand's formula, transport method, concentration threshold, or biological outcome.\n\nControlled micro-stimulus tests show receptor activity without starting germination, confirming that the pod is responsive. The very high receptor density supports \u2014 but does not by itself prove \u2014 a primary chemical gate.\n\nThe next step is to compare this evidence with Zhel'ii archives. If a mature network releases the matching ligand near established growth, the 'family voice' would be a metaphor for a receptor-mediated chemical cue.",
               revealsClue: "WAITING_FOR_TRIGGER",
               setsFlag: "examined_receptors",
               options: [
@@ -4257,7 +4259,7 @@ const GAME_DATA = {
               ]
             },
             earth_comparison: {
-              text: "You run through your training \u2014 Earth analogues for conditional germination:\n\n\u2022 Striga seeds (witchweed) won't germinate until they detect strigolactones \u2014 a chemical exuded by host plant roots. This ensures the parasitic seed only sprouts when a host is within reach.\n\n\u2022 Orchid seeds are dust-tiny and carry no nutrients. They MUST connect to a mycorrhizal fungus within days of germination or die. Many orchid species won't germinate without detecting fungal compounds first.\n\n\u2022 Some legume seeds won't germinate without detecting rhizobium bacteria \u2014 their nitrogen-fixing partners.\n\nThe pattern is clear: organisms that depend on symbiotic partners evolve germination triggers linked to those partners' presence.\n\nThe genesis pod depends on the network organism. It won't germinate without detecting the network's presence through a chemical signal.",
+              text: "You run through your training \u2014 Earth analogues for conditional germination:\n\n\u2022 Conditioned Striga seeds respond to host-root strigolactones; receptor sensitivity, ligand structure, concentration, moisture, and temperature all matter.\n\n\u2022 Orchid seeds have tiny nutrient reserves and normally rely on compatible fungi for germination and early development in nature, but fungal specificity varies and asymbiotic laboratory germination is possible for many species.\n\n\u2022 Legume seeds generally germinate without detecting rhizobia. Rhizobial Nod-factor signaling acts on growing roots and root hairs during later nodulation, not as a universal germination requirement.\n\nThese examples show that chemical and biological dependencies can be highly specific. They do not prove the alien mechanism; the pod's receptors and Zhel'ii archive must do that.",
               setsFlag: "earth_seed_comparison",
               options: [
                 { label: "Examine the outer membrane", goto: "membrane" },
@@ -4266,7 +4268,7 @@ const GAME_DATA = {
               ]
             },
             talk_to_pod: {
-              text: "You lean close to the isolation chamber.\n\n\"Hello in there.\"\n\nThe pod does not respond. It does not glow, pulse, shift, or acknowledge your presence in any way.\n\nOf course it doesn't. It's not listening for sound waves. It's listening for a specific molecule \u2014 a chemical whisper from a family it's never met.\n\nSomewhere in the back of your mind, you hear Zel'keth's translator: 'A child awakens only when it hears the voice of the family.'\n\nYou're speaking the wrong language.",
+              text: "You lean close to the isolation chamber.\n\n\"Hello in there.\"\n\nThe pod does not respond. It is not a sound detector. Zel'keth's phrase \u2014 'a child awakens only when it hears the voice of the family' \u2014 is metaphorical. The testable claim concerns a specific molecule binding to receptors, not awareness, kinship, or literal hearing.\n\nYou're testing the wrong kind of signal.",
               setsFlag: "talked_to_pod",
               options: [
                 { label: "Examine the outer membrane", goto: "membrane" },
@@ -4276,7 +4278,7 @@ const GAME_DATA = {
               ]
             },
             exit_neutral: {
-              text: "You step back from the isolation chamber. The genesis pod sits in its perfect environment, perfectly inert. Waiting for a voice it cannot hear.",
+              text: "You step back from the isolation chamber. The measured physical targets match, yet the viable pod remains dormant. A biologically necessary variable may still be missing.",
               endsConversation: true,
               exitLabel: "Step back",
               options: []
@@ -4304,7 +4306,7 @@ const GAME_DATA = {
               ]
             },
             cultivation: {
-              text: "[TRANSLATION MATRIX ACTIVE]\n\n\u2550\u2550\u2550 GENESIS POD CULTIVATION PROTOCOL \u2550\u2550\u2550\n\nPlacement: Within harmonic range of established growth\nTimeline: Awakening occurs within 2-4 cycles of placement\nSubstrate: Any mineral-rich medium\nAtmosphere: Standard for Zhel'ii biology\nLight: Not required for germination (required after)\nTemperature: 15-22\u00b0C (your units)\n\nCRITICAL: Genesis pods must be placed near mature\nthree-who-are-one. Distance should not exceed\n[TRANSLATOR: 3 of your meters? arm-lengths?].\n\nReason: [See: Germination Biology]\n\nNote: Pods that are not placed near mature growth\nremain dormant indefinitely. No known failure \u2014\nthis is simply how cultivation has always been\nperformed.",
+              text: "[TRANSLATION MATRIX ACTIVE]\n\n\u2550\u2550\u2550 GENESIS POD CULTIVATION PROTOCOL \u2550\u2550\u2550\n\nPlacement: Within cue range of established growth\nTiming unit: 1 Zhel'ii cycle \u2248 6 Earth hours\nFirst visible response: 2-4 cycles (12-24 hours)\nSubstrate: Validated mineral-rich medium\nAtmosphere: Zhel'ii target ranges\nLight: Not required before germination; required after\nTemperature: 15-22\u00b0C\n\nCRITICAL: Historical placements are within 3 meters\nof mature three-who-are-one along a shared airflow path.\n\nReason: [See: Germination Biology]\n\nPods outside verified cue range remain dormant.\nThis is an archive record of fictional Zhel'ii biology,\nnot a rule for Earth seeds.",
               setsFlag: "read_cultivation",
               options: [
                 { label: "Search: Germination biology", goto: "germination" },
@@ -4313,7 +4315,7 @@ const GAME_DATA = {
               ]
             },
             germination: {
-              text: "[TRANSLATION MATRIX ACTIVE]\n\n\u2550\u2550\u2550 GENESIS POD: GERMINATION BIOLOGY \u2550\u2550\u2550\n\nGermination is triggered by detection of a specific\ncompound produced by the mature network organism\nduring normal signaling activity.\n\nThis compound \u2014 designated [UNTRANSLATABLE: chemical\nformula provided below] \u2014 serves as a biological\nconfirmation signal: 'An established network exists\nnearby. Begin germination.'\n\nEvolutionary purpose: Prevents germination in\nisolation, where the young symbiosis would have no\nnetwork support and would perish.\n\n'A child awakens only when it hears the voice\nof the family.'\n\n\u2550\u2550\u2550 COMPOUND DESIGNATION \u2550\u2550\u2550\n[TRANSLATOR: Rendering chemical formula in human notation]\nC\u2084\u2087H\u2086\u2083N\u2085O\u2088S\u2082\nMolecular weight: 862.15 amu\nStability: Degrades in open atmosphere within minutes\nSource: Network organism signaling cascade (byproduct)",
+              text: "[TRANSLATION MATRIX ACTIVE]\n\n\u2550\u2550\u2550 GENESIS POD: GERMINATION BIOLOGY \u2550\u2550\u2550\n\nGermination is gated by sustained detection of a\nspecific compound released during mature-network\nchemical signaling. The network does not deliberately\naddress pods: this compound is an incidental byproduct\nthat pod receptors evolved to use as an environmental cue.\n\nAbove-threshold receptor activation confirms nearby\nmature growth. Exposure can be stopped before the\ndownstream commitment step; germination after that step\nis irreversible.\n\nArchive metaphor: 'A child awakens only when it hears\nthe voice of the family.' This describes chemical\ndetection, not literal hearing or universal biology.\n\n\u2550\u2550\u2550 FICTIONAL COMPOUND DESIGNATION \u2550\u2550\u2550\nFormula rendered in human notation: C\u2084\u2087H\u2086\u2083N\u2085O\u2088S\u2082\nAverage molecular mass: 890.17 Da\nTransport: aerosolized carrier microdroplets\nStability: carrier hydrolyzes within minutes outside plume\nSource: incidental mature-network signaling byproduct",
               revealsClue: "GERMINATION_COMPOUND",
               options: [
                 { label: "Search: Signal chemistry", goto: "signal_chemistry" },
@@ -4323,7 +4325,8 @@ const GAME_DATA = {
               ]
             },
             signal_chemistry: {
-              text: "[TRANSLATION MATRIX ACTIVE]\n\n\u2550\u2550\u2550 NETWORK ORGANISM: SIGNAL CHEMISTRY \u2550\u2550\u2550\n\nThe mature network produces 340+ distinct volatile\ncompounds during normal operation. These include:\n\n \u2022 Nutrient coordination signals (primary)\n \u2022 Growth timing signals (secondary)\n \u2022 Threat response signals (emergency)\n \u2022 Environmental status broadcasts (ambient)\n \u2022 Germination-cascade compound (incidental)\n\nThe germination-cascade compound is not deliberately\nproduced for genesis pods. It is a natural byproduct\nof the network's signaling activity \u2014 always present\nin the air near healthy growth.\n\nThis means:\n \u2192 No mature network = no compound = no germination\n \u2192 Compound cannot be stockpiled (degrades too quickly)\n \u2192 Detection range: ~3m from network source\n \u2192 The pod must be NEAR a living, active network\n   OR receive the compound from another source",
+              text: "[TRANSLATION MATRIX ACTIVE]\n\n\u2550\u2550\u2550 NETWORK ORGANISM: SIGNAL CHEMISTRY \u2550\u2550\u2550\n\nThe mature network releases 340+ trace signaling\ncomponents during normal operation. Most are ordinary\nsmall volatiles in this fictional atmosphere. One is a\nlarge compound transported in aerosol carrier droplets.\n\nThe germination cue is not deliberately produced for\npods. It is an incidental signaling byproduct that is\nconsistently present near healthy mature growth. Pod\nreceptors evolved to interpret it as a cue.\n\nObserved fictional constraints:\n \u2192 No active mature network = no natural cue source\n \u2192 Carrier hydrolyzes within minutes outside the plume\n \u2192 Activation threshold is reached only within ~3m\n   along a supported airflow path\n \u2192 A verified alternative source could reproduce the cue\n\nThese records establish correlation and receptor response;\nthey do not claim intentional speech.",
+              revealsClue: "GERMINATION_COMPOUND",
               setsFlag: "read_signal_chemistry",
               options: [
                 { label: "Search: Germination biology", goto: "germination" },
@@ -4332,7 +4335,7 @@ const GAME_DATA = {
               ]
             },
             triggers: {
-              text: "[TRANSLATION MATRIX ACTIVE]\n\n\u2550\u2550\u2550 GERMINATION TRIGGERS: DETAILED MECHANISM \u2550\u2550\u2550\n\nGermination sequence:\n\n 1. Pod membrane receptors detect germination compound\n 2. Receptor activation triggers internal signaling\n 3. Internal membranes between chambers dissolve\n 4. Network precursor activates FIRST\n 5. Network establishes connections to canopy and root\n 6. Canopy unfolds (light capture begins)\n 7. Root extends (mineral processing begins)\n 8. Full symbiosis functional within 4-6 cycles\n\n\u26a0 CRITICAL: Step 1 is irreversible gating step.\n  Without the compound, no subsequent steps occur.\n  The pod is biologically incapable of spontaneous\n  germination.\n\n\u2550\u2550\u2550 SCHOLARLY ANNOTATION \u2550\u2550\u2550\n\n'This ensures pods only germinate where a support\n network exists. Isolated pods remain dormant\n indefinitely \u2014 a survival adaptation preventing\n germination in hostile conditions.'\n\n'A child awakens only when it hears the voice\n of the family.'",
+              text: "[TRANSLATION MATRIX ACTIVE]\n\n\u2550\u2550\u2550 GERMINATION CUE: DETAILED MECHANISM \u2550\u2550\u2550\n\nTiming unit: 1 Zhel'ii cycle \u2248 6 Earth hours\n\n 1. Receptors detect a sustained cue above threshold\n 2. Internal signaling begins; exposure remains stoppable\n 3. Commitment checkpoint is crossed (irreversible)\n 4. Chamber membranes dissolve\n 5. Network precursor activates first\n 6. Network connects canopy and root precursors\n 7. Canopy unfolds; root extends\n 8. Full young symbiosis stabilizes in 4-6 cycles\n    after commitment (about 24-36 Earth hours)\n\nFirst visible glow is expected in 2-4 cycles\n(about 12-24 Earth hours). Without the cue, the pod\nremains viable and dormant; the archive does not support\na claim of spontaneous germination.\n\nArchive metaphor: 'A child awakens only when it hears\nthe voice of the family.'",
               setsFlag: "read_trigger_mechanism",
               options: [
                 { label: "Search: Germination biology", goto: "germination" },
@@ -4341,7 +4344,7 @@ const GAME_DATA = {
               ]
             },
             proximity_search: {
-              text: "[TRANSLATION MATRIX ACTIVE]\n\n\u2550\u2550\u2550 PROXIMITY REQUIREMENTS \u2550\u2550\u2550\n\nHistorical cultivation data:\n\nAll recorded genesis pod germinations occurred within\n[TRANSLATOR: 1-3 of your meters] of mature growth.\n\nNo record exists of germination beyond this range.\nNo record exists of isolated germination.\n\nProximity ensures:\n 1. Germination compound reaches pod receptors\n 2. Young network can connect to mature network\n    immediately after emergence\n 3. Nutrient support available from first moment\n\n\u2550\u2550\u2550 HISTORIAN'S NOTE \u2550\u2550\u2550\n\n'We have never questioned why proximity is required.\nIt is [TRANSLATOR: tradition? natural law? obvious?].\nThe scholarly annotation was added by a researcher\nwho wondered what would happen if a pod were placed\nfar from any mature growth. The answer, it seems,\nis: nothing happens. The pod waits forever.'\n\n'We did not imagine a scenario where this knowledge\nwould be needed. Until now.'",
+              text: "[TRANSLATION MATRIX ACTIVE]\n\n\u2550\u2550\u2550 PROXIMITY REQUIREMENTS \u2550\u2550\u2550\n\nHistorical cultivation data:\n\nAll recorded genesis pod germinations occurred within\n1-3 meters of mature growth along shared airflow.\nNo record exists of germination beyond this range or\nin isolation. This absence is not proof of impossibility,\nbut it defines the verified operating envelope.\n\nWithin that envelope:\n 1. Cue concentration reaches receptor threshold\n 2. Young and mature networks can connect after emergence\n 3. Later nutrient support may become available\n\nOnly item 1 is the demonstrated germination trigger.\nItems 2-3 describe post-germination benefits in the\nfictional cultivation record.\n\n\u2550\u2550\u2550 HISTORIAN'S NOTE \u2550\u2550\u2550\n\n'We treated tradition as natural law. The pod's journey\nrevealed the measurement hidden inside the practice.'",
               setsFlag: "read_proximity_requirements",
               options: [
                 { label: "Search: Germination biology", goto: "germination" },
@@ -4350,7 +4353,7 @@ const GAME_DATA = {
               ]
             },
             earth_parallels: {
-              text: "[TRANSLATOR NOTE: Human botanical records contain relevant parallels]\n\n\u2550\u2550\u2550 EARTH PARALLEL: GERMINATION DEPENDENCIES \u2550\u2550\u2550\n\nEarth seeds exhibit similar germination dependencies:\n\n \u2022 Some require fire (nutrients from ash)\n \u2022 Some require animal digestion (transport guarantee)\n \u2022 Some require cold periods (winter verification)\n \u2022 Some require specific fungi (symbiont presence)\n \u2022 Some require host plant chemicals (parasitic seeds)\n\nThe genesis pod's requirement for 'network voice'\nparallels how some Earth seedlings depend on\nestablished mycorrhizal networks to survive their\nfirst months.\n\n\u2550\u2550\u2550 KEY PARALLEL \u2550\u2550\u2550\n\nEcologist Suzanne Simard discovered that Douglas fir\n'mother trees' can recognize their own offspring and\nsend them more resources through mycorrhizal networks\nthan they send to stranger seedlings.\n\nTrees have families. And they play favorites.\n\nThe three-who-are-one have families too. The genesis\npod is waiting to hear from its family before it\ncommits to life.",
+              text: "[TRANSLATOR NOTE: Human botanical records offer analogies, not proof]\n\n\u2550\u2550\u2550 EARTH PARALLELS: CONDITIONAL GERMINATION \u2550\u2550\u2550\n\n \u2022 Some fire-adapted seeds respond to heat or smoke\n   chemicals such as karrikins; fire does not guarantee\n   beneficial ash or successful establishment.\n \u2022 Gut passage can disperse, scarify, leave unchanged,\n   damage, or destroy seeds depending on both species.\n \u2022 Cold, moisture, light, oxygen, and temperature cues\n   interact differently among species.\n \u2022 Conditioned parasitic Striga seeds can respond to\n   host-root strigolactones.\n \u2022 Orchid seeds normally depend on compatible fungi in\n   nature, with important species variation and laboratory\n   exceptions.\n \u2022 Rhizobia signal to growing legume roots during\n   nodulation; they are not a general germination trigger.\n\nCommon mycorrhizal networks exist, and resource movement\nhas been measured in some experiments. Evidence does not\nestablish that Earth seedlings generally require 'mother\ntrees' or that mature trees preferentially feed relatives.\n\n'Family voice' is a Zhel'ii metaphor for this fictional\nreceptor-cue system, not a literal Earth-science claim.",
               setsFlag: "read_earth_parallels_6b",
               options: [
                 { label: "Search: Germination biology", goto: "germination" },
@@ -4391,9 +4394,9 @@ const GAME_DATA = {
             portrait:   "portrait_sensors.png",
             actionIcon: "icon_sensors.png"
           },
-          text: "Lab atmosphere matches Zhel'ora at 99.7% for primary components, but trace VOC match is only 1.4%. The lab has 12 residual compounds vs. 847+ aboard the alien ship. Our atmosphere is 'clean' \u2014 too clean. Missing the chemical conversation of a living ecosystem.",
+          text: "The lab's measured primary-condition similarity is 99.7%, but only 12 of 847+ trace biological identifiers are present (12 \u00f7 847 \u2248 1.4%). The chamber matches target physical conditions, not the chemical output of a living network.",
           clueTag: "MISSING_VOCS",
-          learned: "Lab atmosphere is missing nearly all volatile compounds \u2014 it matches the air but not the living ecosystem."
+          learned: "Primary target conditions match, but 12 of 847+ trace identifiers (about 1.4%) remain; the lab did not reproduce the mature network's chemical output."
         },
         {
           action: "plants",
@@ -4404,9 +4407,9 @@ const GAME_DATA = {
             portrait:   "portrait_bioreactor.png",
             actionIcon: "icon_alien_plants.png"
           },
-          text: "The pod is primed and viable but waiting for a specific chemical trigger. Dense receptor sites on the membrane are shaped for a complex organic volatile. Like Earth seeds that require fire or animal digestion \u2014 dormancy broken only by a specific environmental signal.",
+          text: "The pod is viable and dormant. Dense membrane receptors respond selectively to an unknown chemical cue, while physical-condition receptors report favorable targets. Earth seeds also vary in dormancy cues, but the receptor identity and Zhel'ii archive \u2014 not analogy alone \u2014 establish this fictional mechanism.",
           clueTag: "WAITING_FOR_TRIGGER",
-          learned: "The pod is waiting for a specific chemical trigger \u2014 like Earth seeds that need fire or cold to germinate."
+          learned: "The viable pod remains dormant while its dense membrane receptors await a specific chemical cue; Earth species vary in which cues can break dormancy."
         },
         {
           action: "logs",
@@ -4417,23 +4420,23 @@ const GAME_DATA = {
             portrait:   "portrait_alien_logs.png",
             actionIcon: "icon_alien_logs.png"
           },
-          text: "The mature network produces a germination-cascade compound (C\u2084\u2087H\u2086\u2083N\u2085O\u2088S\u2082) during normal signaling \u2014 a byproduct that tells nearby pods 'a support network exists, begin germination.' Without this compound, pods remain dormant indefinitely. 'A child awakens only when it hears the voice of the family.'",
+          text: "The mature network releases an incidental germination-cue byproduct (C\u2084\u2087H\u2086\u2083N\u2085O\u2088S\u2082; 890.17 Da) in fictional aerosol carrier droplets. A sustained above-threshold exposure activates pod receptors. 'Family voice' is an archive metaphor for chemical detection, not literal speech.",
           clueTag: "GERMINATION_COMPOUND",
-          learned: "A specific compound from the mature network triggers germination. Pods won't germinate without 'hearing' an established network."
+          learned: "An incidental, aerosol-borne cue from mature growth activates the pod's receptors; 'family voice' is a metaphor for this fictional chemistry."
         }
       ],
 
       diagnoses: [
         {
           id: "germination_compound",
-          label: "The pod needs a 'germination compound' from a mature network \u2014 it won't awaken without the chemical signal that a support network exists.",
+          label: "The viable pod is dormant because its receptors have not received the mature network's specific germination cue.",
           isCorrect: true
         },
         {
           id: "wrong_light",
           label: "The lab's artificial light is missing a critical wavelength for germination.",
           isCorrect: false,
-          hint: "The biomonitors show light spectrum is matched at 99.1%. The pod has far more chemical receptors than light receptors \u2014 it's waiting for a molecule, not a wavelength."
+          hint: "The biomonitors show the light spectrum is within the Zhel'ii target tolerance. Dense chemical receptors, the missing trace profile, and the archive all point to a molecule rather than a wavelength."
         },
         {
           id: "transfer_damage",
@@ -4454,39 +4457,39 @@ const GAME_DATA = {
         options: [
           {
             id: "proximity",
-            label: "Ask Zel'keth to dock the Zhel'ora closer \u2014 let the mature network's signal reach the pod naturally.",
+            label: "With joint approval, dock the Zhel'ora at the xenobiology port and run a low-dose natural plume through a sealed, monitored transfer line.",
             bonusPoints: 10,
-            bonusLabel: "Diplomatic Solution",
-            response: "Zel'keth: \"Ah! Yes, the [TRANSLATOR: network voice] would reach it through the station walls if we dock at the xenobiology port. We did not think to offer this. Simple! Elegant! Very human thinking.\"\n\n[Within hours, the pod begins to glow. The three-who-are-one are waking up.]"
+            bonusLabel: "Contained Cooperative Test",
+            response: "Station biosafety and Zhel'ii representatives authorize a sealed transfer line less than three meters long. Both sides verify the cue and exclude cells and unexpected compounds before beginning below the archived exposure range. The flow can be stopped before the commitment threshold.\n\nAfter 2 cycles (about 12 Earth hours), receptors activate and the first glow appears. No leakage or cross-contamination is detected."
           },
           {
             id: "extract",
-            label: "Request a sample of the germination compound from the Zhel'ora's mature network.",
-            bonusPoints: 0,
-            bonusLabel: null,
-            response: "Zel'keth: \"A small sample would not harm the collective. We can provide a [TRANSLATOR: bottle? vial? seed of communication?] of the compound. Your scientists may synthesize more when needed.\"\n\n[The extracted compound is applied. The pod's receptors activate. Germination begins.]"
+            label: "With Zhel'ii consent, capture an authentic sample; verify identity, purity, concentration, and sterility before a contained microdose.",
+            bonusPoints: 5,
+            bonusLabel: "Verified Extraction",
+            response: "A closed sampler collects an authentic cue fraction with Zhel'ii consent. The team screens for cells and co-extracted compounds, measures concentration, and uses a staged microdose. Extraction adds purity and dosage uncertainty, so monitoring continues and no stockpiling is assumed.\n\nAfter 3 cycles (about 18 Earth hours), the verified dose crosses the receptor threshold and the first glow appears."
           },
           {
             id: "synthesize",
-            label: "Synthesize the germination compound \u2014 we have the chemical formula.",
-            bonusPoints: 10,
-            bonusLabel: "Scientific Achievement",
+            label: "Develop a synthetic candidate only after structure, stereochemistry, carrier, receptor response, and dose are validated against an authentic sample.",
+            bonusPoints: 0,
+            bonusLabel: null,
             requires: { clueFound: "GERMINATION_COMPOUND" },
-            response: "Zel'keth: \"Your species can create the voice of the network? [TRANSLATOR: astonishment? admiration? slight concern?] This is... impressive. But please \u2014 verify the formulation carefully.\"\n\n[After careful synthesis and verification, the compound is applied. The pod responds. Life stirs within.]"
+            response: "The formula alone is rejected as a synthesis plan. After a longer joint study, the team resolves connectivity and stereochemistry, matches the candidate to authentic material, validates receptor response outside the pod, and obtains authorization for a contained microdose.\n\nThe candidate works after 4 cycles (about 24 Earth hours), but the time, verification burden, and formulation uncertainty make this the least supported immediate intervention."
           }
         ]
       },
 
-      rankUpText: "From silenced networks to awakened seeds \u2014 you've learned that life doesn't begin alone. Every organism needs to hear the voice of its family.",
+      rankUpText: "You separated matched measurements from missing biology, tested a fictional cue safely, and completed Campaign 1 as a Xenobotanist.",
 
       explanation: {
-        title: "Mother Trees and First Words",
-        body: "In Earth's forests, seedlings don't survive alone. They connect to mycorrhizal networks \u2014 fungal threads that link trees together \u2014 and receive support from established 'mother trees.' A seedling growing near its parent receives sugars, nutrients, and even chemical signals through the network. Remove the network, and seedling survival plummets.\n\nEvolution has made many seeds cautious. Some won't germinate without fire (ensuring nutrients from ash). Some need animal digestion (ensuring transport to new territory). Some require cold stratification (ensuring winter has passed). And some, like the Zhel'ii genesis pod, need to 'hear' that a support network exists before committing to growth.\n\nThe mature network's signaling compounds include a specific molecule that triggers germination \u2014 a chemical 'all clear' that says: 'You are not alone. Begin growing. We will support you.'\n\nWithout that signal, the genesis pod remains in suspended animation, possibly for centuries. A survival mechanism becomes a barrier \u2014 unless someone provides the voice it needs to hear.",
-        funFact: "Ecologist Suzanne Simard discovered that Douglas fir 'mother trees' can recognize their own offspring and send them more resources through mycorrhizal networks than they send to stranger seedlings. Trees have families, and they play favorites."
+        title: "Matched Conditions, Missing Cue",
+        body: "A viable seed can remain dormant even under otherwise favorable conditions. Earth species vary: germination may depend on interacting water, oxygen, temperature, light, seed-coat, hormonal, heat, smoke, or host-derived cues. Conditioned Striga seeds provide a strong example of receptor-mediated response to host-root strigolactones. Orchid-fungus dependence is widespread in nature but variable, and rhizobial signaling concerns later legume-root nodulation rather than a general germination requirement.\n\nThe Zhel'ii pod is fictional. Reachable game evidence establishes its mechanism: primary target conditions match; the viable pod is dormant; dense receptors await a specific cue; and the archive identifies an incidental mature-network byproduct that activates them. The 890.17 Da compound is not presented as an ordinary Earth VOC. In this story it travels in short-lived aerosol carrier droplets along an open or sealed airflow path.\n\nThe phrase 'voice of the family' is metaphor. Common mycorrhizal networks and resource movement exist in some Earth systems, but evidence does not support universal claims that seedlings need 'mother trees' or that mature trees preferentially feed relatives.\n\nA safe intervention therefore requires more than the correct molecule: containment, identity and concentration checks, a staged exposure, a reversible stop before germination commitment, cross-contamination monitoring, and authorization from both species.",
+        funFact: "Smoke-derived karrikins can stimulate germination in responsive seeds at very low concentrations, while other smoke components can inhibit it. Ligand identity, dose, seed state, and species all matter."
       },
 
       victory: {
-        podAwakening: "The genesis pod pulses with light. Slowly, the three internal chambers unseal. Crystalline fronds unfold \u2014 no larger than your fingernail, but unmistakably alive. Root tendrils extend, seeking purchase in the growth medium you've prepared. And beneath the surface, the first delicate threads of a new network begin to spread.\n\nThe three-who-are-one.\n\nGrowing in human care for the first time in history.",
+        podAwakening: "Monitoring continues after the first glow. Between 12 and 24 Earth hours, the pod crosses its commitment checkpoint and the three internal chambers begin to unseal. Over the next 24 to 36 hours, crystalline fronds unfold, root tendrils enter the validated growth medium, and the network precursor links the young symbiosis. Containment remains intact and every environmental reading is logged.\n\nThe three-who-are-one are stabilizing in human care for the first time in history.",
         zelkethClosing: "Dr. Nova. You have done a thing we did not believe possible. The three-who-are-one live far from home, in the care of another species.\n\nYou are now [TRANSLATOR STRUGGLING: network-parent? harmony-keeper? adopted family?] to this new life.\n\nWhen we depart, a part of our world remains with yours.\n\nThis is... [TRANSLATOR: good? right? as it should be?]\n\nMay your species and ours speak again. Through the children of the three-who-are-one, we are now connected.\n\nThe harmony extends between stars."
       }
     }

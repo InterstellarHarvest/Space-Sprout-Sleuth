@@ -3194,7 +3194,7 @@
       bonusInsights: 0,
       textProgress: {},      // clueTag → charIdx (-1 = fully read)  (kept for non-dialogue cases)
       calledHome: false,     // Campaign 2 "call home" hint — one use per case
-      solutionIdx: -1        // which solution choice the player picked (Case 5 only)
+      solutionIdx: -1        // which solution choice the player picked (when present)
     };
   }
 
@@ -4431,8 +4431,9 @@
       // Update the completed case score
       const cc = STATE.completedCases.find(c => c.caseId === caseData.id);
       if (cc) cc.score += opt.bonusPoints;
-      saveState();
     }
+    // Persist every intervention, including the zero-bonus option.
+    saveState();
 
     // Show the response, then proceed to explanation
     const baseScore = (STATE.completedCases.find(c => c.caseId === caseData.id) || {}).score || 0;
@@ -4455,6 +4456,7 @@
 
   function showExplanation(caseData, score) {
     const isLast = STATE.currentCase >= GAME_DATA.cases.length - 1;
+    const finalAction = caseData.victory ? 'showCaseVictory' : 'finishFinalCase';
 
     renderInfo(
       '<div class="info-header green">\u2713 Case Solved!</div>' +
@@ -4468,10 +4470,45 @@
         '<div class="fun-fact-label">\u2728 Fun Fact</div>' +
         escHtml(caseData.explanation.funFact) +
       '</div>' +
-      '<button class="retro-btn green" onclick="SSS.' + (isLast ? 'showVictory' : 'nextCase') + '()">' +
-        (isLast ? 'See Final Results \u2192' : 'Proceed to Next Case \u2192') +
+      '<button class="retro-btn green" onclick="SSS.' + (isLast ? finalAction : 'nextCase') + '()">' +
+        (isLast ? 'See What Happens \u2192' : 'Proceed to Next Case \u2192') +
       '</button>'
     );
+  }
+
+  function showCaseVictory() {
+    const caseData = GAME_DATA.cases[STATE.currentCase];
+    const victory = caseData && caseData.victory;
+    if (!victory) {
+      finishFinalCase();
+      return;
+    }
+
+    setScreen('CORRECT_ANSWER');
+    const sections = [victory.podAwakening, victory.zelkethClosing]
+      .filter(Boolean)
+      .map(text => '<p>' + escHtml(text).replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>') + '</p>')
+      .join('');
+
+    renderInfo(
+      '<div class="info-header green">A New Symbiosis Awakens</div>' +
+      '<div class="info-body">' + sections + '</div>' +
+      '<button class="retro-btn accent" onclick="SSS.finishFinalCase()">See Final Results \u2192</button>'
+    );
+  }
+
+  function finishFinalCase() {
+    const caseData = GAME_DATA.cases[STATE.currentCase];
+    const shouldRankUp = caseData && caseData.ranksUp !== false && STATE.rank < GAME_DATA.ranks.length - 1;
+    const oldRank = STATE.rank;
+    if (shouldRankUp) STATE.rank++;
+    saveState();
+
+    if (shouldRankUp) {
+      showRankUp(oldRank, 'showVictory');
+    } else {
+      showVictory();
+    }
   }
 
   function nextCase() {
@@ -4522,10 +4559,12 @@
     return (STATE.currentCampaign === 1) ? RANK_COLORS_C2 : RANK_COLORS;
   }
 
-  function showRankUp(oldRank) {
+  function showRankUp(oldRank, nextAction) {
     setScreen('RANK_UP');
     if (oldRank === undefined) oldRank = Math.max(0, STATE.rank - 1);
-    const completedCase = GAME_DATA.cases[STATE.currentCase - 1];
+    if (!nextAction) nextAction = 'showBriefing';
+    const completedCaseIndex = nextAction === 'showVictory' ? STATE.currentCase : STATE.currentCase - 1;
+    const completedCase = GAME_DATA.cases[completedCaseIndex];
     const flavorText = completedCase && completedCase.rankUpText ? completedCase.rankUpText : '';
 
     renderInfo(
@@ -4535,7 +4574,7 @@
           '<canvas id="rankup-badge" class="badge-pixelate-canvas" width="512" height="512"></canvas>' +
         '</div>' +
         '<div style="font-size:22px; color:#8898a8;">Score: ' + STATE.totalScore + '</div>' +
-        '<button class="retro-btn accent" style="margin:10px 0;" onclick="SSS.showBriefing()">Continue \u2192</button>' +
+        '<button class="retro-btn accent" style="margin:10px 0;" onclick="SSS.' + nextAction + '()">Continue \u2192</button>' +
         (flavorText ? '<div style="font-size:20px; color:#6a8a9a; padding:0 20px; line-height:1.4;">' + escHtml(flavorText) + '</div>' : '') +
       '</div>'
     );
@@ -5452,11 +5491,30 @@
       if (STATE.currentCase >= GAME_DATA.cases.length) {
         showVictory();
       } else if (STATE.caseState.diagnosed) {
-        // Edge case: saved right after solving but before next case
-        nextCase();
+        // Resume the solved case at its intervention or explanation instead of
+        // skipping the choice (and incrementing beyond the final case).
+        resumeSolvedCase();
       } else {
         showBriefing();
       }
+    }
+  }
+
+  function resumeSolvedCase() {
+    const caseData = GAME_DATA.cases[STATE.currentCase];
+    if (!caseData) {
+      showVictory();
+      return;
+    }
+
+    loadScene(caseData, STATE.currentCase);
+    setScreen('CORRECT_ANSWER');
+    const cc = STATE.completedCases.find(c => c.caseId === caseData.id);
+    const score = cc ? cc.score : 0;
+    if (caseData.solutionChoice && STATE.caseState.solutionIdx < 0) {
+      showSolutionChoice(caseData, score);
+    } else {
+      showExplanation(caseData, score);
     }
   }
 
@@ -5527,7 +5585,7 @@
       return ci >= 0 && ci <= 4;
     }).length >= 5 || STATE.currentCase >= 5;
     // Case 6b (index 6): unlocked after Case 6 completed
-    if (idx === 6) return STATE.completedCases.some(cc => cc.caseId === 'alien1') || STATE.currentCase >= 6;
+    if (idx === 6) return STATE.completedCases.some(cc => cc.caseId === 'alien1');
     return false;
   }
 
@@ -6472,6 +6530,8 @@
     confirmSolution,
     showExplanationScreen,
     nextCase,
+    showCaseVictory,
+    finishFinalCase,
     showVictory,
     newGame,
     resumeGame,
