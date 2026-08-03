@@ -3236,7 +3236,7 @@ const GAME_DATA = {
           startMood: 0,
           nodes: {
             start: {
-              text: "Greetings-welcome, Dr. Nova of the Solar Agricultural Agency. This unit is designated [TRANSLATOR APPROXIMATION: Zel'keth].\n\nThe three-who-are-one have entered cessation-of-function. This began... [TRANSLATOR: calculating time units] ...approximately three of your day-cycles after we accepted docking-invitation with your station.\n\nWe have examined our own systems. Atmosphere is nominal. Light is nominal. Temperature is nominal. We do not understand.\n\nYour species has expertise in growing life where it should not grow. We have observed this. We ask for your [TRANSLATOR: eyes? perspective? outside thinking?].",
+              text: "Greetings-welcome, Dr. Nova of the Solar Agricultural Agency. This unit is designated [TRANSLATOR APPROXIMATION: Zel'keth].\n\nThe three-who-are-one have entered cessation-of-function. This began... [TRANSLATOR: calculating time units] ...after we accepted docking-invitation with your station approximately three of your day-cycles ago.\n\nWe have examined our own systems. Atmosphere is nominal. Light is nominal. Temperature is nominal. We do not understand.\n\nYour species has expertise in growing life where it should not grow. We have observed this. We ask for your [TRANSLATOR: eyes? perspective? outside thinking?].",
               options: [
                 { label: "Tell me about the three-who-are-one.", goto: "symbiosis_detail" },
                 { label: "What happened three days ago?", goto: "timeline" },
@@ -3297,7 +3297,7 @@ const GAME_DATA = {
               ]
             },
             timeline: {
-              text: "Three of your day-cycles. The Zhel'ora arrived at your Station Hayes and we performed [TRANSLATOR: docking-ritual? connection-protocol? joining-of-vessels?]. Your people were most welcoming.\n\nThe first day-cycle, all was well. The three-who-are-one flourished.\n\nThe second day-cycle, the network's activity decreased. We thought perhaps it was adjusting to the new environment.\n\nBy the third day-cycle, the network had gone fully dormant. The canopy dimmed. The roots slowed.\n\nWe have been unable to revive it.",
+              text: "Three of your day-cycles ago, the Zhel'ora arrived at your Station Hayes and we performed [TRANSLATOR: docking-ritual? connection-protocol? joining-of-vessels?]. Your people were most welcoming.\n\nBefore docking, all was well. The three-who-are-one flourished.\n\nDuring the first day-cycle after docking, the network's activity decreased. We thought perhaps it was adjusting to the new environment.\n\nBy the third day-cycle, the network had gone fully dormant. The canopy dimmed. The roots slowed.\n\nWe have been unable to revive it.",
               setsFlag: "zelketh_described_timeline",
               options: [
                 { label: "What exactly happens during docking?", goto: "docking_detail" },
@@ -3315,7 +3315,7 @@ const GAME_DATA = {
               ]
             },
             scrubbers_explain: {
-              text: "[Zel'keth's colors shift rapidly \u2014 alarm, then confusion, then understanding]\n\nAtmospheric scrubbers. Machines that clean your air. And they activated automatically when our vessels connected.\n\nThese machines \u2014 they remove compounds they do not recognize? Compounds that are not in their... [TRANSLATOR: approved list? safety database?]?\n\nThe network's signaling compounds would not be in a human safety database. Your scrubbers would classify them as...\n\n[Long pause. Colors drain to pale.]\n\n...contaminants?",
+              text: "[Zel'keth's colors shift rapidly \u2014 alarm, then confusion, then understanding]\n\nAtmospheric scrubbers. Machines that clean your air. And they activated automatically when our vessels connected.\n\nThis docking configuration \u2014 it removes compounds that are not in its... [TRANSLATOR: approved list? safety database?]?\n\nThe network's signaling compounds would not be in a human safety database. The system would classify them as...\n\n[Long pause. Colors drain to pale.]\n\n...contaminants?",
               moodShift: -1,
               setsFlag: "zelketh_scrubbers_explained",
               options: [
@@ -3367,17 +3367,17 @@ const GAME_DATA = {
               ]
             },
             earth_parallel: {
-              text: "[Zel'keth's entire form PULSES with vibrant teal \u2014 unmistakable excitement]\n\nYou have network organisms on your world?! The [TRANSLATOR: myco-rhizal? fungal-web? underground-speakers?]!\n\nWe have studied your botanical transmissions! The one your scientist Simard documented \u2014 trees sharing resources through fungal connections. 'Mother trees' supporting their offspring through the network!\n\n[TRANSLATOR: joy? kinship? validation?]\n\nThe three-who-are-one and your 'wood wide web' \u2014 they are [TRANSLATOR: cousins? echoes? parallel solutions to the same problem?]. Life finds the same answers, even between stars!",
+              text: "[Zel'keth's entire form PULSES with vibrant teal \u2014 unmistakable excitement]\n\nYou have organisms that form fungal connections with plants on your world?! The [TRANSLATOR: myco-rhizal? fungal-web? underground-partnerships?]!\n\nWe have studied your botanical transmissions. Experiments have measured carbon movement or defense-related responses through common fungal networks in particular systems, but your scientists still debate how widespread those effects are and what causes them.\n\n[TRANSLATOR: joy? kinship? validation?]\n\nPerhaps the three-who-are-one offer an analogy \u2014 not proof that life finds an identical answer between stars.",
               moodShift: 2,
               setsFlag: "zelketh_knows_earth_parallel",
               options: [
-                { label: "Exactly \u2014 chemical communication networks. Universal biology.", goto: "universal_biology" },
-                { label: "If your network works like ours, I might know what to look for.", goto: "exit_positive" },
+                { label: "A useful analogy \u2014 but not proof of identical biology.", goto: "universal_biology" },
+                { label: "If the analogy points to a useful question, I might know what to look for.", goto: "exit_positive" },
                 { label: "What happened three days ago?", goto: "timeline" }
               ]
             },
             universal_biology: {
-              text: "Universal biology! Yes! [TRANSLATOR: perfect phrase? exactly this?]\n\nThe three-who-are-one communicate through volatile compounds in the air. Your mycorrhizal networks communicate through compounds in the soil. Air or soil \u2014 the principle is identical. Chemical words carrying instructions between organisms.\n\n[Zel'keth's colors settle to a warm, steady glow]\n\nDr. Nova, if you understand how Earth networks fail, you may understand how ours has failed. What silences a chemical conversation?\n\nSomething removing the words from the air, perhaps?",
+              text: "An analogy, not universal proof \u2014 yes.\n\nEarth plants can respond to chemical cues, and some plant roots share fungal connections. The three-who-are-one use fictional Zhel'ii biology: volatile compounds in the air coordinate three obligate partners. The systems may be comparable, but they are not identical.\n\n[Zel'keth's colors settle to a warm, steady glow]\n\nFor our cultivar, the useful question remains: what silences an airborne chemical conversation?\n\nSomething removing the compounds from the air, perhaps?",
               moodShift: 1,
               options: [
                 { label: "Removing the words from the air \u2014 that's exactly what I need to check.", goto: "exit_positive" },
@@ -3397,7 +3397,7 @@ const GAME_DATA = {
               portraitOverride: "portrait_alien_confused.png",
               setsFlag: "zelketh_heard_about_scrubbers",
               options: [
-                { label: "They filter anything they don't recognize. Including biological signals.", goto: "scrubbers_reveal" },
+                { label: "This docking configuration is filtering the unrecognized biological signals.", goto: "scrubbers_reveal" },
                 { label: "I need to confirm what exactly they're filtering.", goto: "exit_neutral" }
               ]
             },
@@ -3413,14 +3413,14 @@ const GAME_DATA = {
             ready_to_fix: {
               text: "[Zel'keth's colors surge with hope \u2014 bright teal and amber]\n\nFix it? You can restore the network's voice?\n\nIf the scrubbers stop removing the compounds... the network would sense its own signals in the air again. It would realize the environment is safe. It would... wake up?\n\n[TRANSLATOR: hope? desperate-optimism? please-say-yes?]\n\nDr. Nova, if you can do this \u2014 if you can tell the network it is not alone \u2014 the three-who-are-one will sing again.",
               options: [
-                { label: "We disable the scrubbers for the docking section. The network wakes up.", goto: "exit_positive" }
+                { label: "We reconfigure the docking-section treatment so the signals can persist safely.", goto: "exit_positive" }
               ]
             },
             no_blame: {
               text: "[Zel'keth's colors warm to deep, steady amber]\n\nFault? No, Dr. Nova. There is no fault in good intentions applied without full understanding. Your scrubbers were protecting your people. You could not know they were silencing ours.\n\nThis is why species must talk to each other. This is why we came seeking your [TRANSLATOR: eyes? perspective? outside thinking?].\n\nYou saw what we could not see. That is not fault. That is [TRANSLATOR: gift? service? exactly what we asked for?].",
               moodShift: 1,
               options: [
-                { label: "Then let's fix it. We disable the scrubbers for the docking section.", goto: "exit_positive" }
+                { label: "Then let's establish a monitored, signal-safe docking configuration.", goto: "exit_positive" }
               ]
             },
             network_inert: {
@@ -3444,7 +3444,7 @@ const GAME_DATA = {
               moodShift: 1,
               setsFlag: "zelketh_full_understanding",
               options: [
-                { label: "Now we fix it. Disable the scrubbers for the docking section.", goto: "exit_positive" },
+                { label: "Now we fix it with a monitored, signal-safe docking configuration.", goto: "exit_positive" },
                 { label: "I'm sorry this happened.", goto: "no_blame" }
               ]
             },
@@ -3538,7 +3538,7 @@ const GAME_DATA = {
               ]
             },
             scrubbers_confirmation: {
-              text: "\u2550\u2550\u2550 ASSESSMENT \u2550\u2550\u2550\n\nAFFIRMATIVE. Human atmospheric scrubbers are removing 100% of network signaling compounds.\n\nThe scrubbers' safety database does not contain Zhel'ii biological signatures. All unrecognized organic volatiles are classified as contaminants and filtered.\n\nResult: Network organism cannot detect its own signals in the ambient atmosphere. Standard dormancy-safety response engaged.\n\nRecommendation: Disable or reprogram human-side scrubbers for docking section.",
+              text: "\u2550\u2550\u2550 ASSESSMENT \u2550\u2550\u2550\n\nAFFIRMATIVE. In this fictional system, human atmospheric processing is removing all detected network signaling compounds.\n\nThe safety database does not contain Zhel'ii biological signatures, so the docking configuration classifies these unrecognized organic volatiles as contaminants.\n\nResult: Network organism cannot detect its own signals in the ambient atmosphere. Standard dormancy-safety response engaged.\n\nRecommendation: Isolate the shared atmosphere or reprogram the docking-section treatment to preserve identified signals while maintaining monitored life support.",
               options: [
                 { label: "Query: Docking system logs", goto: "docking_logs" },
                 { label: "Exit interface", goto: "exit_neutral" }
@@ -3562,7 +3562,7 @@ const GAME_DATA = {
               ]
             },
             filtered_compounds: {
-              text: "\u2550\u2550\u2550 FILTERED COMPOUND ANALYSIS \u2550\u2550\u2550\n\nCross-referencing Zhel'ii botanical archives with human scrubber activity...\n\nThe following CRITICAL compounds are being removed:\n\n \u2022 NUTRIENT-REQUEST signals (roots \u2192 canopy)\n \u2022 NUTRIENT-DELIVERY signals (canopy \u2192 roots)\n \u2022 GROWTH-SYNC signals (network \u2192 both)\n \u2022 THREAT-RESPONSE signals (any \u2192 all)\n \u2022 GERMINATION-CASCADE compound\n\nAll classified by human systems as:\n'UNKNOWN ORGANIC CONTAMINANT \u2014 REMOVE'\n\n\u2588\u2588 THE ENTIRE COMMUNICATION SYSTEM IS BEING FILTERED AS WASTE \u2588\u2588",
+              text: "\u2550\u2550\u2550 FILTERED COMPOUND ANALYSIS \u2550\u2550\u2550\n\nCross-referencing Zhel'ii botanical archives with human atmospheric-processing activity...\n\nThe following CRITICAL compounds are being removed:\n\n \u2022 NUTRIENT-REQUEST signals (roots \u2192 canopy)\n \u2022 NUTRIENT-DELIVERY signals (canopy \u2192 roots)\n \u2022 GROWTH-SYNC signals (network \u2192 both)\n \u2022 THREAT-RESPONSE signals (any \u2192 all)\n\nAll classified by the fictional docking configuration as:\n'UNKNOWN ORGANIC CONTAMINANT \u2014 REMOVE'\n\n\u2588\u2588 THE ENTIRE COMMUNICATION SYSTEM IS BEING FILTERED AS WASTE \u2588\u2588",
               options: [
                 { label: "Query: Organism status", goto: "organism_status" },
                 { label: "Exit interface", goto: "exit_neutral" }
@@ -3628,7 +3628,7 @@ const GAME_DATA = {
               ]
             },
             antennae_detail: {
-              text: "You examine the broadcast structures under magnification. Each one is a tiny organic nozzle \u2014 designed to release specific compounds into the air. The mechanism is elegant: different nozzle shapes produce different signal molecules.\n\nBut they're all sealed shut. Not damaged \u2014 deliberately closed. This is a controlled shutdown, not a failure.\n\nThe network chose to stop signaling. Why would an organism voluntarily go silent?\n\nIn Earth biology, you've seen this pattern: organisms conserve resources when they detect that their signals aren't being received. If the network's compounds aren't persisting in the atmosphere, it would assume the environment is hostile and enter dormancy.",
+              text: "You examine the broadcast structures under magnification. Each one is a tiny organic nozzle \u2014 designed to release specific compounds into the air. The mechanism is elegant: different nozzle shapes produce different signal molecules.\n\nBut they're all sealed shut. Not damaged \u2014 deliberately closed. This is a controlled shutdown, not a failure.\n\nThe network has stopped signaling. Why?\n\nThe Zhel'ii archive describes a fictional self-monitoring dormancy response: if the network's compounds do not persist in the atmosphere, it treats the environment as hostile and conserves resources. This mechanism is evidence about the three-who-are-one, not a general rule of Earth biology.",
               setsFlag: "network_deliberately_silent",
               options: [
                 { label: "Something is removing the signals from the air.", goto: "removal_insight" },
@@ -3653,7 +3653,7 @@ const GAME_DATA = {
               ]
             },
             signal_structures: {
-              text: "Now that you know what to look for, the signal-producing structures are obvious. Hundreds of tiny nozzle-like organs arranged along every network thread \u2014 the 'antennae' that release volatile compounds into the air.\n\nEvery single one is sealed shut. The network has deliberately stopped broadcasting.\n\nOn Earth, mycorrhizal fungi reduce activity when soil conditions are unfavorable. Same principle: don't waste energy signaling into an environment that isn't carrying your signals.\n\nThe network thinks its signals aren't being heard. And it's right \u2014 something is removing them from the air before they can reach their targets.",
+              text: "Now that you know what to look for, the signal-producing structures are obvious. Hundreds of tiny nozzle-like organs arranged along every network thread \u2014 the 'antennae' that release volatile compounds into the air.\n\nEvery single one is sealed shut. The network has deliberately stopped broadcasting.\n\nEarth mycorrhizal fungi also respond to environmental conditions, but this signal-persistence feedback is specific to the fictional Zhel'ii organism.\n\nThe network is responding as though its signals cannot persist. The sensor evidence confirms that atmospheric processing is removing them before they can reach their targets.",
               revealsClue: "NETWORK_DORMANT",
               options: [
                 { label: "I need to find what's removing the signals.", goto: "exit_neutral" },
@@ -3737,7 +3737,7 @@ const GAME_DATA = {
               ]
             },
             earth_parallels: {
-              text: "[TRANSLATOR NOTE: Human botanical records contain relevant parallels]\n\n\u2550\u2550\u2550 EARTH PARALLEL: MYCORRHIZAL NETWORKS \u2550\u2550\u2550\n\nEarth forests utilize similar chemical communication networks. Human scientist Suzanne Simard documented 'mycorrhizal networks' connecting trees underground. These networks:\n\n \u2022 Transfer nutrients between organisms\n \u2022 Carry chemical warning signals\n \u2022 Allow 'mother trees' to support offspring\n\nHumans call this phenomenon the 'wood wide web.'\n\nThe three-who-are-one operate on similar principles, but above-ground via atmospheric volatiles rather than underground via fungal threads.\n\n\u2550\u2550\u2550 KEY DIFFERENCE \u2550\u2550\u2550\n\nEarth mycorrhizal signals travel through soil (protected). Zhel'ii network signals travel through atmosphere (exposed). Atmospheric signals are vulnerable to any process that alters air composition.\n\n[TRANSLATOR: This vulnerability had no practical consequence until the atmosphere was shared with another species' technology.]",
+              text: "[TRANSLATOR NOTE: Human botanical records contain relevant parallels]\n\n\u2550\u2550\u2550 EARTH PARALLEL: MYCORRHIZAL ASSOCIATIONS \u2550\u2550\u2550\n\nMany Earth plants form associations with mycorrhizal fungi, and fungal hyphae can connect more than one plant. In particular experiments, researchers have measured carbon movement or defense-related responses associated with common fungal networks.\n\nHow widespread, important, or direct these effects are in forests is context-dependent and actively debated. Claims that forests behave as one communicating organism, or that mature 'mother trees' preferentially support their offspring through the network, are not established conclusions.\n\nThe three-who-are-one are fictional alien biology. Their atmospheric signaling system is an analogy, not an Earth-science fact.\n\n\u2550\u2550\u2550 CASE-SPECIFIC DIFFERENCE \u2550\u2550\u2550\n\nThe Zhel'ii network signals travel through the shared atmosphere, where the docking-section treatment can remove them. That vulnerability is established by the vessel's own records and sensor data.",
               setsFlag: "read_earth_parallels",
               options: [
                 { label: "Search: Network communication", goto: "network_comm" },
@@ -3792,9 +3792,9 @@ const GAME_DATA = {
             alienPortrait: "portrait_alien_neutral.png",
             alienIcon:     "portrait_alien.png"
           },
-          text: "The three-who-are-one have entered cessation-of-function. The canopy produces, the roots produce, but the network does not carry. The harmony is broken. This began approximately three day-cycles after docking with the human station.",
+          text: "The three-who-are-one have entered cessation-of-function. The canopy produces, the roots produce, but the network does not carry. The harmony is broken. This began after docking with the human station approximately three day-cycles ago.",
           clueTag: "SYMBIOSIS_BROKEN",
-          learned: "The three-organism symbiosis has lost coordination. Network organism is dormant. Started three days after docking."
+          learned: "The three-organism symbiosis has lost coordination. Network organism is dormant. The decline started after docking three days ago."
         },
         {
           action: "sensors",
@@ -3867,15 +3867,15 @@ const GAME_DATA = {
 
       resolution: {
         sceneTransition: true,
-        text: "[ATMOSPHERIC SCRUBBERS DISABLED FOR DOCKING SECTION]\n\nYou watch as the network organism stirs. The gray threads flush with color \u2014 soft bioluminescent pulses traveling along the mycelium-like connections. Within minutes, the canopy fronds brighten. The root tendrils move with purpose.\n\nThe three-who-are-one are speaking again.",
+        text: "[ATMOSPHERIC PROCESSING RECONFIGURED \u2014 SIGNAL-SAFE DOCKING MODE]\n\nAfter the vessels isolate and monitor the shared exchange zone, the docking-section treatment is adjusted to preserve the identified Zhel'ii signal compounds while maintaining life-support safeguards.\n\nYou watch as the network organism stirs. The gray threads flush with color \u2014 soft bioluminescent pulses traveling along the mycelium-like connections. Within minutes, the canopy fronds brighten. The root tendrils move with purpose.\n\nThe three-who-are-one are signaling again.",
         zelkethGratitude: "Dr. Nova. You have restored the harmony. The three-who-are-one will continue. We will not perish in the dark between stars.\n\nYour species sees in ways we do not. You found what we could not find because it was... [TRANSLATOR STRUGGLING: invisible? assumed? part of the background?]. It was your technology. We did not think to look there.\n\nWe wish to offer a gift. A genesis pod \u2014 a seed-beginning of the three-who-are-one. If you can make it flourish in your care, it would be... [TRANSLATOR APPROXIMATION: a great honor? proof of connection? diplomatic milestone?]\n\nWe give this freely. But know that genesis pods are... delicate. They require specific conditions to awaken. We believe you will discover them.",
         acceptPod: "SAA PRIORITY UPDATE:\n\nThe genesis pod has been transferred to the new SAA Xenobiology Lab aboard Hayes Station. This is humanity's first alien biological sample intended for cultivation.\n\nDr. Nova, make it grow."
       },
 
       explanation: {
-        title: "The Wood Wide Web of Space",
-        body: "On Earth, forests are connected by vast underground networks of mycorrhizal fungi \u2014 sometimes called the 'wood wide web.' These networks carry nutrients between trees, send chemical warnings about pest attacks, and even let mature 'mother trees' support struggling seedlings. The forest isn't a collection of individuals; it's a superorganism connected by fungal threads and chemical signals.\n\nThe Zhel'ii cultivar works the same way, but more intimately. Three organisms that evolved together now function as one, coordinated by volatile chemical signals \u2014 molecules that drift through the air carrying instructions: 'Send sugar here.' 'Need minerals there.' 'Time to grow.'\n\nWhen the human station's atmospheric scrubbers went to work, they did exactly what they're designed to do: remove unfamiliar compounds from the air. Unfortunately, those 'contaminants' were the cultivar's entire communication system. The network, sensing that its signals weren't persisting in the environment, assumed something was wrong and shut down \u2014 a safety dormancy to conserve resources.\n\nThe fix is simple: create an isolated atmospheric zone without human scrubbing, or program the scrubbers to allow the specific compounds through. The network will sense its own signals in the air again and reactivate.",
-        funFact: "On Earth, some plants can 'hear' through mycorrhizal networks. When one tree is attacked by insects, it sends chemical signals through the fungi to warn its neighbors \u2014 and those neighbors start producing defensive compounds before the insects even arrive. The forest has its own internet, and it's been running for 400 million years."
+        title: "Chemical Signals and a Silenced Symbiosis",
+        body: "On Earth, many plants form mycorrhizal associations with fungi. Fungal hyphae can connect multiple plants, and particular experiments have measured carbon movement or defense-related responses associated with those connections. The importance, direction, and causes of these effects vary by system; broad claims that a forest acts as one communicating superorganism or that 'mother trees' preferentially support offspring are not established.\n\nThe three-who-are-one are fictional alien biology. In the story, three organisms function as obligate partners coordinated by volatile compounds that drift through the air carrying instructions such as 'send sugar here,' 'need minerals there,' and 'time to grow.'\n\nIn this fictional docking configuration, human atmospheric processing treated the unrecognized Zhel'ii compounds as contaminants. The network's own records establish that it enters dormancy when its signals do not persist, so filtration removed the coordination channel and triggered the shutdown.\n\nA safe intervention is to establish a monitored, isolated exchange zone and validate selective treatment or bypass settings that preserve the identified signal compounds while maintaining life-support protections. Once the signals persist again, the fictional network can begin reactivating.",
+        funFact: "Plants can respond to volatile chemical cues released by damaged neighbors, and experiments in some plant-fungus systems have detected defense-related responses associated with common mycorrhizal networks. These findings are context-dependent; they do not show that forests hear, think, or operate as a single internet-like organism."
       }
     },
 

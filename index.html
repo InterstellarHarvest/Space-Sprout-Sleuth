@@ -4362,12 +4362,30 @@
       }, { once: true });
     }
 
-    // If case has a solution choice (e.g. Case 6b), show that before explanation
+    // If case has a solution choice (e.g. Case 6b), show that before explanation.
+    // Otherwise, preserve an authored resolution/handoff before the science recap.
     if (caseData.solutionChoice) {
       showSolutionChoice(caseData, score);
+    } else if (caseData.resolution) {
+      showResolution(caseData, score);
     } else {
       showExplanation(caseData, score);
     }
+  }
+
+  function showResolution(caseData, score) {
+    const resolution = caseData.resolution;
+    const sections = [resolution.text, resolution.zelkethGratitude, resolution.acceptPod]
+      .filter(Boolean)
+      .map(text => '<p>' + escHtml(text).replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>') + '</p>')
+      .join('');
+
+    renderInfo(
+      '<div class="info-header green">\u2713 Case Solved!</div>' +
+      '<div class="score-line">+' + score + ' points</div>' +
+      '<div class="info-body">' + sections + '</div>' +
+      '<button class="retro-btn green" onclick="SSS.showExplanationScreen()">Continue \u2192</button>'
+    );
   }
 
   function showSolutionChoice(caseData, baseScore) {
