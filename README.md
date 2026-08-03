@@ -22,6 +22,8 @@ Each case is wrapped around a real concept in space botany.
 
 ### Campaign 1 · Solar Agricultural Agency
 
+Campaign 1 contains five core cases followed by two first-contact bonus cases. Runtime `alien1` is Case 6, **First Contact Protocol**; runtime `alien2` is Case 7, **The Gift** (source-development label `Case 6b`). **The Gift** is the Campaign 1 culmination.
+
 | Where | The science |
 |---|---|
 | International Space Station · Low Earth Orbit | Gravitropism — how plants know which way is down |
@@ -29,7 +31,8 @@ Each case is wrapped around a real concept in space botany.
 | Mars · Arcadia Planitia | Light quality — not all photons are equal |
 | Orbital Research Station · L2 | Light stress and reactor control — when continuous illumination exceeds a system’s safe operating range |
 | Europa · sub-surface bunker | Ionizing radiation in Jupiter’s energetic-particle environment |
-| First-contact bonus cases | The "wood wide web" of space, mother trees, and first words |
+| Zhel'ora Botanical Vessel · L2 Station Hayes | **Case 6 — First Contact Protocol**: volatile signaling, symbiosis, and unintended filtration effects |
+| SAA Xenobiology Lab · L2 Station Hayes | **Case 7 — The Gift**: germination cues and missing living context |
 
 ### Campaign 2 · Federation Liaison (The Concord)
 
