@@ -12,9 +12,11 @@ assert.ok(fs.existsSync(chromeBin), 'Chrome executable is required');
 const root = process.cwd();
 const dataContext = {};
 vm.createContext(dataContext);
-new vm.Script(fs.readFileSync(path.join(root, 'campaign_2_data.js'), 'utf8') +
-  '\n;globalThis.__C2__ = CAMPAIGN_2_DATA;').runInContext(dataContext);
+new vm.Script(fs.readFileSync(path.join(root, 'space_sprout_sleuth_data.js'), 'utf8') + '\n' +
+  fs.readFileSync(path.join(root, 'campaign_2_data.js'), 'utf8') +
+  '\n;globalThis.__C2__ = CAMPAIGN_2_DATA; globalThis.__PERS__ = GAME_DATA.personalities;').runInContext(dataContext);
 const campaignData = JSON.parse(JSON.stringify(dataContext.__C2__));
+const personalities = JSON.parse(JSON.stringify(dataContext.__PERS__));
 const mime = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png' };
 const server = http.createServer((req, res) => {
   const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
@@ -261,9 +263,191 @@ try {
   assert.deepEqual(results.map(item => item.clues), [5, 5, 5, 5, 5, 5]);
   assert.ok(results.every(item => item.diagnosed));
   assert.deepEqual(results.map(item => item.solutionRequired), [false, false, false, false, true, true]);
+  // The neutral playthrough above collected all 5 clues in every case without
+  // ever entering a negative mood — proving formal clues never require a bad mood.
+
+  // ================= Mood-mechanics runtime coverage =================
+  // Drive every configured annoyed/locked mood node to its threshold through
+  // real, ungated player choices, verifying: (a) the runtime routes to the
+  // mood node on re-entry (mood-dot indicator), (b) mood persists across the
+  // exit/re-entry that triggering requires, (c) recovery returns to neutral,
+  // (d) Case 06's speakers keep independent per-speaker mood, (e) mood persists
+  // across a full page reload, and (f) no corrected wording defect ever renders.
+  const DEFECT_RE = /passes through the kelp unused|this is the mechanism|never (?:been )?restored|transplant living soil/i;
+
+  function moodLabel(m, pers) {
+    const p = personalities[pers] || personalities.patient;
+    if (p.lockThreshold !== null && m <= -p.lockThreshold) return 'angry';
+    if (m <= -p.annoyThreshold) return 'annoyed';
+    if (m >= 2) return 'friendly';
+    return 'neutral';
+  }
+  function startNodeFor(src, mood, locked) {
+    const l = moodLabel(mood, src.personality);
+    if (l === 'angry' && src.nodes.locked) return 'locked';
+    if (l === 'annoyed' && src.nodes.annoyed) return 'annoyed';
+    if (locked && src.nodes.locked) return 'locked';
+    return 'start';
+  }
+  function pathToMood(src, target) {
+    const nodes = src.nodes, pers = src.personality;
+    const moodIds = Object.keys(nodes).filter(id => nodes[id].moodShift !== undefined);
+    const idx = new Map(moodIds.map((id, i) => [id, 1 << i]));
+    const seen = new Set();
+    const q = [{ id: startNodeFor(src, src.startMood || 0, false), vis: 0, mood: src.startMood || 0, locked: false, clicks: [] }];
+    while (q.length) {
+      const s = q.shift(); const n = nodes[s.id];
+      let mood = s.mood, vis = s.vis, locked = s.locked;
+      const bit = idx.get(s.id) || 0;
+      if (n.moodShift !== undefined && !(vis & bit)) { mood += n.moodShift; vis |= bit; }
+      if (n.setMood === 'neutral') mood = 0;
+      else if (n.setMood === 'annoyed') mood = Math.min(mood, -personalities[pers].annoyThreshold);
+      else if (n.setMood === 'angry') mood = -(personalities[pers].lockThreshold || 5);
+      if (n.locksSource === true) locked = true;
+      if (n.locksSource === false) locked = false;
+      const k = s.id + '|' + vis + '|' + mood + '|' + (locked ? 1 : 0);
+      if (seen.has(k)) continue; seen.add(k);
+      if (s.id === target) return s.clicks;
+      const opts = n.options || []; const ends = n.endsConversation === true || opts.length === 0;
+      if (!ends) for (const o of opts) q.push({ id: o.goto, vis, mood, locked, clicks: s.clicks.concat(o.label) });
+      else q.push({ id: startNodeFor(src, mood, locked), vis, mood, locked, clicks: s.clicks.concat('__REENTER__') });
+    }
+    return null;
+  }
+  function directRecoveryLabel(src, moodId) {
+    for (const o of src.nodes[moodId].options || []) {
+      const t = src.nodes[o.goto];
+      if (t && t.setMood === 'neutral') return o.label;
+    }
+    return null;
+  }
+  function clueTagForSource(caseData, sourceKey) {
+    const c = caseData.clues.find(cl => cl.action === sourceKey);
+    return c ? c.clueTag : null;
+  }
+
+  const moodSpecs = [];
+  campaignData.cases.forEach((caseData, caseIndex) => {
+    for (const [sourceKey, src] of Object.entries(caseData.sources || {})) {
+      if (src.type !== 'conversation') continue;
+      for (const moodId of ['annoyed', 'locked']) {
+        if (!src.nodes[moodId]) continue;
+        moodSpecs.push({
+          caseIndex, caseId: caseData.id, sourceKey, speaker: src.speaker,
+          target: moodId, expectDot: moodId === 'locked' ? 'angry' : 'annoyed',
+          clueTag: clueTagForSource(caseData, sourceKey),
+          path: pathToMood(src, moodId),
+          recoveryLabel: directRecoveryLabel(src, moodId)
+        });
+      }
+    }
+  });
+  assert.equal(moodSpecs.length, 12, 'exactly 12 mood nodes to exercise in-browser');
+  assert.ok(moodSpecs.every(s => s.path), 'every mood node has a replayable click-path');
+  assert.ok(moodSpecs.every(s => s.recoveryLabel), 'every mood node exposes a direct neutral-recovery option');
+
+  const freshCaseState = () => ({ cluesFound: [], nodesVisited: {}, actionsTaken: [], flags: [], sourceStates: {}, wrongGuesses: 0, diagnosed: false, bonusInsights: 0, textProgress: {}, calledHome: false, solutionIdx: -1 });
+  const waitReady = async () => {
+    for (let i = 0; i < 120; i++) {
+      const r = await send('Runtime.evaluate', { expression: 'document.readyState==="complete" && !!window.SSS && !!document.getElementById("diagnose-btn")', returnByValue: true });
+      if (r.result.value) return;
+      await new Promise(res => setTimeout(res, 50));
+    }
+    throw new Error('page not ready after reload');
+  };
+  const seedAndBegin = async (caseIndex, keepSave) => {
+    if (!keepSave) {
+      const seed = { ...seededSave, currentCase: caseIndex, completedCases: Array.from({ length: caseIndex }, (_, i) => i), caseState: freshCaseState() };
+      await send('Runtime.evaluate', { expression: 'localStorage.setItem("space_sprout_sleuth_save", ' + JSON.stringify(JSON.stringify(seed)) + ')' });
+    }
+    await send('Page.reload');
+    await send('Runtime.enable');
+    await waitReady();
+    await send('Runtime.evaluate', { expression: 'SSS.showBriefing(); SSS.beginInvestigation(); true' });
+  };
+  const evalPage = async (fn, arg) => {
+    const res = await send('Runtime.evaluate', { expression: '(' + fn.toString() + ')(' + JSON.stringify(arg) + ')', awaitPromise: true, returnByValue: true });
+    if (res.exceptionDetails) throw new Error(res.exceptionDetails.text);
+    return res.result.value;
+  };
+
+  // In-page driver: open source, replay path, capture mood-dot + texts, recover.
+  async function driveMood(spec) {
+    const pause = ms => new Promise(r => setTimeout(r, ms));
+    const skip = async () => { const a = document.getElementById('info-area'); if (a) a.click(); await pause(15); };
+    const info = () => { const a = document.getElementById('info-area'); return a ? a.textContent : ''; };
+    const openSource = async tag => { const b = document.querySelector('[data-clue-tag="' + tag + '"]'); if (!b) return false; b.click(); await skip(); return true; };
+    const clickOpt = async label => { const o = [...document.querySelectorAll('.dialogue-option')].find(e => e.textContent.trim() === label); if (!o) return false; o.click(); await skip(); return true; };
+    const negDot = () => ({ annoyed: !!document.querySelector('.mood-dot.annoyed'), angry: !!document.querySelector('.mood-dot.angry') });
+    const seen = [];
+    if (!(await openSource(spec.clueTag))) return { error: 'source button missing: ' + spec.clueTag };
+    seen.push(info());
+    for (const label of spec.path) {
+      if (label === '__REENTER__') { await openSource(spec.clueTag); }
+      else if (!(await clickOpt(label))) return { error: 'option unavailable: ' + label, seen };
+      seen.push(info());
+    }
+    const triggered = negDot();
+    let recovered = null;
+    if (!spec.skipRecovery && spec.recoveryLabel) {
+      if (await clickOpt(spec.recoveryLabel)) { await openSource(spec.clueTag); recovered = negDot(); seen.push(info()); }
+    }
+    return { triggered, recovered, seen };
+  }
+
+  const capturedTexts = [];
+  const moodReport = [];
+  for (const spec of moodSpecs) {
+    await seedAndBegin(spec.caseIndex, false);
+    const r = await evalPage(driveMood, spec);
+    const tag = spec.caseId + '/' + spec.sourceKey + '.' + spec.target;
+    assert.ok(!r.error, tag + ': ' + r.error);
+    capturedTexts.push(...r.seen);
+    if (spec.expectDot === 'annoyed') assert.ok(r.triggered.annoyed, tag + ' must show the annoyed mood indicator after triggering');
+    else assert.ok(r.triggered.angry, tag + ' must show the angry (locked) mood indicator after triggering');
+    assert.ok(r.recovered && !r.recovered.annoyed && !r.recovered.angry, tag + ' must recover to neutral via the recovery option');
+    moodReport.push({ node: tag, indicator: spec.expectDot, recovered: true });
+  }
+
+  // Per-speaker independence: triggering Dr. Nova must not annoy Vorn-Shael.
+  const novaSpec = moodSpecs.find(s => s.caseIndex === 5 && s.sourceKey === 'nova' && s.target === 'annoyed');
+  await seedAndBegin(5, false);
+  const rNova = await evalPage(driveMood, { ...novaSpec, skipRecovery: true });
+  assert.ok(rNova.triggered.annoyed, 'Case 06 Nova annoyed triggers');
+  const vornTag = clueTagForSource(campaignData.cases[5], 'vorn_shael');
+  const rVorn = await evalPage(async tag => {
+    const pause = ms => new Promise(r => setTimeout(r, ms));
+    document.querySelector('[data-clue-tag="' + tag + '"]').click();
+    const a = document.getElementById('info-area'); if (a) a.click(); await pause(15);
+    return { annoyed: !!document.querySelector('.mood-dot.annoyed'), angry: !!document.querySelector('.mood-dot.angry') };
+  }, vornTag);
+  assert.ok(!rVorn.annoyed && !rVorn.angry, 'Case 06 Vorn-Shael keeps independent neutral mood while Nova is annoyed');
+
+  // Cross-reload persistence on a representative annoyed and locked node.
+  for (const spec of [moodSpecs.find(s => s.caseId === 'missing_dance'), moodSpecs.find(s => s.caseId === 'wrong_color_light' && s.target === 'locked')]) {
+    await seedAndBegin(spec.caseIndex, false);
+    const r1 = await evalPage(driveMood, { ...spec, skipRecovery: true });
+    capturedTexts.push(...r1.seen);
+    assert.ok(spec.expectDot === 'angry' ? r1.triggered.angry : r1.triggered.annoyed, spec.caseId + ' triggers before reload');
+    await seedAndBegin(spec.caseIndex, true); // reload, keep saved mood
+    const r2 = await evalPage(async tag => {
+      const pause = ms => new Promise(r => setTimeout(r, ms));
+      document.querySelector('[data-clue-tag="' + tag + '"]').click();
+      const a = document.getElementById('info-area'); if (a) a.click(); await pause(15);
+      return { annoyed: !!document.querySelector('.mood-dot.annoyed'), angry: !!document.querySelector('.mood-dot.angry') };
+    }, spec.clueTag);
+    assert.ok(spec.expectDot === 'angry' ? r2.angry : r2.annoyed, spec.caseId + ' mood persists across a full page reload');
+  }
+
+  // No corrected-wording defect ever rendered during any interaction.
+  for (const t of capturedTexts) {
+    assert.doesNotMatch(t, DEFECT_RE, 'a corrected-wording defect string rendered at runtime');
+  }
+
+  await send('Runtime.enable');
   assert.equal(exceptions.length, 0, 'no uncaught browser exceptions');
 
-  console.log(JSON.stringify({ browser: 'Google Chrome headless', cases: results, uncaughtExceptions: exceptions.length }, null, 2));
+  console.log(JSON.stringify({ browser: 'Google Chrome headless', cases: results, moodNodesExercised: moodReport.length, moodReport, uncaughtExceptions: exceptions.length }, null, 2));
 } finally {
   if (ws && ws.readyState === WebSocket.OPEN) ws.close();
   chrome.kill('SIGTERM');
