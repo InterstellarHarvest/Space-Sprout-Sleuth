@@ -1,13 +1,11 @@
-// Space Sprout Sleuth — Campaign 2 Data (skeleton)
-// Federation Field Cases — Phase 2 skeleton pass
+// Space Sprout Sleuth — Campaign 2 Data
+// Federation Field Cases — canonical runtime content
 //
 // Loaded alongside space_sprout_sleuth_data.js. The engine merges both into
 // GAME_DATA.campaigns[] during init and switches active campaign via
 // setActiveCampaign(idx).
 //
-// Phase 2 scope: all 5 cases at flat V1-depth. No branching dialogue,
-// no species-variant content, placeholder text everywhere. Enough to prove
-// the architecture end-to-end. Phase 3+ deepens each case.
+// Campaign 2 contains five core cases plus the First Garden bonus finale.
 
 // Embedded TexturePacker frame data for all Campaign 2 spritesheets.
 // Mirrors the SPRITE_FRAMES pattern in space_sprout_sleuth_data.js — using
@@ -183,6 +181,42 @@ const CAMPAIGN_2_FRAMES = {
   ]
 };
 
+// One canonical quantitative model drives every displayed Heavy Hands value.
+// The fictional biological response is authored separately in the case text;
+// the acceleration values below follow a = omega^2 r exactly.
+const CAMPAIGN_2_HEAVY_HANDS_MODEL = (() => {
+  const standardGravityMps2 = 9.80665;
+  const targetMidpointG = 2.10;
+  const midpointRadiusM = 224.9;
+  const bedDepthM = 0.2;
+  const angularSpeedRadS = Math.sqrt(
+    targetMidpointG * standardGravityMps2 / midpointRadiusM
+  );
+  const rotationRpm = angularSpeedRadS * 60 / (2 * Math.PI);
+  const topRadiusM = midpointRadiusM - bedDepthM / 2;
+  const baseRadiusM = midpointRadiusM + bedDepthM / 2;
+  const accelerationG = radiusM => (
+    angularSpeedRadS * angularSpeedRadS * radiusM / standardGravityMps2
+  );
+
+  return Object.freeze({
+    standardGravityMps2,
+    targetMidpointG,
+    midpointRadiusM,
+    bedDepthM,
+    topRadiusM,
+    baseRadiusM,
+    angularSpeedRadS,
+    rotationRpm,
+    topAccelerationG: accelerationG(topRadiusM),
+    midpointAccelerationG: accelerationG(midpointRadiusM),
+    baseAccelerationG: accelerationG(baseRadiusM),
+    gradientDeltaG: accelerationG(baseRadiusM) - accelerationG(topRadiusM)
+  });
+})();
+
+const HH = CAMPAIGN_2_HEAVY_HANDS_MODEL;
+
 const CAMPAIGN_2_DATA = {
   id: "c2",
   name: "Federation Field Cases",
@@ -235,7 +269,8 @@ const CAMPAIGN_2_DATA = {
       // Coordinates are in the 240x280 scene sprite space. Top-left (85, 90),
       // bottom-right (190, 150).
       sceneWindow: { x: 85, y: 90, w: 105, h: 60 },
-      briefing: "Nova here. Your first Federation field case. A Vressk centrifuge habitat in orbit around Kepler-442b is trying to grow gorlroot \u2014 that's a staple tuber from a 2.1g world. The tubers are growing upward instead of down, and the Vressk botanist on site is not happy about it. Nobody can figure out why.\n\nZel'keth: 'The Vressk are precise. If their botanist cannot identify the cause, it is either something very subtle or something no Vressk has encountered before. Both possibilities are interesting.'\n\nNova: 'Interesting for you. Frustrating for them. Go easy \u2014 Vressk don't like wasted time. Get in, gather your evidence, make the diagnosis.'",
+      sceneDescription: "A rotating Vressk agricultural habitat with curved gorlroot beds along the outer ring wall.",
+      briefing: "Nova here. Your first Federation field case. A Vressk centrifuge habitat in orbit around Kepler-442b is trying to grow gorlroot \u2014 a staple tuber from a 2.1g world. The primary roots point radially outward, which is down in this habitat, but the swelling tubers kink sideways, twist, and break through the soil surface. The Vressk botanist cannot explain the deformation.\n\nZel'keth: 'The Vressk are precise. If their botanist cannot identify the cause, it is either something very subtle or something no Vressk has encountered before. Both possibilities are interesting.'\n\nNova: 'Interesting for you. Frustrating for them. Go easy \u2014 Vressk don't like wasted time. Get in, gather your evidence, make the diagnosis.'",
 
       sources: {
         crew: {
@@ -245,7 +280,7 @@ const CAMPAIGN_2_DATA = {
           startMood: 0,
           nodes: {
             start: {
-              text: "You must be the Federation liaison. Fine. The gorlroot are growing wrong. Up instead of down. I have been over every variable and I cannot explain it. Ask your questions.",
+              text: "You must be the Federation liaison. Fine. The gorlroot primary roots point down correctly, but the tubers buckle sideways as they swell. I have been over every variable and I cannot explain it. Ask your questions.",
               options: [
                 { label: "What exactly is happening with the gorlroot?", goto: "problem_main" },
                 { label: "How long has this been going on?", goto: "timeline" },
@@ -277,7 +312,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             problem_main: {
-              text: "The tubers swell upward. Out of the soil. Toward the outer wall of the ring. Roots tangle instead of driving straight down. On Vress, gorlroot root networks are perfectly vertical \u2014 they track the gravity vector to within a fraction of a degree. Here, they track... nothing. They spiral.",
+              text: "The primary roots point outward toward the ring wall, exactly where centrifugal down should be. But as each tuber thickens, one side grows faster than the other. The tuber bends across the row, twists, and pushes its shoulder through the soil surface. On Vress, gorlroot tubers swell straight along the local down direction. Here, they buckle.",
               revealsClue: "GORLROOT_UPWARD",
               setsFlag: "botanist_described_problem",
               options: [
@@ -313,7 +348,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             gravity_varies: {
-              text: "Varies? It is centrifugal force. The radius... the radius changes with depth. The top of the bed is closer to the axis than the bottom. You are saying the 'down' vector is different at 20 centimeters depth than at the surface.",
+              text: "Varies? It is centrifugal acceleration. The radius changes with depth. The top of the bed is closer to the axis than the base. The direction remains radially outward along this bed line, but the magnitude is slightly larger at the base. You are saying gorlroot can detect that tiny difference across its own tissue.",
               bonusInsight: true,
               moodShift: 1,
               options: [
@@ -367,7 +402,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             precision_discussion: {
-              text: "On Vress, the gravity field is uniform to eight decimal places. If the gorlroot is calibrated to that... and centrifugal force is not... then the gorlroot is not wrong. It is accurately detecting something we told it was not there.",
+              text: "Across a 20-centimeter bed on Vress, the change in gravitational magnitude is negligible for cultivation. If the fictional gorlroot control system is calibrated to that consistency, and the rotating habitat has a larger radial gradient, then the plant may be detecting a difference our midpoint specification ignored.",
               bonusInsight: true,
               moodShift: 1,
               options: [
@@ -399,13 +434,13 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             gravity_insight: {
-              text: "A gradient? 2.09 at the top, 2.13 at the base? That is 0.04g across 20 centimeters. On Vress that difference does not exist. The planetary field is uniform. But centrifugal force... the radius changes. I should have seen this.",
+              text: `A gradient? ${HH.topAccelerationG.toFixed(4)}g at the top and ${HH.baseAccelerationG.toFixed(4)}g at the base? That is ${HH.gradientDeltaG.toFixed(4)}g across 20 centimeters. The direction is outward at both points, but the magnitude increases with radius. On Vress that bed-scale difference is negligible. I should have checked more than the midpoint.`,
               revealsClue: "GORLROOT_UPWARD",
               bonusInsight: true,
               moodShift: 1,
               options: [
                 { label: "It's a small difference, but gorlroot can detect it.", goto: "realization" },
-                { label: "That gradient confuses the gravitropism system.", goto: "realization" }
+                { label: "That magnitude gradient triggers the fictional overcorrection.", goto: "realization" }
               ]
             },
             tradition_insight: {
@@ -419,12 +454,12 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             tuber_insight: {
-              text: "Toward the ring wall. Yes. That is... outward. Toward the greater radius. The tuber follows the stronger component of the gradient instead of the composite vector. The gravitropism system is trying to resolve a vector that changes with depth and it cannot.",
+              text: "The primary roots point toward the ring wall \u2014 outward, the correct down direction. But the thickening tuber spans a range of radii. Its fictional ultra-sensitive statocyte controller compares the slightly different acceleration magnitudes across its tissue and overcorrects as if the plant were tilted. That produces the sideways curve.",
               revealsClue: "GORLROOT_UPWARD",
               bonusInsight: true,
               moodShift: 1,
               options: [
-                { label: "The gradient is the problem, not the magnitude.", goto: "realization" },
+                { label: "The magnitude gradient is the problem, not the direction.", goto: "realization" },
                 { label: "The tuber is more sensitive than the instruments.", goto: "realization" }
               ]
             },
@@ -439,7 +474,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             realization: {
-              text: "So. The gravity is correct in magnitude. But centrifugal force is not planetary gravity. The vector changes with radius. Across 20 centimeters of soil, the 'down' is not the same at the top as at the bottom. And the gorlroot \u2014 calibrated to a uniform field over millions of years \u2014 detects the inconsistency and loses orientation.",
+              text: `So. The midpoint is correctly calibrated to ${HH.midpointAccelerationG.toFixed(2)}g. Along one radial bed line, down remains outward, but centrifugal acceleration grows from ${HH.topAccelerationG.toFixed(4)}g at the top to ${HH.baseAccelerationG.toFixed(4)}g at the base. The fictional gorlroot statocyte controller mistakes that small magnitude difference across a swelling tuber for tilt, overcorrects, and makes the tissue buckle sideways.`,
               options: [
                 { label: "Deeper centrifuge arm would reduce the gradient.", goto: "solution" },
                 { label: "Thinner growing beds would also help.", goto: "solution" },
@@ -447,14 +482,14 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             solution: {
-              text: "Deeper arm increases the radius, which shrinks the gradient proportionally. Thinner beds reduce the distance over which the gradient acts. Either way, the gorlroot experiences something closer to uniform. I can modify the bed depth immediately. The arm extension requires engineering work. Thank you, liaison. This was... competent.",
+              text: "A larger ring radius can deliver the same target acceleration at a lower rotation rate, reducing the bed-scale gradient. Thinner beds reduce the radial separation sampled by each plant. Either change makes the magnitude more uniform across the tuber. I can trial a thinner bed immediately; a larger ring requires engineering work. Thank you, liaison. This was... competent.",
               moodShift: 1,
               options: [
                 { label: "Good luck with the next crop.", goto: "exit_friendly" }
               ]
             },
             annoyed: {
-              text: "The tubers grow upward. The gravity reads 2.1g. I have tried everything I can think of and nothing works. That is all I know. If you have evidence, show me. Otherwise, investigate on your own.",
+              text: "The tubers buckle sideways even though the midpoint reads 2.1g. I have tried everything I can think of and nothing works. That is all I know. If you have evidence, show me. Otherwise, investigate on your own.",
               revealsClue: "GORLROOT_UPWARD",
               options: [
                 { label: "What about the centrifuge engineering?", goto: "habitat_info" },
@@ -462,7 +497,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             locked: {
-              text: "We are done talking. The gorlroot grows wrong \u2014 up instead of down. The gravity is 2.1g. I cannot explain it and neither can you. Come back when you have a real answer.",
+              text: "We are done talking. The gorlroot tubers buckle even though the midpoint is 2.1g. I cannot explain it and neither can you. Come back when you have a real answer.",
               revealsClue: "GORLROOT_UPWARD",
               endsConversation: true,
               exitLabel: "Walk away"
@@ -491,7 +526,7 @@ const CAMPAIGN_2_DATA = {
           speaker: "Centrifuge Sensor Array",
           nodes: {
             start: {
-              text: "——— CENTRIFUGE SENSOR ARRAY ———\n> Ring Status: NOMINAL\n> RPM: 4.23 (stable \u00b10.001)\n> Temperature: 22.4\u00b0C\n> Humidity: 68%\n\n\nQuery available: [gravity] [atmosphere] [historical]",
+              text: `——— CENTRIFUGE SENSOR ARRAY ———\n> Ring Status: NOMINAL\n> RPM: ${HH.rotationRpm.toFixed(5)} (stable \u00b10.00001)\n> Temperature: 22.4\u00b0C\n> Humidity: 68%\n\nQuery available: [gravity] [atmosphere] [historical]`,
               options: [
                 { label: "[gravity] Run gravity profile", goto: "gravity_profile" },
                 { label: "[atmosphere] Check atmosphere", goto: "atmosphere" },
@@ -500,7 +535,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             gravity_profile: {
-              text: "——— GRAVITY PROFILE ———\n> Measurement: SURFACE (top of bed)\n>  \u2192 2.09g\n> Measurement: BASE (bottom of bed)\n>  \u2192 2.13g\n> Measurement: MIDPOINT (calibration ref)\n>  \u2192 2.10g\n> Delta across soil depth (20cm): 0.04g\n\n> \u26a0 NOTE: Gradient is inherent to centrifugal\n> force \u2014 not an instrument error.\n",
+              text: `——— GRAVITY PROFILE ———\n> SURFACE / TOP (r = ${HH.topRadiusM.toFixed(1)}m)\n>  \u2192 ${HH.topAccelerationG.toFixed(4)}g outward\n> BASE / RING-WALL SIDE (r = ${HH.baseRadiusM.toFixed(1)}m)\n>  \u2192 ${HH.baseAccelerationG.toFixed(4)}g outward\n> MIDPOINT / CALIBRATION (r = ${HH.midpointRadiusM.toFixed(1)}m)\n>  \u2192 ${HH.midpointAccelerationG.toFixed(2)}g outward\n> Magnitude delta across ${Math.round(HH.bedDepthM * 100)}cm: ${HH.gradientDeltaG.toFixed(4)}g\n\n> \u26a0 Direction is radially outward at all three\n> points. Magnitude increases with radius.\n`,
               revealsClue: "GRAVITY_GRADIENT",
               options: [
                 { label: "[cross-ref] What causes the gradient?", goto: "gradient_explanation" },
@@ -509,7 +544,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             gradient_explanation: {
-              text: "——— CENTRIFUGAL GRADIENT \u2014 REFERENCE ———\n> Centrifugal 'gravity' = \u03c9\u00b2r\n> where r = distance from rotation axis.\n\n> Soil bed occupies 20cm of radial depth.\n> At bed surface: r = 224.8m \u2192 2.09g\n> At bed base:    r = 225.0m \u2192 2.13g\n\n> On a planet: gravity is effectively uniform\n> across this distance (<0.000001g variation).\n> In a centrifuge: variation is 0.04g \u2014\n> ~40,000\u00d7 larger than planetary equivalent.\n",
+              text: `——— CENTRIFUGAL GRADIENT \u2014 REFERENCE ———\n> Centrifugal acceleration: a = \u03c9\u00b2r\n> r = distance from the rotation axis\n> \u03c9 = rotation rate in radians per second\n\n> Target midpoint: ${HH.targetMidpointG.toFixed(2)}g at ${HH.midpointRadiusM.toFixed(1)}m\n> Required rotation: ${HH.rotationRpm.toFixed(5)} RPM\n> Soil bed radial depth: ${HH.bedDepthM.toFixed(1)}m\n> Top:  ${HH.topAccelerationG.toFixed(4)}g outward\n> Base: ${HH.baseAccelerationG.toFixed(4)}g outward\n> Difference: ${HH.gradientDeltaG.toFixed(4)}g\n\n> On one radial line the direction remains outward.\n> The measured difference is a magnitude gradient,\n> not a change or reversal of down.\n`,
               bonusInsight: true,
               options: [
                 { label: "[back] Return to main", goto: "start" },
@@ -543,7 +578,7 @@ const CAMPAIGN_2_DATA = {
           speaker: "Gorlroot Specimen",
           nodes: {
             start: {
-              text: "The gorlroot specimen tray holds three plants at different growth stages. The tubers are visible \u2014 all three are pushing upward and outward rather than swelling beneath the soil surface.",
+              text: "The specimen tray holds three plants at different growth stages. Their primary roots point outward toward the ring wall, the correct down direction. The swelling tubers, however, curve sideways across their rows; the largest has buckled enough to push its shoulder through the soil surface.",
               options: [
                 { label: "Examine the roots closely.", goto: "root_inspection" },
                 { label: "Look at the tuber orientation.", goto: "tuber_orientation" },
@@ -561,17 +596,17 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             tuber_orientation: {
-              text: "Each tuber is growing toward the outer wall of the centrifuge ring \u2014 not straight down into the soil, but at an angle. The angle isn't random: it tracks the radial direction away from the rotation axis. As if the tuber is following a gravity signal that points 'outward' rather than 'downward.' The heavier the tuber gets, the more it leans.",
+              text: "Each primary root grows toward the outer ring wall, which is radially outward and therefore down in the rotating habitat. The tubers begin aligned that way, then curve tangentially as they thicken. The deformation increases with tuber diameter rather than pointing toward or away from the axis.",
               revealsClue: "TUBERS_MISALIGNED",
               bonusInsight: true,
               options: [
-                { label: "The tuber is tracking the gradient, not the composite vector.", goto: "gradient_observation" },
+                { label: "The deformation increases as the tuber spans more of the gradient.", goto: "gradient_observation" },
                 { label: "Examine the roots.", goto: "root_inspection" },
                 { label: "[Step away]", goto: "exit_done" }
               ]
             },
             gradient_observation: {
-              text: "The larger tubers lean more, because their mass samples a greater range of the gravity gradient. A small seedling sits within a few centimeters; a mature tuber spans 8\u201310cm of radial depth. The bigger it gets, the more gradient it experiences, the more confused its orientation becomes.",
+              text: "The larger tubers curve more because their tissues span a greater radial distance and therefore a slightly larger acceleration difference. This does not reverse down. It is consistent with a fictional growth controller that overreacts to magnitude differences across the tuber and drives unequal growth on its two sides.",
               bonusInsight: true,
               options: [
                 { label: "This confirms the gradient is the problem.", goto: "exit_done" },
@@ -618,7 +653,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             gravitropism: {
-              text: "——— GRAVITROPISM \u2014 GORLROOT ———\n\nGorlroot employs a high-precision gravitropic system evolved under the uniform 2.1g field of Vress. Statocyte density is approximately 14\u00d7 higher than equivalent Earth root-tip cells. The organism can resolve gravity vector direction to within \u00b10.001 degrees under uniform field conditions.\n\nThis precision is an evolutionary adaptation to Vress's dense, mineral-rich soil: accurate root orientation is critical for accessing deep mineral deposits. No Vressk crop has ever been tested outside a uniform gravity field.",
+              text: "——— GRAVITROPISM \u2014 GORLROOT ———\n\nFICTIONAL XENOBOTANY RECORD: Gorlroot employs an alien statocyte-like control system evolved under the 2.1g field of Vress. During tuber expansion, paired sensor tissues compare acceleration across the growing organ and adjust growth rates on opposite sides.\n\nThe system is unusually sensitive to differences in acceleration magnitude. That sensitivity is fictional and must not be generalized to Earth plants. No gorlroot crop has previously been tested in a radial acceleration gradient.",
               revealsClue: "GORLROOT_NEEDS_UNIFORM_G",
               bonusInsight: true,
               options: [
@@ -628,7 +663,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             centrifuge_specs: {
-              text: "——— CENTRIFUGE HABITAT SPECS ———\n\nDesignation: Vressk Agricultural Ring, Kepler-442b Orbit\nRadius to soil bed midpoint: 224.9m\nRotation: 4.23 RPM\nNominal acceleration at midpoint: 2.10g\n\nDesigned by Concord Engineering Division.\nGravity specification: '2.1g \u00b10.05g at midpoint'\n\n\u26a0 Specification references midpoint only. No tolerance specified for gravity gradient across the radial depth of the soil bed.",
+              text: `——— CENTRIFUGE HABITAT SPECS ———\n\nDesignation: Vressk Agricultural Ring, Kepler-442b Orbit\nRadius to soil bed midpoint: ${HH.midpointRadiusM.toFixed(1)}m\nRotation: ${HH.rotationRpm.toFixed(5)} RPM\nNominal acceleration at midpoint: ${HH.midpointAccelerationG.toFixed(2)}g\n\nDesigned by Concord Engineering Division.\nGravity specification: '${HH.targetMidpointG.toFixed(2)}g \u00b10.05g at midpoint'\n\n\u26a0 Specification references midpoint magnitude only. No tolerance was specified for the acceleration difference across the radial depth of the bed.`,
               options: [
                 { label: "[back] Return to search", goto: "start" },
                 { label: "[exit] Close archive", goto: "exit_done" }
@@ -663,7 +698,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             centrifugal_gradient: {
-              text: "——— CONCORD ENGINEERING NOTE #4471 ———\n\nCentrifugal 'gravity' = \u03c9\u00b2r. Unlike planetary gravity (effectively uniform over agricultural scales), centrifugal force exhibits a RADIAL GRADIENT: acceleration increases with distance from the rotation axis.\n\nFor rotating habitats, the 'down' vector at the top of a soil bed differs measurably from the 'down' vector at the base. Biological systems calibrated to uniform planetary gravity fields may fail to resolve the inconsistent vector.\n\n\u26a0 ADVISORY: Species with high-precision gravitropic systems (Vressk, Telluvian root-analogues) should not be cultivated in centrifugal habitats without gradient mitigation.",
+              text: "——— CONCORD ENGINEERING NOTE #4471 ———\n\nCentrifugal acceleration is a = \u03c9\u00b2r. Its magnitude increases with distance from the rotation axis. Along a single radial bed line, the direction remains radially outward; it does not reverse or rotate between the top and base.\n\nA midpoint-only specification can therefore hide a small magnitude difference across a deep bed. Most organisms may not respond measurably to that difference. Fictional species records identify a few alien crops, including gorlroot, whose unusual growth-control systems require explicit gradient limits.\n\n\u26a0 ADVISORY: Validate species-specific responses with controlled trials before full-scale cultivation.",
               revealsClue: "CENTRIFUGAL_GRADIENT_KNOWN",
               options: [
                 { label: "[gravitropism] How do other species handle this?", goto: "gravitropism_data" },
@@ -673,7 +708,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             gravitropism_data: {
-              text: "——— GRAVITROPISM \u2014 CROSS-SPECIES COMPARISON ———\n\nEarth plants: Moderate precision. Detects \u00b10.5\u00b0 vector change. CENTRIFUGE-COMPATIBLE \u2014 gradient below detection threshold.\n\nVressk gorlroot: Ultra-high precision. 14\u00d7 statocyte density. Detects \u00b10.001\u00b0. NOT CENTRIFUGE-COMPATIBLE without mitigation.\n\nZhel'ii symbionts: Minimal gravitropism (chemical orientation). CENTRIFUGE-COMPATIBLE.\n\nRecommendation: For high-precision species, use \u2265500m radius or \u22645cm bed depth to keep gradient below biological detection threshold.",
+              text: "——— GRAVITROPISM \u2014 CROSS-SPECIES COMPARISON ———\n\nEarth plants: gravitropism through statolith-mediated sensing is established, but this record contains no evidence that Earth crops detect the very small bed-scale magnitude difference in the current habitat.\n\nVressk gorlroot: FICTIONAL alien sensor tissues compare acceleration across a swelling tuber and can overcorrect in a radial magnitude gradient. Compatibility requires species-specific testing.\n\nZhel'ii symbionts: fictional records describe primarily chemical orientation; response to this gradient has not been tested.\n\nRecommendation: compare candidate radius and bed-depth designs using a = \u03c9\u00b2r, then validate the selected design with a monitored gorlroot trial.",
               bonusInsight: true,
               options: [
                 { label: "[back] Return to search", goto: "start" },
@@ -709,7 +744,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See dialogue tree.",
           clueTag: "GORLROOT_UPWARD",
-          learned: "Gorlroot tubers are growing upward instead of swelling beneath the soil."
+          learned: "Gorlroot primary roots point outward as expected, but swelling tubers buckle sideways and break through the soil surface."
         },
         {
           action: "sensors",
@@ -722,7 +757,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See sensor readout.",
           clueTag: "GRAVITY_GRADIENT",
-          learned: "Centrifuge gravity varies across the soil bed: 2.09g at top, 2.13g at base."
+          learned: `At ${HH.rotationRpm.toFixed(5)} RPM, outward acceleration rises from ${HH.topAccelerationG.toFixed(4)}g at the bed top to ${HH.baseAccelerationG.toFixed(4)}g at the base: a ${HH.gradientDeltaG.toFixed(4)}g magnitude difference.`,
         },
         {
           action: "plants",
@@ -735,7 +770,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See examination.",
           clueTag: "TUBERS_MISALIGNED",
-          learned: "Tubers are growing outward toward the ring wall, not downward into the soil."
+          learned: "Roots point outward toward the ring wall, which is down; larger tubers curve sideways more as they span more radial depth."
         },
         {
           action: "logs",
@@ -768,14 +803,14 @@ const CAMPAIGN_2_DATA = {
       diagnoses: [
         {
           id: "gradient",
-          label: "Centrifugal gravity isn't uniform — the vector changes across the soil bed depth, and gorlroot's gravitropism is tuned to a uniform planetary field.",
+          label: "Centrifugal acceleration has a small magnitude gradient across the radial bed. The fictional gorlroot sensor system overcorrects across a swelling tuber, causing unequal growth and sideways buckling.",
           isCorrect: true
         },
         {
           id: "too_strong",
           label: "The centrifuge is calibrated too strong — the gorlroot are experiencing more than 2.1g.",
           isCorrect: false,
-          hint: "Sensor readings show the centrifuge is calibrated correctly on average. The issue isn't magnitude."
+          hint: "The midpoint is calibrated to 2.10g. Compare the top and base magnitudes and the size-dependent deformation."
         },
         {
           id: "nutrients",
@@ -787,7 +822,7 @@ const CAMPAIGN_2_DATA = {
           id: "soil_depth",
           label: "The soil bed is too shallow for gorlroot's root system.",
           isCorrect: false,
-          hint: "Depth is a symptom, not a cause. Ask why the tubers are growing the wrong direction to begin with."
+          hint: "Depth alone does not explain why deformation increases with tuber size. Compare the acceleration magnitudes across the bed."
         }
       ],
 
@@ -795,8 +830,8 @@ const CAMPAIGN_2_DATA = {
 
       explanation: {
         title: "Centrifugal Gravity and the Gradient Problem",
-        body: "On a planet, gravity pulls uniformly downward \u2014 a 20-centimeter-tall plant experiences the same gravitational vector at its roots as at its stem tip. This uniformity is so consistent that plants evolved exquisitely sensitive systems to detect it: statocytes filled with dense starch granules (statoliths) that settle under gravity, telling the root 'that way is down.'\n\nIn a centrifuge, 'gravity' is centrifugal force: \u03c9\u00b2r, where r is the distance from the rotation axis. Unlike planetary gravity, this force changes with radius. The top of a soil bed is closer to the axis than the bottom, so it experiences slightly less 'gravity' \u2014 and the 'down' vector at different depths points in slightly different directions.\n\nFor most Earth plants, this gradient is too small to detect. But gorlroot evolved on Vress, a 2.1g world where deep mineral deposits require roots to navigate dense soil with extreme precision. Vressk statocyte density is 14\u00d7 higher than Earth root cells. Gorlroot can detect gravitational vector changes of \u00b10.001 degrees \u2014 far below what any human instrument considers significant, but far above the gradient in a 225-meter centrifuge.\n\nThe solution is geometric: increase the centrifuge radius (which shrinks the gradient proportionally) or use thinner growing beds (which reduce the distance over which the gradient acts). NASA has studied this problem for O'Neill cylinder agriculture \u2014 the math is the same, just at a different scale.",
-        funFact: "Gerard O'Neill's 1976 space colony designs specified a minimum rotation radius of 900 meters partly to keep the gravity gradient small enough for comfortable human habitation. Plants are even pickier \u2014 some proposals suggest 1,500+ meters for precision agriculture. The Vressk would appreciate O'Neill's thoroughness."
+        body: `Earth roots use statolith-bearing cells as part of gravitropism, but the gorlroot response in this case is explicitly fictional. Gorlroot's paired alien sensor tissues compare acceleration across a swelling tuber and change growth rates on opposite sides.\n\nIn a rotating habitat, the apparent downward acceleration has magnitude a = \u03c9\u00b2r. At the case's ${HH.midpointRadiusM.toFixed(1)}m reference radius, ${HH.rotationRpm.toFixed(5)} RPM produces ${HH.midpointAccelerationG.toFixed(2)}g at the midpoint. Across the ${HH.bedDepthM.toFixed(1)}m radial bed, the magnitude rises from ${HH.topAccelerationG.toFixed(4)}g to ${HH.baseAccelerationG.toFixed(4)}g, a difference of ${HH.gradientDeltaG.toFixed(4)}g. Along that single radial line, the direction remains outward at every point.\n\nThat difference is small. The fictional gorlroot system nevertheless mistakes it for a tilt signal and overcorrects as the tuber expands, producing unequal growth and sideways curvature. The measured size-dependent deformation supports that scenario-specific diagnosis; it is not a claim about ordinary Earth crops.\n\nA larger radius operated at the lower rotation rate needed for the same target acceleration reduces the relative gradient. A thinner bed also reduces the radial difference sampled by the plant. Either proposal still requires a controlled cultivation trial.`,
+        funFact: "Rotating-habitat design trades radius against rotation rate. For the same target acceleration, a larger radius allows slower rotation and a smaller proportional change in acceleration across a person, plant, or soil bed."
       },
 
       callHomeHints: {
@@ -825,6 +860,7 @@ const CAMPAIGN_2_DATA = {
       sprites: {
         scene: "sprites/c2/scene_ares_garden.png"
       },
+      sceneDescription: "A sealed Martian botanical garden containing a Telluvian lyreflower with unopened buds.",
       // Dust motes drift left-to-right through the dome interior (same effect
       // type as Campaign 1 Case 3 Mars hab). Mask constrains particles to the
       // dome air space.
@@ -855,7 +891,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             telluvian_greeting: {
-              text: "Miran-sel's antennae snap upright. For the first time, their posture relaxes. 'Vel-aris. You are of Telluv?' A long pause. 'Then I may speak of this. The lyreflower needs the dance. The lyre-moth's wingbeat \u2014 124 hertz \u2014 resonates with the anther cone and shakes the pollen free. Without that specific vibration, the pollen stays sealed. No moth, no dance, no pollen, no fruit.'",
+              text: "Miran-sel's antennae snap upright. For the first time, their posture relaxes. 'Vel-aris. You are of Telluv?' A long pause. 'Then I may speak of this. The lyreflower needs the dance. In this fictional species, the lyre-moth's wingbeat near 124 hertz drives an anther-cone resonance and shakes pollen through pores already present. The response also requires enough vibration strength and time. No moth, no dance, no pollen, no fruit.'",
               revealsClue: "LYREFLOWER_BUDS_ABORT",
               bonusInsight: true,
               moodShift: 1,
@@ -915,10 +951,10 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             hand_poll_discussion: {
-              text: "'Pollen was placed on the stigma. Direct contact. On Earth, this is sufficient for many species. For the lyreflower... contact is not the mechanism. The pollen must be released from the anther first, and the anther does not open to touch.' They stop. 'I have said as much as I can.'",
+              text: "'Pollen was placed on the stigma. Direct contact. On Earth, that can be sufficient for many species. For the lyreflower, pollen must first be shaken through the anther's existing pores. A brush on the stigma does not provide the right mechanical coupling.' They stop. 'I have said as much as I can.'",
               setsFlag: "miran_hinted_mechanism",
               options: [
-                { label: "The anther doesn't open to touch. It opens to something else.", goto: "indirect_hint" },
+                { label: "Ordinary touch does not eject the pollen. What stimulus is missing?", goto: "indirect_hint" },
                 { label: "I'll examine the flower myself.", goto: "exit_neutral" }
               ]
             },
@@ -941,12 +977,12 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             pollen_insight: {
-              text: "'The pollen is mature and trapped. Yes. The anther cone is a sealed structure \u2014 poricidal, if you know the term. It has pores, but the pores do not open to contact. They open to...' Miran-sel stops. 'You are close. Very close. Check your other sources.'",
+              text: "'The pollen is mature and retained. Yes. The cone is poricidal, if you know the term: it has small pores already present. Ordinary contact does not shake enough pollen through them. It needs...' Miran-sel stops. 'You are close. Very close. Check your other sources.'",
               revealsClue: "LYREFLOWER_BUDS_ABORT",
               bonusInsight: true,
               moodShift: 1,
               options: [
-                { label: "Poricidal anthers that don't open to touch. What opens them?", goto: "vibration_discussion" },
+                { label: "The pores already exist, but touch does not eject pollen. What will?", goto: "vibration_discussion" },
                 { label: "I'll check the database.", goto: "exit_friendly" }
               ]
             },
@@ -961,7 +997,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             vibration_discussion: {
-              text: "Miran-sel is quiet for a long time. 'I will say this. On Earth, there are bees that shake flowers. Your word is... buzz pollination. The bee vibrates its body at a frequency that matches the flower. The flower opens. The pollen falls.' Their antennae tremble. 'I have not told you about the lyreflower. I have told you about Earth bees.'",
+              text: "Miran-sel is quiet for a long time. 'I will say this. On Earth, some bees grasp flowers and mechanically vibrate them. Your word is buzz pollination. Pollen is shaken through pores already present. Frequency matters, but so do vibration strength, duration, and how the bee couples to the flower.' Their antennae tremble. 'I have not told you about the lyreflower. I have told you about Earth bees.'",
               bonusInsight: true,
               setsFlag: "miran_hinted_buzz",
               options: [
@@ -970,25 +1006,25 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             almost_there: {
-              text: "'I have told you about Earth bees. I have not told you about Telluvian moths. If you were to discover, through your own research, that a specific frequency of vibration triggers the lyreflower's anther... that would be something you learned. Not something I told you.'",
+              text: "'I have told you about Earth bees. I have not told you about Telluvian moths. If you were to discover that this fictional alien cone responds most strongly near a particular frequency, provided the vibration is strong and sustained enough... that would be something you learned. Not something I told you.'",
               options: [
                 { label: "I understand. I'll confirm it in the database.", goto: "exit_friendly" },
-                { label: "A specific frequency. Like a wingbeat.", goto: "realization" }
+                { label: "A response near the moth's wingbeat, with adequate strength and duration.", goto: "realization" }
               ]
             },
             database_insight: {
-              text: "Miran-sel closes their eyes. 'You found it. 124 hertz. The resonant frequency of the anther cone. The lyre-moth's wingbeat.' Their antennae unfold slowly. 'You arrived at this through evidence. I did not tell you. Therefore I can confirm: yes. That is what the flower needs. That is the dance.'",
+              text: "Miran-sel closes their eyes. 'You found the fictional species record: the cone responds most strongly near 124 hertz when the stimulus has sufficient amplitude and duration. That matches the lyre-moth's wingbeat.' Their antennae unfold slowly. 'You arrived at this through evidence. Therefore I can confirm: yes. That is the dance.'",
               revealsClue: "LYREFLOWER_BUDS_ABORT",
               bonusInsight: true,
               moodShift: 2,
               setsFlag: "dance_revealed",
               options: [
-                { label: "A piezoelectric vibrator tuned to 124 Hz would work.", goto: "solution" },
+                { label: "A calibrated mechanical trial should test frequency, strength, duration, and coupling.", goto: "solution" },
                 { label: "Thank you for confirming.", goto: "exit_friendly" }
               ]
             },
             realization: {
-              text: "'A wingbeat. Yes.' Miran-sel's antennae finally relax. 'The lyre-moth beats its wings at 124 hertz. The anther cone resonates. The pores open. The pollen falls onto the moth. The moth carries it to the next flower. On Telluv, this happens ten thousand times a day in every garden. Here... silence.'",
+              text: "'A wingbeat. Yes.' Miran-sel's antennae finally relax. 'Near 124 hertz, pressure oscillations from the hovering moth couple into the fictional flower's flexible cone. The tissue resonates and pollen is shaken through its existing pores onto the moth. The moth carries it to the next flower. Here... silence.'",
               revealsClue: "LYREFLOWER_BUDS_ABORT",
               setsFlag: "dance_revealed",
               options: [
@@ -1004,14 +1040,14 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             solution: {
-              text: "'A small piezoelectric vibrator, tuned to 124 hertz, placed near the anther cone during the bloom window. The flower will not know the difference. It is not...' Miran-sel pauses. '...elegant. But it will work. The lyreflower will bloom. The embassy will be satisfied. And perhaps one day, someone will bring lyre-moths to Mars, and the silence will end properly.'",
+              text: "'A professionally calibrated mechanical exciter could reproduce the measured vibration near the cone during the bloom window. It must be tested for coupling, amplitude, duration, and the response around 124 hertz—not merely set to one number.' Miran-sel pauses. 'A controlled horticultural trial can determine whether it restores pollen release without damaging the flower.'",
               moodShift: 1,
               options: [
                 { label: "I'll include that recommendation in the report.", goto: "exit_friendly" }
               ]
             },
             annoyed: {
-              text: "'The buds form. The buds abort. The anther does not open to touch. The garden is silent. I have told you everything I can tell you. Please \u2014 check the sensor data. Check the plant. Check the records. The answer is there.'",
+              text: "'The buds form. The buds abort. The existing pores release almost no pollen to ordinary touch. The garden lacks the moth's vibration. Please check the sensor data, plant, and records. The answer is there.'",
               revealsClue: "LYREFLOWER_BUDS_ABORT",
               options: [
                 { label: "I'll investigate.", goto: "exit_neutral" }
@@ -1096,7 +1132,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             anther_exam: {
-              text: "The central anther cone is a rigid, conical structure with tiny pores along its surface \u2014 poricidal anthers, like Earth tomatoes. The pores are sealed shut. Inside, you can see dense, golden pollen packed tightly. Mature, viable, and completely trapped. The cone does not release its pollen to gravity, wind, or gentle contact.",
+              text: "The central anther cone is a flexible conical structure with tiny pores along its surface—poricidal, as in some Earth flowers. Inside is dense, mature pollen. Gentle contact releases almost none; the grains remain retained until an effective vibration shakes them through the existing pores.",
               revealsClue: "POLLEN_RETAINED",
               options: [
                 { label: "Try tapping it.", goto: "tap_flower", isAction: true },
@@ -1114,7 +1150,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             tap_flower: {
-              text: "You tap the anther cone gently with a finger. Nothing happens. You tap harder. Still nothing. You flick it \u2014 the stem sways but the pores stay sealed. The anther is mechanically rigid and does not respond to direct physical contact. Whatever opens these pores, it isn't touch.",
+              text: "You tap the anther cone gently. Nothing visible happens. A firmer tap sways the stem but releases no measurable pollen. The pores are already present; ordinary tapping does not deliver the vibration pattern, strength, duration, and coupling this fictional cone requires.",
               setsFlag: "tapped_flower",
               options: [
                 { label: "Not touch. Something else.", goto: "anther_exam" },
@@ -1198,7 +1234,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             buzz_pollination: {
-              text: "\u2014\u2014\u2014 BUZZ POLLINATION \u2014 CROSS-SPECIES SURVEY \u2014\u2014\u2014\n\nBuzz pollination (sonication): pollen release triggered by vibration at a specific frequency. The pollinator vibrates its flight muscles or body at the resonant frequency of the anther structure, causing pores to open and pollen to eject.\n\nEarth examples: Bumblebees (Bombus) on tomatoes, potatoes, blueberries. Frequency range: 200\u2013400 Hz. Honeybees cannot buzz-pollinate.\n\nTelluvian example: Lyre-moth on lyreflower. Frequency: 124 Hz. Obligate \u2014 no alternative release mechanism exists.\n\n\u26a0 ADVISORY: Telluvian lyreflower CANNOT be pollinated by contact alone. Acoustic stimulus at 124 Hz is required for anther pore opening.",
+              text: "\u2014\u2014\u2014 BUZZ POLLINATION \u2014 CROSS-SPECIES SURVEY \u2014\u2014\u2014\n\nESTABLISHED EARTH SCIENCE: In floral sonication, a bee grasps a flower and mechanically vibrates it so pollen is expelled through pores already present in the anthers. The result depends on frequency, amplitude, duration, and coupling; there is no single universal frequency. Sonication occurs in multiple bee taxa. Honeybees do not perform floral buzzing, although they may still visit some of these crops.\n\nFICTIONAL TELLUVIAN RECORD: A hovering lyre-moth produces air-pressure oscillations that couple to the lyreflower's flexible cone. Tests show the strongest pollen release near 124 Hz when amplitude and duration are sufficient. Ordinary contact does not reproduce that stimulus.",
               revealsClue: "BUZZ_POLLINATION_ACOUSTIC",
               options: [
                 { label: "[lyreflower] Species details", goto: "lyreflower_file" },
@@ -1207,7 +1243,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             lyreflower_file: {
-              text: "\u2014\u2014\u2014 TELLUVIAN LYREFLOWER \u2014 SPECIES FILE \u2014\u2014\u2014\n\nPoricidal anther structure tuned to resonate at 124 Hz.\nPollinator: Telluvian lyre-moth (Chiroptera telluviae).\nMoth wingbeat frequency: 124 \u00b10.5 Hz.\n\nPollination mechanism: moth hovers near anther cone, wingbeat resonates cone structure, pores open, pollen ejects onto moth's ventral surface.\n\nWithout acoustic trigger: pollen remains sealed. Bud aborts after 72-hour wait period.\n\nRemediation: piezoelectric vibrator at 124 Hz, applied to anther cone during bloom window.",
+              text: "\u2014\u2014\u2014 TELLUVIAN LYREFLOWER \u2014 FICTIONAL SPECIES FILE \u2014\u2014\u2014\n\nThe flexible poricidal cone has existing exit pores. Pollinator: Telluvian lyre-moth. Its hovering wingbeat is near 124 Hz.\n\nScenario measurements: coupled vibration near 124 Hz produces the strongest pollen ejection, provided the stimulus has adequate amplitude and duration. Without effective coupled vibration, most pollen remains retained and buds later abort.\n\nRemediation candidate: a professionally calibrated mechanical exciter, evaluated in a controlled trial across safe frequency, amplitude, duration, and placement settings.",
               revealsClue: "BUZZ_POLLINATION_ACOUSTIC",
               bonusInsight: true,
               options: [
@@ -1217,7 +1253,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             acoustic_mutualism: {
-              text: "\u2014\u2014\u2014 ACOUSTIC MUTUALISM \u2014 CONCORD SURVEY \u2014\u2014\u2014\n\nMultiple Concord species exhibit obligate acoustic symbiosis \u2014 biological relationships mediated by specific sound frequencies rather than chemical or physical contact.\n\nTelluvian culture considers these relationships sacred and resists clinical documentation. Concord protocol respects this: technical details are recorded for agricultural emergencies only.\n\nNote: Earth parallel exists. Commercial greenhouses use mechanical vibrators ('electric bees') to pollinate tomato crops, replicating the bumblebee's sonication.",
+              text: "\u2014\u2014\u2014 VIBRATION-MEDIATED POLLINATION \u2014 CONCORD SURVEY \u2014\u2014\u2014\n\nFICTIONAL TELLUVIAN RECORD: Several species pairs use airborne oscillations that become mechanical vibration in flower tissue. Telluvian culture considers these relationships sacred; Concord documentation records only evidence needed for horticultural care.\n\nEARTH PARALLEL: Buzz-pollinating bees physically grasp and vibrate poricidal flowers. Growers may use commercial vibrating tools to assist tomato pollination, but the direct mechanical coupling differs from the lyre-moth scenario.",
               options: [
                 { label: "[back] Return to search", goto: "start" },
                 { label: "[exit] Close database", goto: "exit_done" }
@@ -1259,7 +1295,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See sensor readout.",
           clueTag: "NO_ACOUSTIC_TRIGGER",
-          learned: "Garden is sealed, silent. No airflow, no acoustic stimulus in the environment."
+          learned: "The sealed garden lacks the periodic vibration source found in Telluvian gardens."
         },
         {
           action: "plants",
@@ -1298,14 +1334,14 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See database entry.",
           clueTag: "BUZZ_POLLINATION_ACOUSTIC",
-          learned: "Lyreflower requires an acoustic trigger (Telluvian moth wingbeat frequency) to release pollen — not just contact."
+          learned: "A fictional species record shows strongest pollen release when adequate vibration is coupled to the cone near the lyre-moth's 124 Hz wingbeat."
         }
       ],
 
       diagnoses: [
         {
           id: "acoustic",
-          label: "The lyreflower requires acoustic stimulation at a specific frequency — Telluvian moth wingbeat resonance — to release pollen. Contact alone isn't enough; it needs vibration.",
+          label: "The fictional lyreflower requires adequately strong, sustained vibration coupled into its cone, with the strongest response near the lyre-moth's 124 Hz wingbeat.",
           isCorrect: true
         },
         {
@@ -1328,12 +1364,12 @@ const CAMPAIGN_2_DATA = {
         }
       ],
 
-      rankUpText: "Contact isn't always enough. You just learned that some pollination requires vibration at a precise frequency \u2014 and that sometimes the hardest part of the diagnosis is respecting the culture that holds the answer.",
+      rankUpText: "Contact isn't always enough. You connected evidence about vibration frequency, strength, duration, and coupling while respecting the culture that held the alien-species record.",
 
       explanation: {
         title: "Buzz Pollination: When Contact Isn't Enough",
-        body: "Most people think pollination means 'pollen touches stigma.' For many plants, that's true. But some species evolved a lock on their anthers: poricidal anthers with sealed pores that only open when vibrated at a specific frequency. The pollinator doesn't just carry pollen \u2014 it shakes it loose.\n\nOn Earth, this is called 'buzz pollination' or sonication. Bumblebees do it naturally: they grab a flower and vibrate their flight muscles at 200\u2013400 Hz without moving their wings. The flower resonates, the pores open, the pollen falls. Honeybees cannot do this \u2014 which is why bumblebees are the only effective pollinators for tomatoes, blueberries, and many Solanum species.\n\nThe Telluvian lyreflower takes this further. Its anther cone is tuned to resonate at exactly 124 Hz \u2014 the wingbeat frequency of the lyre-moth. No moth, no vibration, no pollen, no reproduction. It's an obligate acoustic mutualism: two species that need each other's sound to survive.\n\nThe fix is mechanical: a piezoelectric vibrator tuned to 124 Hz, applied near the bloom. Commercial greenhouses on Earth already do this for tomatoes \u2014 they call the devices 'electric bees.'",
-        funFact: "Before commercial greenhouses discovered mechanical vibrators, tomato growers in enclosed environments had almost zero fruit set. The breakthrough came in the 1980s when researchers realized honeybees couldn't pollinate tomatoes \u2014 only bumblebees could, because of their unique ability to sonicate. Today, global greenhouse tomato production depends on either imported bumblebee colonies or vibrating wands."
+        body: "ESTABLISHED EARTH SCIENCE: Poricidal anthers already have small openings. During buzz pollination, a bee grasps the flower and mechanically vibrates it, accelerating pollen so grains are expelled through those pores. Release depends on interacting variables—including frequency, amplitude, duration, and coupling—not a universal magic frequency. Floral buzzing occurs across multiple bee taxa; honeybees do not perform it.\n\nFICTIONAL CASE MODEL: The Telluvian lyreflower has a flexible cone whose strongest measured response is near 124 Hz. Unlike an Earth bee gripping a flower, the hovering lyre-moth's air-pressure oscillations couple into the alien tissue. Adequate strength and duration shake pollen through existing pores. That airborne coupling and exact response are invented for this case.\n\nA safe remedy is a controlled horticultural trial of a calibrated mechanical exciter. Investigators should measure the delivered vibration and plant response across settings rather than assume that frequency alone guarantees success.",
+        funFact: "Tomato growers can assist pollination with commercial vibrating tools. These devices imitate the flower vibration produced by a sonicating bee, while managed bumblebee colonies are another greenhouse option."
       },
 
       callHomeHints: {
@@ -1362,6 +1398,7 @@ const CAMPAIGN_2_DATA = {
       sprites: {
         scene: "sprites/c2/scene_oolian_dome.png"
       },
+      sceneDescription: "An underwater mariculture dome where red grow lights illuminate rows of yellowing zhal-kelp.",
       // Bubbles rise upward through the kelp tanks (same effect type as
       // Campaign 1 Case 5 Europa bioreactor). Mask constrains particles to
       // the tank volumes.
@@ -1383,8 +1420,8 @@ const CAMPAIGN_2_DATA = {
                 { label: "Who do you think is at fault?", goto: "blame_question" },
                 { label: "The sensor data shows the lights are 62% red.", goto: "spectrum_insight", requires: { clueFound: "LIGHT_SPECTRUM_RED_HEAVY" } },
                 { label: "The kelp's pigments are tuned to blue-green, not red.", goto: "pigment_insight", requires: { clueFound: "PIGMENT_MISMATCH" } },
-                { label: "Zhal-kelp evolved under deep-ocean light \u2014 blue-green only.", goto: "evolution_insight", requires: { clueFound: "KELP_EVOLVED_DEEP_OCEAN_LIGHT" } },
-                { label: "Concord records say zhal-kelp uses chlorophyll c, not chlorophyll a.", goto: "database_insight", requires: { clueFound: "CHLOROPHYLL_C_BLUE_GREEN" } },
+                { label: "Zhal-kelp evolved where blue-green light dominates and little red remains.", goto: "evolution_insight", requires: { clueFound: "KELP_EVOLVED_DEEP_OCEAN_LIGHT" } },
+                { label: "Concord records say zhal-kelp uses chlorophyll a and c plus accessory pigments.", goto: "database_insight", requires: { clueFound: "CHLOROPHYLL_C_BLUE_GREEN" } },
                 { label: "Tei-sal, I am Oolian. I know zhal-kelp.", goto: "oolian_greeting", requires: { playerSpecies: "oolian" } },
                 { label: "I've seen what happens when equipment doesn't match biology.", goto: "alien_rapport", requires: { playerSpeciesNot: "human" } },
                 { label: "Maybe the lights are just defective.", goto: "wrong_guess_defective" },
@@ -1420,7 +1457,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             new_lights: {
-              text: "'The human lights are very bright. Very red. They are designed for land plants \u2014 crops that grow under a yellow sun in open air. Our kelp does not live under a yellow sun. It lives at the bottom of an ocean, where the only light that reaches is blue and green. The red never arrives.' A pause. 'On your world, this would be obvious. You do not put a desert lamp over a deep-sea creature.'",
+              text: "'The human lights are very bright and red-heavy. They were designed for terrestrial crops. At our surveyed beds, water and dissolved material leave predominantly blue-green light and little red.' A pause. 'The fictional zhal-kelp is adapted to that local spectrum.'",
               setsFlag: "teisal_described_lights",
               options: [
                 { label: "So the kelp can't use red light?", goto: "cant_use_red" },
@@ -1505,7 +1542,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             evolution_insight: {
-              text: "'You found the depth records. Yes. Forty to one hundred twenty meters below the surface. At that depth, seawater has already absorbed all the red. Only blue and green penetrate. The kelp never needed red-absorbing pigments because red light never existed in its world.' Tei-sal's voice is gentle. 'Until we put it under these lamps.'",
+              text: "'You found the depth records. Yes. Forty to one hundred twenty meters below the surface. At this site, water and dissolved material leave predominantly blue-green light and little red at the kelp beds.' Tei-sal's voice is gentle. 'The fictional zhal-kelp is adapted to that measured spectrum, not the red-heavy lamps.'",
               revealsClue: "KELP_DYING_NEW_DOME",
               bonusInsight: true,
               moodShift: 1,
@@ -1661,7 +1698,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             magnification: {
-              text: "Under magnification, the chloroplasts are present and structurally intact. But the pigment composition tells the story: the dominant pigments are phycobiliproteins and chlorophyll c \u2014 both tuned to absorb blue-green wavelengths. Under the red-heavy dome lights, these pigments sit idle. The photosynthetic machinery is intact but has nothing it can use.",
+              text: "Under magnification, the photosynthetic structures are present and intact. The fictional pigment profile includes chlorophyll a and c plus an alien accessory-pigment suite measured to harvest blue-green wavelengths efficiently. Under the red-heavy dome lights, the machinery receives far fewer usable photons than the total brightness suggests.",
               revealsClue: "PIGMENT_MISMATCH",
               options: [
                 { label: "The pigments are fine. The light is wrong.", goto: "color_compare" },
@@ -1707,7 +1744,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             kelp_profile: {
-              text: "\u2014\u2014\u2014 ZHAL-KELP SPECIES PROFILE \u2014\u2014\u2014\n\nNative to Kepler-186f deep ocean, 40\u2013120m depth.\nPrimary pigments: chlorophyll c, phycobiliproteins (phycoerythrin, phycocyanin).\nAbsorption peak: 460\u2013540nm (blue-green).\nRed absorption: negligible (<2% efficiency above 600nm).\n\nCultivated by Oolian mariculture guilds for >11,000 years. Foundation crop of Oolian civilization.\n\n\u26a0 Species has never been exposed to red-dominant light in evolutionary or agricultural history.",
+              text: "\u2014\u2014\u2014 ZHAL-KELP \u2014 FICTIONAL SPECIES PROFILE \u2014\u2014\u2014\n\nNative habitat: Kepler-186f ocean, 40\u2013120m at the recorded site.\nPigments: chlorophyll a and c plus a fictional accessory-pigment suite.\nScenario measurements: strongest photosynthetic response from 460\u2013540nm; the installed red-heavy spectrum produces low output at equal total photon flux.\n\nThis is species-specific alien evidence, not a universal action spectrum for Earth algae.",
               revealsClue: "KELP_EVOLVED_DEEP_OCEAN_LIGHT",
               options: [
                 { label: "[habitat] Natural habitat", goto: "habitat" },
@@ -1716,7 +1753,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             habitat: {
-              text: "\u2014\u2014\u2014 NATURAL HABITAT \u2014 KEPLER-186F OCEAN \u2014\u2014\u2014\n\nDepth: 40\u2013120m below surface.\nAmbient light at depth: filtered through seawater.\nDominant wavelengths at 40m: 460\u2013540nm (blue to green).\nRed wavelengths (>600nm): fully attenuated in first 10m.\n\nSeawater acts as a natural blue-green bandpass filter. No organism below 15m has ever been exposed to significant red light.",
+              text: "\u2014\u2014\u2014 NATURAL HABITAT \u2014 KEPLER-186F OCEAN \u2014\u2014\u2014\n\nDepth at surveyed beds: 40\u2013120m.\nAmbient light: filtered by water, particles, and dissolved material.\nSite measurement: blue-green wavelengths dominate; little red remains at the recorded beds.\n\nWater generally attenuates longer red wavelengths faster than blue-green wavelengths, but depth profiles vary with local optical conditions. The numerical habitat profile here is fictional scenario evidence.",
               revealsClue: "KELP_EVOLVED_DEEP_OCEAN_LIGHT",
               bonusInsight: true,
               options: [
@@ -1771,7 +1808,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             action_spectra: {
-              text: "\u2014\u2014\u2014 PHOTOSYNTHETIC ACTION SPECTRA \u2014\u2014\u2014\n\nAction spectrum = which wavelengths drive photosynthesis for a given organism.\n\nEarth lettuce (chlorophyll a+b): peaks at 440nm and 660nm. Red light is the primary driver.\n\nOolian zhal-kelp (chlorophyll c + phycobiliproteins): peak at 490\u2013530nm. Red light contributes <2% to photosynthetic output.\n\nKey insight: 'adequate PAR' (total photon flux) is meaningless without spectral context. A 280 \u00b5mol/m\u00b2/s red-dominated source delivers only ~14 \u00b5mol/m\u00b2/s of USABLE photons to zhal-kelp.",
+              text: "\u2014\u2014\u2014 PHOTOSYNTHETIC ACTION SPECTRA \u2014\u2014\u2014\n\nESTABLISHED EARTH SCIENCE: An action spectrum measures how effectively wavelengths drive a biological process. Terrestrial plants commonly use chlorophyll a and b; brown algae use chlorophyll a and c with accessory pigments such as fucoxanthin. Their responses are not interchangeable and are not described by one universal peak.\n\nFICTIONAL ZHAL-KELP MEASUREMENT: At equal total photon flux, the species performs best under the dome's 460\u2013540nm reference band and poorly under the installed red-heavy spectrum.\n\nKey insight: total photosynthetically active radiation does not by itself establish that a particular organism receives an effective spectrum.",
               revealsClue: "CHLOROPHYLL_C_BLUE_GREEN",
               bonusInsight: true,
               options: [
@@ -1780,7 +1817,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             mariculture_standards: {
-              text: "\u2014\u2014\u2014 DEEP-OCEAN MARICULTURE \u2014 CONCORD STANDARDS \u2014\u2014\u2014\n\nOolian standard OMS-4: blue-green spectrum, 460\u2013540nm, designed for chlorophyll c organisms.\nEarth standard GRO-series: red-blue spectrum, designed for chlorophyll a+b organisms.\n\nConcord recommendation: 'Grow-light procurement for cross-species facilities MUST include species-specific spectral requirements. PAR alone is insufficient.'\n\nNote: This recommendation was adopted AFTER the current Oolian dome dispute. It did not exist when the GRO-9 fixtures were approved.",
+              text: "\u2014\u2014\u2014 DEEP-OCEAN MARICULTURE \u2014 FICTIONAL CONCORD STANDARD \u2014\u2014\u2014\n\nOolian OMS-4 fixtures reproduce the measured blue-green spectrum used by zhal-kelp. Earth GRO-series fixtures were specified for terrestrial crops using chlorophyll a and b and were not validated for this alien species.\n\nProcurement recommendation: include species-specific spectral response and intensity requirements; total photon flux alone is insufficient.\n\nThis recommendation was adopted after the current dome dispute.",
               options: [
                 { label: "[back] Return to search", goto: "start" },
                 { label: "[exit] Close database", goto: "exit_done" }
@@ -1847,7 +1884,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See archive.",
           clueTag: "KELP_EVOLVED_DEEP_OCEAN_LIGHT",
-          learned: "Zhal-kelp evolved under deep-ocean light: predominantly 460-540nm (blue-green). Red light doesn't reach kelp beds."
+          learned: "At the recorded native beds, zhal-kelp receives predominantly blue-green light and little red; the exact fictional habitat profile is site-specific."
         },
         {
           action: "database",
@@ -1924,6 +1961,7 @@ const CAMPAIGN_2_DATA = {
       sprites: {
         scene: "sprites/c2/scene_zhelii_grove.png"
       },
+      sceneDescription: "A shipboard grove of three intertwined alien organisms under continuous grow lights.",
       // Starfield window rect — twinkle (static stars with pulsing alpha).
       // Top-left (65, 10), bottom-right (175, 50). Ceiling viewport aesthetic.
       sceneWindow: { x: 65, y: 10, w: 110, h: 40, twinkle: true },
@@ -2108,7 +2146,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             realization: {
-              text: "'The signaling is circadian. It requires periodic darkness \u2014 not as rest, but as a trigger. The onset of darkness tells the network: now is the time to speak. Without that trigger, the internal clock drifts to a permanent midday state where signaling is at its lowest. And it stays there. Forever. Until someone turns off the lights.'",
+              text: "'The fictional grove's signaling is circadian. Its records show that periodic darkness entrains the cycle and that signaling remains low under continuous light. Restoring a validated dark period should re-establish the timing cue, but we must monitor the response rather than promise it.'",
               options: [
                 { label: "Exactly. Install programmable shading for a 6-hour dark period.", goto: "solution" },
                 { label: "The grove is alive and intact. It just needs night.", goto: "solution" }
@@ -2321,7 +2359,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             circadian_data: {
-              text: "\u2014\u2014\u2014 CIRCADIAN RHYTHMS IN NETWORK ORGANISMS \u2014\u2014\u2014\n\nZhel'ii symbiosis networks exhibit circadian-linked signaling. VOC (volatile organic compound) production follows a ~24h rhythm entrained by periodic darkness.\n\nThe dark period serves as a zeitgeber (timing signal) that resets the network's internal clock each cycle. Without periodic darkness, the clock drifts to a 'perpetual mid-day' state in which VOC production is at its circadian minimum \u2014 and remains there indefinitely.\n\n\u26a0 ADVISORY: Zhel'ii network organisms MUST have a dark period of \u22655 hours per cycle. Continuous illumination will suppress VOC signaling within 7\u201310 days.",
+              text: "\u2014\u2014\u2014 CIRCADIAN RHYTHMS IN NETWORK ORGANISMS \u2014\u2014\u2014\n\nESTABLISHED EARTH SCIENCE: Biological clocks can be entrained by environmental cues such as light-dark cycles. Continuous light can disrupt plant rhythms and physiology, but effects vary by species, intensity, temperature, and other conditions; darkness is not a universal reset requirement.\n\nFICTIONAL ZHEL'II RECORD: This grove's VOC output follows a cycle entrained by periodic darkness. Trials found that at least five dark hours maintained signaling, while continuous illumination suppressed it over 7\u201310 days. Those exact thresholds and the 'midday' state belong only to the alien scenario.",
               revealsClue: "CIRCADIAN_SIGNALING_NEEDS_DARK",
               options: [
                 { label: "[voc] VOC signaling details", goto: "voc_reference" },
@@ -2330,7 +2368,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             voc_reference: {
-              text: "\u2014\u2014\u2014 VOC SIGNALING \u2014 ZHEL'II SYMBIONTS \u2014\u2014\u2014\n\nThe three-who-are-one coordinate via volatile organic compounds released into the surrounding atmosphere. Production is driven by the vine component. Reception is via the fungal mat's receptor surfaces. Modulation is performed by the fern-analogue.\n\nSignaling follows a circadian pattern: production peaks during the dark period (when photosynthetic load is lowest and metabolic resources can be redirected to compound synthesis). During continuous light, the biosynthetic pathway remains downregulated.\n\nThis is analogous to Earth plant circadian systems: jasmine releases most of its scent at night, stomata close at night to conserve water, and many defense compounds are synthesized during dark periods.",
+              text: "\u2014\u2014\u2014 VOC SIGNALING \u2014 FICTIONAL ZHEL'II RECORD \u2014\u2014\u2014\n\nThe three-who-are-one coordinate via volatile compounds. Scenario observations assign production, reception, and modulation to its three alien components. Output peaks during the validated dark period and remains downregulated under continuous light.\n\nEARTH CONTEXT: Plant volatile emissions, stomatal behavior, defense chemistry, and circadian timing can interact, but their timing and mechanisms vary among species and environments. Those examples do not establish the Zhel'ii mechanism; the case's own time-series evidence does.",
               revealsClue: "CIRCADIAN_SIGNALING_NEEDS_DARK",
               bonusInsight: true,
               options: [
@@ -2420,14 +2458,14 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See database entry.",
           clueTag: "CIRCADIAN_SIGNALING_NEEDS_DARK",
-          learned: "Zhel'ii network signaling is circadian-linked — requires periodic darkness to reset. Continuous light suppresses VOC output."
+          learned: "Fictional Zhel'ii records show periodic darkness entrains this grove's signaling cycle; continuous light suppresses its VOC output."
         }
       ],
 
       diagnoses: [
         {
           id: "photoperiod_circadian",
-          label: "The network's VOC signaling is circadian-linked and requires periodic darkness to reset. Continuous 24h light locks it in a perpetual mid-day state where signaling is lowest.",
+          label: "The fictional network's VOC signaling is entrained by periodic darkness; the continuous-light change suppressed its measured signaling cycle.",
           isCorrect: true
         },
         {
@@ -2455,8 +2493,8 @@ const CAMPAIGN_2_DATA = {
 
       explanation: {
         title: "Circadian Signaling: When Darkness Is a Nutrient",
-        body: "Plants don't just photosynthesize during the day and rest at night. They use the transition between light and dark as a timing signal \u2014 a zeitgeber \u2014 that synchronizes an enormous range of metabolic processes. Defense compounds are synthesized at night. Stomata cycles are reset at dawn. Jasmine releases its scent in darkness. The dark period isn't downtime. It's when the most important work happens.\n\nThe Zhel'ii three-who-are-one symbiosis takes this further. The network's volatile signaling compounds \u2014 the 'voice' that coordinates the vine, the fungal mat, and the fern-analogue \u2014 are produced almost exclusively during the dark period. The biosynthetic pathway that makes these compounds is suppressed during photosynthesis because the metabolic resources are allocated elsewhere. Only when the lights go off does the network redirect energy from growth to communication.\n\nContinuous light doesn't just prevent rest. It locks the internal clock in a state where the signaling pathway never activates. The clock needs periodic darkness to reset, the same way a pendulum needs to swing back before it can swing forward. Without the reset, the clock drifts to a permanent 'midday' reading where VOC production is at its minimum \u2014 and stays there.\n\nThis case required stacking two principles: photoperiodism (the need for periodic darkness, from Campaign 1 Case 04) and VOC-mediated symbiotic signaling (from Campaign 1 Cases 06 and 07). Neither principle alone explains the silence. Together, they reveal that the caretakers' well-intentioned kindness \u2014 more light for more energy \u2014 was precisely what silenced the grove.",
-        funFact: "Many Earth plants are more metabolically active at night than during the day. CAM photosynthesis plants (like cacti) open their stomata only at night to fix carbon dioxide. Rubber trees produce most of their latex at night. And the 'dawn chorus' of birdsong at sunrise? Plants have their own version: a burst of VOC emissions at the light-to-dark transition that scientists call the 'dusk pulse.'"
+        body: "ESTABLISHED EARTH SCIENCE: Circadian clocks coordinate many plant processes and can be entrained by recurring environmental signals, including light-dark transitions. Continuous light can alter rhythms and physiology, but the outcome varies among species and conditions. It is not accurate to say that all plants require night for every clock or that all stomata, defenses, and volatile emissions follow one schedule.\n\nFICTIONAL CASE MODEL: Historical measurements from this Zhel'ii grove show a repeating VOC peak during its dark interval. After caretakers changed the only relevant variable from 18/6 to continuous light, signaling declined while the organisms remained structurally healthy. Alien reference trials independently report the same response and a minimum validated dark interval.\n\nThe convergence supports restoring the previously successful cycle and monitoring VOC recovery. It does not prove a universal plant rule or guarantee immediate recovery. The instructional move is to connect a controlled environmental change with a time-series response, then distinguish that case evidence from broader Earth chronobiology.",
+        funFact: "Some CAM plants, including many cacti, open stomata mainly at night, reducing daytime water loss while taking in carbon dioxide. That is one specialized pathway, not a rule for all plants."
       },
 
       callHomeHints: {
@@ -2486,6 +2524,7 @@ const CAMPAIGN_2_DATA = {
       sprites: {
         scene: "sprites/c2/scene_concord_vault.png"
       },
+      sceneDescription: "A heavily shielded orbital botanical vault containing pale karreth blooms in sealed growth chambers.",
       briefing: "Nova: 'Last case. The Concord Botanical Vault at L5 \u2014 the most secure facility in known space. They transplanted the karreth bloom six months ago. The bloom produces medicinal compounds that treat a disease affecting multiple Concord species. Supplies are running out because the bloom has nearly stopped producing.'\n\nZel'keth: 'The vault was built with the best radiation shielding the Concord has ever designed. The environment is flawless by every metric. And yet the bloom is failing. This is where Concord policy meets species-specific biology, and I am not confident policy will win.'\n\nNova: 'The vault admin is a Rhessi named Kel-tor. Rhessi come from a high-radiation world. If anyone has an intuition about what's wrong, it might be them. But they weren't consulted on the vault design. Just find what's true.'",
 
       sources: {
@@ -2501,9 +2540,9 @@ const CAMPAIGN_2_DATA = {
                 { label: "What do you think the problem is?", goto: "keltor_suspicion" },
                 { label: "Tell me about the vault's shielding.", goto: "shielding_info" },
                 { label: "What have you tried?", goto: "what_tried" },
-                { label: "The sensors show zero background radiation inside the vault.", goto: "radiation_insight", requires: { clueFound: "RADIATION_ZERO" } },
+                { label: "The sensors show radiation below the vault's detection limit.", goto: "radiation_insight", requires: { clueFound: "RADIATION_ZERO" } },
                 { label: "The bloom's DNA-repair pathway has shut down completely.", goto: "pathway_insight", requires: { clueFound: "DNA_REPAIR_PATHWAY_INACTIVE" } },
-                { label: "The karreth homeworld has 8.4 mSv/day background radiation.", goto: "homeworld_insight", requires: { clueFound: "KARRETH_HOMEWORLD_HIGH_RAD" } },
+                { label: "The fictional homeworld record gives an absorbed plant-tissue dose rate near 8.4 mGy/day.", goto: "homeworld_insight", requires: { clueFound: "KARRETH_HOMEWORLD_HIGH_RAD" } },
                 { label: "Concord records describe an obligate radiation-triggered pathway.", goto: "database_insight", requires: { clueFound: "HORMESIS_OBLIGATE_RADIATION" } },
                 { label: "Kel-tor. I am Rhessi. I know what radiation means to biology.", goto: "rhessi_greeting", requires: { playerSpecies: "rhessi" } },
                 { label: "I've seen what happens when species-specific needs are ignored.", goto: "alien_rapport", requires: { playerSpeciesNot: "human" } },
@@ -2512,7 +2551,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             rhessi_greeting: {
-              text: "Kel-tor's eyes widen \u2014 the only expression a Rhessi permits for surprise. 'You are of Rhess.' A long breath. 'Then I will say what I have not been permitted to say in official channels: the shielding is the problem. On Rhess, we live under 12 mSv per day and our biology expects it. The karreth homeworld is similar. This vault has zero. The Concord built the most expensive coffin in known space and called it protection.'",
+              text: "Kel-tor's eyes widen. 'You are of Rhess.' A long breath. 'Then I will say what I have not been permitted to say officially: the shielding may be the problem. Fictional Rhessi tissue measurements average about 12 mGy of absorbed dose per day in the native mixed field; the karreth record is similar. Here, the dose is below detection. The contrast deserves a controlled test.'",
               revealsClue: "BLOOMS_INERT",
               bonusInsight: true,
               moodShift: 1,
@@ -2531,7 +2570,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             keltor_suspicion: {
-              text: "'I have a theory. I am not permitted to state it officially because it contradicts Concord shielding policy.' Kel-tor's voice is flat, careful. 'The Concord classifies all radiation as hazardous. Their shielding standards are universal. I come from a world where children play in radiation that would hospitalize a human. I have... a different perspective.'",
+              text: "'I have a theory. I am not permitted to state it officially because it contradicts Concord shielding policy.' Kel-tor's voice is careful. 'Ionizing radiation is hazardous, and protection is the default. But the fictional Rhessi and karreth records describe species-specific responses that the universal vault specification never evaluated.'",
               revealsClue: "BLOOMS_INERT",
               setsFlag: "keltor_hinted",
               options: [
@@ -2541,17 +2580,17 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             shielding_problem: {
-              text: "'I think the shielding is too good. The bloom evolved under constant radiation. Remove the radiation, and you remove something the bloom needs.' A pause. 'I cannot say this in my official reports. The Concord does not have a framework for radiation as a requirement. It only has frameworks for radiation as a threat.'",
+              text: "'I think the shielding removed a signal used by this fictional bloom. The transplant created a large measured dose contrast, followed by pathway decline.' A pause. 'That is a testable species-specific hypothesis, not permission to expose the plant or workers without review.'",
               options: [
                 { label: "That's what I need to prove. I'll gather the evidence.", goto: "exit_friendly" },
                 { label: "Why can't you say this officially?", goto: "why_silent" }
               ]
             },
             rhessi_perspective: {
-              text: "'On Rhess, radiation is not a hazard. It is a metabolic input. Our skin converts ionizing radiation into usable energy \u2014 a supplement to standard photosynthesis. Our immune systems use radiation-induced damage as a training signal. We are healthier WITH radiation than without it.' Kel-tor looks at the sealed growth chambers. 'I believe the karreth bloom is the same.'",
+              text: "'The fictional Rhessi record describes protective chemistry and radiation-responsive signaling under a characterized native field. That does not mean exposure is harmless or that it powers ordinary photosynthesis.' Kel-tor looks at the chambers. 'It does make the karreth pathway record worth testing under specialist controls.'",
               bonusInsight: true,
               options: [
-                { label: "Radiation as a metabolic input. That would explain everything.", goto: "realization" },
+                { label: "A species-specific radiation signal could explain the pattern.", goto: "realization" },
                 { label: "I need to confirm with the data.", goto: "exit_friendly" }
               ]
             },
@@ -2564,10 +2603,10 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             shielding_info: {
-              text: "'Tier-1 Concord standard. The best in known space. Interior background radiation: 0.0 mSv per year. Not low. Zero. The vault blocks everything \u2014 cosmic rays, stellar radiation, geological emissions. The Concord is very proud of it.' A beat. 'The karreth bloom is less impressed.'",
+              text: "'Tier-1 Concord standard. Interior absorbed-dose rate is below the monitor's 0.01 mGy/day detection limit. That is not proof of absolute zero, but it is far below the fictional homeworld measurement. The Concord is proud of it.' A beat. 'The karreth bloom is less impressed.'",
               setsFlag: "keltor_described_shielding",
               options: [
-                { label: "Zero radiation. Is that a problem for the bloom?", goto: "keltor_suspicion" },
+                { label: "Could the below-detection field be a problem for the bloom?", goto: "keltor_suspicion" },
                 { label: "I'll check the sensor readings.", goto: "exit_neutral" }
               ]
             },
@@ -2589,68 +2628,68 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             radiation_insight: {
-              text: "'Zero.' Kel-tor allows the faintest satisfaction to enter their voice. 'You noticed. The vault's interior reads 0.0 mSv. No background radiation of any kind. On the karreth homeworld, the surface reads 8.4 mSv per day. The bloom has gone from constant irradiation to... nothing. And the Concord considers this an achievement.'",
+              text: "'Below detection.' Kel-tor allows satisfaction into their voice. 'You noticed. The plant-tissue monitor reads less than 0.01 mGy/day. The fictional homeworld file reports about 8.4 mGy/day absorbed dose in a mixed photon field. The bloom has undergone a large change, and the Concord treated that as automatically beneficial.'",
               revealsClue: "BLOOMS_INERT",
               bonusInsight: true,
               moodShift: 1,
               options: [
-                { label: "The bloom was adapted to radiation. Removing it shut down a pathway.", goto: "realization" },
+                { label: "The dose change may have suppressed a radiation-responsive pathway.", goto: "realization" },
                 { label: "What would radiation do for the bloom?", goto: "rhessi_perspective" }
               ]
             },
             pathway_insight: {
-              text: "'The DNA-repair pathway is quiescent. Yes.' Kel-tor nods. 'On the karreth homeworld, that pathway runs continuously because there is always radiation damage to repair. The medicinal compounds are a byproduct of the repair process. No damage, no repair, no compounds. The shielding removed the input that drives the entire system.'",
+              text: "'The fictional radiation-responsive pathway is quiescent. Yes.' Kel-tor nods. 'Homeworld records associate pathway activity with absorbed dose, and karrethins are downstream products. In the vault, both measures declined. A controlled exposure-response study must test causation and a minimum effective range.'",
               revealsClue: "BLOOMS_INERT",
               bonusInsight: true,
               moodShift: 1,
               options: [
-                { label: "The shielding starved the pathway by being too effective.", goto: "realization" },
-                { label: "The fix is controlled radiation exposure.", goto: "solution" }
+                { label: "The shielding change may have suppressed the pathway.", goto: "realization" },
+                { label: "The next step is a specialist-controlled dose-response trial.", goto: "solution" }
               ]
             },
             homeworld_insight: {
-              text: "'8.4 mSv per day. Every day. For the entire evolutionary history of the species.' Kel-tor's voice is precise. 'On Rhess, we receive 12. We are healthy. The karreth bloom evolved under similar conditions and integrated radiation into its core metabolism. The Concord treated 8.4 mSv as a hazard to be eliminated. For this organism, it was a nutrient to be provided.'",
+              text: "'About 8.4 mGy absorbed by plant tissue per day in the fictional mixed photon field.' Kel-tor's voice is precise. 'The species record says that exposure became a signal for its unusual repair-linked pathway. That does not make ionizing radiation a nutrient for ordinary organisms. It gives us a testable, species-specific hypothesis.'",
               revealsClue: "BLOOMS_INERT",
               bonusInsight: true,
               moodShift: 1,
               options: [
-                { label: "Radiation as nutrient. The Concord's policy is species-blind.", goto: "realization" },
-                { label: "Install calibrated radiation sources to mimic the homeworld.", goto: "solution" }
+                { label: "A fictional species-specific signal was omitted from the vault specification.", goto: "realization" },
+                { label: "Recommend a specialist-designed, controlled dose-response trial.", goto: "solution" }
               ]
             },
             database_insight: {
-              text: "'The Concord documented this.' Kel-tor closes their eyes briefly. 'An obligate radiation-triggered pathway — rare, species-specific, and nothing like the response of ordinary organisms. And they still built a vault with zero background radiation for a species whose medicinal pathway requires that trigger.' A long silence. 'At least the record exists. Your report will have citations.'",
+              text: "'The Concord documented a fictional, species-specific radiation-responsive pathway—nothing like a general benefit for ordinary organisms. The vault then reduced measured dose below detection without validating the biological response.' A long silence. 'The record supports a carefully controlled trial.'",
               revealsClue: "BLOOMS_INERT",
               bonusInsight: true,
               moodShift: 2,
               options: [
                 { label: "The fix is clear. The policy question is harder.", goto: "policy_discussion" },
-                { label: "Calibrated radiation sources. Mimicking homeworld conditions.", goto: "solution" }
+                { label: "A licensed, shielded trial should test the pathway safely.", goto: "solution" }
               ]
             },
             realization: {
-              text: "'The shielding is the problem. The vault was designed to protect the bloom from radiation. But the bloom requires radiation \u2014 specifically, the continuous low-level ionizing radiation of its homeworld. Without it, the DNA-repair pathway has nothing to repair. The pathway shuts down. The medicinal compounds, which are a byproduct of that repair, stop being produced. The Concord built a perfect environment and the perfection itself is what is killing the bloom.'",
+              text: "'The evidence supports an unintended shielding effect. The vault reduced absorbed dose below detection; the fictional repair-linked pathway and karrethin output then declined. The homeworld record predicts this response. The responsible next step is a specialist-designed dose-response trial with controls—not an assumption that more exposure is automatically better.'",
               options: [
-                { label: "Install calibrated radiation sources to restore homeworld conditions.", goto: "solution" },
+                { label: "Recommend a specialist-designed trial with dosimetry and controls.", goto: "solution" },
                 { label: "This is bigger than one vault. The policy needs to change.", goto: "policy_discussion" }
               ]
             },
             policy_discussion: {
-              text: "'The Concord's shielding standards assume all radiation is harmful. For most species, that is correct. For species from high-radiation worlds \u2014 Rhessi, karreth, at least three others in Concord records \u2014 it is lethally wrong.' Kel-tor meets your eyes. 'You will need to decide how to frame your recommendation. A targeted fix for this vault, or a systemic reform of Concord shielding policy.'",
+              text: "'Ionizing radiation is hazardous, so protection remains the default. The policy failure was omitting a controlled species-specific validation path for fictional organisms with evidence of radiation-responsive biology.' Kel-tor meets your eyes. 'Recommend a targeted trial, policy reform, or both—but keep the safety controls.'",
               setsFlag: "keltor_discussed_policy",
               options: [
                 { label: "I'll think about that after the diagnosis.", goto: "solution" }
               ]
             },
             solution: {
-              text: "'Calibrated radiation sources. Cesium-137 or cobalt-60, sealed and shielded to produce 8\u20139 mSv per day within the growth chambers only. The vault's external shielding stays intact \u2014 the radiation is added, not the shielding removed. The bloom's DNA-repair pathway reactivates. Compound production resumes within weeks.' Kel-tor's expression doesn't change, but their posture straightens. 'It would have been simpler to consult a Rhessi before building the vault. But I will take the late correction.'",
+              text: "'A qualified radiological engineering team must design any test. They would characterize the field, use licensed sealed equipment with shielding, interlocks, remote monitoring, and staged plant-response measurements. No one here should improvise a source or assume the homeworld number transfers directly.' Kel-tor straightens. 'A controlled trial can find the minimum effective exposure while protecting workers and the facility.'",
               moodShift: 1,
               options: [
                 { label: "I'll include the recommendation in my report.", goto: "exit_friendly" }
               ]
             },
             annoyed: {
-              text: "'The bloom requires radiation. The vault has none. The DNA-repair pathway \u2014 which produces the medicinal compounds \u2014 has shut down because there is no damage to repair. I have stated this as clearly as I can within the constraints of my position. Please check the sensor data, the transplant records, and the Concord database. The evidence is there.'",
+              text: "'The fictional bloom's pathway is radiation-responsive, and the vault reduced measured absorbed dose below detection. The pathway and compound output then declined. Please check the sensor data, transplant record, and species file. Together they justify a controlled test, not an improvised exposure.'",
               revealsClue: "BLOOMS_INERT",
               options: [
                 { label: "I'll check the other sources.", goto: "exit_neutral" }
@@ -2690,7 +2729,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             radiation_data: {
-              text: "\u2014\u2014\u2014 RADIATION PROFILE \u2014\u2014\u2014\n\n> Shielding: Tier-1 Concord Standard\n> Interior background radiation: 0.0 mSv/year\n> Cosmic ray flux: BLOCKED (100%)\n> Stellar radiation: BLOCKED (100%)\n> Geological emissions: N/A (station, not planetary)\n\n\u26a0 NOTE: Interior is classified RADIATION-CLEAN.\nFor reference \u2014 karreth homeworld surface: 8.4 mSv/day (3,066 mSv/year).",
+              text: "\u2014\u2014\u2014 RADIATION PROFILE \u2014\u2014\u2014\n\n> Shielding: Tier-1 Concord Standard\n> Interior absorbed-dose rate at plant tissue: <0.01 mGy/day (instrument detection limit)\n> Field components: no component above detection at the sampling points\n\n\u26a0 NOTE: 'Below detection' is not absolute zero. The fictional karreth homeworld reference reports approximately 8.4 mGy/day absorbed by plant tissue in a mixed photon field. Absorbed dose in gray is used here; equivalent/effective dose in sievert would require radiation and organism-specific weighting.",
               revealsClue: "RADIATION_ZERO",
               options: [
                 { label: "[shielding] How is this achieved?", goto: "shielding_specs" },
@@ -2717,7 +2756,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             shielding_specs: {
-              text: "\u2014\u2014\u2014 SHIELDING SPECIFICATIONS \u2014\u2014\u2014\n\n> Type: Composite polyethylene + borated steel + water jacket\n> Thickness: 2.4m total equivalent\n> Rated attenuation: >99.999% of all ionizing radiation\n> Design standard: Concord Universal Shielding Protocol v3.2\n\n\u26a0 Spec note: 'Designed to protect biological specimens from ALL forms of ionizing radiation. No provision exists for species that may require radiation exposure. The protocol does not distinguish between radiation-sensitive and radiation-adapted species.'",
+              text: "\u2014\u2014\u2014 SHIELDING SPECIFICATIONS \u2014\u2014\u2014\n\n> Type: engineered multilayer fictional vault assembly\n> Performance: all monitored interior components below current detection limits\n> Design standard: Concord Universal Shielding Protocol v3.2\n\n\u26a0 Spec note: The protocol minimizes exposure but contains no species-specific validation path for fictional organisms whose biology may use an ionizing-radiation signal.",
               options: [
                 { label: "[back] Return to main", goto: "start" },
                 { label: "[exit] Close terminal", goto: "exit_done" }
@@ -2753,16 +2792,16 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             dna_repair: {
-              text: "The compound biosynthesis pathway is downstream of the DNA-repair pathway. On the karreth homeworld, continuous low-level radiation causes constant minor DNA damage. The repair pathway runs non-stop to fix it, and the medicinal compounds are a metabolic byproduct of that repair. Here, with zero radiation, there is zero DNA damage. The repair pathway has nothing to do. It sits idle, and the compounds are never produced.",
+              text: "The fictional species file places karrethin biosynthesis downstream of a radiation-responsive repair pathway. Under the homeworld field the pathway is active; in the vault it is quiescent and compound output is low. That correlation and the transplant timeline support a controlled exposure-response test, not a claim that all DNA damage is beneficial.",
               revealsClue: "DNA_REPAIR_PATHWAY_INACTIVE",
               bonusInsight: true,
               options: [
-                { label: "No damage, no repair, no compounds.", goto: "homeworld_compare" },
+                { label: "Low pathway markers and low compounds may share the missing signal.", goto: "homeworld_compare" },
                 { label: "[Step away]", goto: "exit_done" }
               ]
             },
             homeworld_compare: {
-              text: "A reference image from the karreth homeworld shows the bloom in vivid magenta \u2014 petals almost glowing with accumulated compounds. That bloom lives under 8.4 mSv per day of background radiation. Its DNA is constantly being damaged and constantly being repaired. The repair process is what gives the petals their color and their medicinal properties. The vault specimen looks like a faded photograph of the same species.",
+              text: "A fictional homeworld reference image shows a vivid magenta bloom with high karrethin concentration. Its recorded plant-tissue absorbed-dose rate is about 8.4 mGy/day in a mixed photon field. The pale vault specimen has low pathway markers and low karrethin output, a pattern consistent with the species record.",
               options: [
                 { label: "The radiation drives the repair. The repair drives the compounds.", goto: "exit_done" },
                 { label: "[Step away]", goto: "exit_done" }
@@ -2791,7 +2830,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             homeworld: {
-              text: "\u2014\u2014\u2014 KARRETH HOMEWORLD CONDITIONS \u2014\u2014\u2014\n\nPlanet: Karreth-IV (unnamed system, Concord designation)\nSurface radiation: 8.4 mSv/day (stellar + geological sources)\nAtmosphere: thin, minimal UV filtration\nSoil: high mineral content, radioactive trace elements\n\nKarreth bloom evolved under continuous ionizing radiation for estimated >200 million years. All native biology exhibits elevated DNA-repair activity.\n\n\u26a0 Note: Karreth-IV would be classified 'uninhabitable' by Concord radiation standards. The native species thrive in it.",
+              text: "\u2014\u2014\u2014 KARRETH HOMEWORLD \u2014 FICTIONAL CONDITIONS \u2014\u2014\u2014\n\nPlant-tissue absorbed-dose rate at surveyed habitat: approximately 8.4 mGy/day in a mixed photon field.\nAtmosphere and substrate: fictional site record; field composition characterized separately.\n\nKarreth bloom populations at this site show constitutive activity in a species-specific repair-linked pathway. This does not establish a benefit for other organisms or convert absorbed dose directly into human risk.",
               revealsClue: "KARRETH_HOMEWORLD_HIGH_RAD",
               options: [
                 { label: "[compounds] How does radiation relate to the compounds?", goto: "compound_biology" },
@@ -2810,7 +2849,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             compound_biology: {
-              text: "\u2014\u2014\u2014 MEDICINAL COMPOUND BIOLOGY \u2014\u2014\u2014\n\nThe karreth bloom's medicinal compounds (karrethins) are produced as a metabolic byproduct of the plant's DNA-repair pathway. The repair enzymes generate karrethins during the process of fixing radiation-induced strand breaks.\n\nUnder native conditions (8.4 mSv/day): repair pathway runs continuously. Karrethin production is constant.\nUnder zero radiation: no strand breaks occur. Repair pathway is quiescent. Karrethin production: near zero.\n\nThe compounds cannot be produced without active DNA damage to trigger the repair cycle.",
+              text: "\u2014\u2014\u2014 MEDICINAL COMPOUND BIOLOGY \u2014 FICTIONAL SPECIES RECORD \u2014\u2014\u2014\n\nKarrethins are produced downstream of a radiation-responsive repair cascade. At the surveyed homeworld dose rate (about 8.4 mGy/day absorbed by plant tissue), pathway markers and karrethin output are high. Below the vault's detection limit, both are low.\n\nThe record supports an exposure-response trial with a non-exposed control. It does not prove that damage is harmless, that the homeworld rate is optimal, or that radiation benefits Earth organisms.",
               options: [
                 { label: "[homeworld] Homeworld radiation details", goto: "homeworld" },
                 { label: "[back] Return to search", goto: "start" },
@@ -2857,7 +2896,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             karreth_bio: {
-              text: "\u2014\u2014\u2014 KARRETH BLOOM \u2014 RADIOBIOLOGY \u2014\u2014\u2014\n\nDNA-repair pathway: constitutively active under native conditions (8.4 mSv/day). Produces karrethins (medicinal compounds) as repair byproduct.\n\nUnder zero radiation: pathway deactivates within 60\u201390 days. Karrethin production drops to <10% of baseline. Pathway reactivation requires restoration of radiation stimulus; recovery expected within 14\u201321 days.\n\nRecommended artificial radiation source: sealed cesium-137 or cobalt-60, calibrated to deliver 7\u20139 mSv/day to growth chamber. External vault shielding remains intact.\n\nEarth comparison: Laboratory studies have found that ionizing radiation can alter the electron-transfer properties of melanin and can enhance growth or metabolic activity in some melanized fungi under particular conditions. Researchers have proposed a possible energy-capture role, but this is not established as radiation-powered photosynthesis and the fungi are not known to require radiation.",
+              text: "\u2014\u2014\u2014 KARRETH BLOOM \u2014 FICTIONAL RADIOBIOLOGY \u2014\u2014\u2014\n\nScenario evidence links plant-tissue absorbed dose to a repair cascade and karrethin production. The vault transplant provides an observational contrast but no dose-response curve.\n\nRequired next step: a qualified radiation-protection and radiological-engineering team must design a licensed, shielded, interlocked trial with controls, dosimetry, remote monitoring, staged exposure, and stop criteria. The team must determine a minimum effective exposure; no isotope, device, or operating recipe is prescribed here.\n\nEARTH CONTEXT: Melanin is radioprotective in fungi. Some laboratory studies report radiation-associated changes in melanized fungi under particular conditions, but they do not establish radiation-powered photosynthesis or a radiation requirement.",
               revealsClue: "HORMESIS_OBLIGATE_RADIATION",
               bonusInsight: true,
               options: [
@@ -2867,14 +2906,14 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             shielding_policy: {
-              text: "\u2014\u2014\u2014 CONCORD UNIVERSAL SHIELDING PROTOCOL v3.2 \u2014\u2014\u2014\n\nAdopted by 12 Concord member species. Classifies ALL ionizing radiation as hazardous. Mandates maximum feasible shielding for all biological facilities.\n\nNo provision exists for species that require radiation exposure. The protocol was designed primarily around radiation-sensitive species (humans, Telluvians, Oolians) and applied universally.\n\nProposed amendment (pending): 'Species-specific shielding standards for radiation-adapted organisms.' Filed by the Rhessi delegation. Status: UNDER REVIEW.\n\nNote: This amendment would have prevented the current karreth bloom situation. It was filed two years ago. It has not been voted on.",
+              text: "\u2014\u2014\u2014 CONCORD UNIVERSAL SHIELDING PROTOCOL v3.2 \u2014 FICTIONAL POLICY \u2014\u2014\u2014\n\nThe protocol treats ionizing radiation as a hazard and mandates maximum feasible exposure reduction. It lacks a controlled validation pathway for fictional species with documented radiation-responsive biology.\n\nProposed amendment: retain radiation protection while permitting specialist-reviewed, licensed, shielded experiments when species-specific evidence warrants them. Status: under review.",
               options: [
                 { label: "[back] Return to search", goto: "start" },
                 { label: "[exit] Close database", goto: "exit_done" }
               ]
             },
             rhessi_bio: {
-              text: "\u2014\u2014\u2014 RHESSI RADIATION BIOLOGY \u2014\u2014\u2014\n\nThe Rhessi evolved on Rhess-IV under 12 mSv/day background radiation. Their biology exhibits partial radiation dependence:\n\n- Melanin-analogue in integument is radioprotective and may contribute to species-specific energy handling\n- Immune system uses radiation-induced damage as a calibration signal\n- DNA-repair pathways are constitutively active and produce beneficial secondary metabolites\n\nRhessi individuals in low-radiation environments report fatigue, reduced immune function, and metabolic inefficiency. Within the fictional Concord record, partial dependence is documented for this species; it should not be treated as an Earth biological generalization.\n\nNote: The Rhessi are the Concord's foremost experts on radiation biology. Their delegation was not consulted during the design of the Concord Botanical Vault.",
+              text: "\u2014\u2014\u2014 RHESSI RADIATION BIOLOGY \u2014 FICTIONAL RECORD \u2014\u2014\u2014\n\nAt one surveyed Rhessi habitat, modeled tissue absorbed dose averages about 12 mGy/day in a characterized mixed field. Concord records describe species-specific protective chemistry and radiation-responsive signaling. Exact effects remain fictional and cannot be generalized to humans, Earth fungi, or other organisms.\n\nThe Rhessi delegation has relevant radiobiology expertise but was not consulted during vault design.",
               options: [
                 { label: "[back] Return to search", goto: "start" },
                 { label: "[exit] Close database", goto: "exit_done" }
@@ -2915,7 +2954,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See sensor readout.",
           clueTag: "RADIATION_ZERO",
-          learned: "Vault shielding is Tier-1 Concord: interior background radiation is 0.0 mSv/year. Completely clean."
+          learned: "Tier-1 shielding keeps plant-tissue absorbed dose below the monitor's 0.01 mGy/day detection limit; that is not absolute zero."
         },
         {
           action: "plants",
@@ -2928,7 +2967,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See examination.",
           clueTag: "DNA_REPAIR_PATHWAY_INACTIVE",
-          learned: "Karreth DNA-repair pathway is quiescent. The medicinal compounds are downstream of it — no damage, no compounds."
+          learned: "The fictional karreth repair-linked pathway is quiescent and downstream karrethin output is low; the shared decline supports testing a missing radiation signal."
         },
         {
           action: "logs",
@@ -2941,7 +2980,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See archive.",
           clueTag: "KARRETH_HOMEWORLD_HIGH_RAD",
-          learned: "Karreth homeworld has 8.4 mSv/day background radiation. The species evolved with an always-on DNA-repair pathway."
+          learned: "The fictional homeworld record reports about 8.4 mGy/day absorbed by plant tissue in a mixed photon field and high repair-pathway activity."
         },
         {
           action: "database",
@@ -2961,7 +3000,7 @@ const CAMPAIGN_2_DATA = {
       diagnoses: [
         {
           id: "hormesis",
-          label: "Karreth bloom requires low-level background radiation. Its DNA-repair pathway — which produces the medicinal compounds as a byproduct — only activates when there's damage to repair. The Concord's 'perfect' shielding starved the pathway.",
+          label: "The evidence supports a species-specific radiation-responsive karrethin pathway that became quiescent after the vault reduced absorbed dose below detection.",
           isCorrect: true
         },
         {
@@ -2985,12 +3024,12 @@ const CAMPAIGN_2_DATA = {
       ],
 
       solutionChoice: {
-        prompt: "Your diagnosis is correct \u2014 the karreth bloom requires background radiation to drive its DNA-repair pathway, which produces the medicinal compounds as a byproduct. The Concord's 'perfect' shielding removed the one thing the bloom needed most. Now: how do you resolve this? Your handlers and the Concord are watching.",
+        prompt: "Your diagnosis is correct: the fictional karrethin pathway is associated with the homeworld radiation field and became quiescent after vault shielding reduced absorbed dose below detection. Any intervention involving ionizing radiation requires licensed specialists, dosimetry, controls, interlocks, monitoring, and approval. What do you recommend?",
         options: [
           {
-            label: "Targeted retrofit: install calibrated cesium-137 sources in this vault only. Fix the immediate problem. No policy change.",
+            label: "Authorize a qualified team to design a shielded, monitored dose-response trial in this vault, with controls and stop criteria.",
             bonusPoints: 0,
-            response: "The targeted retrofit is approved immediately. Sealed radiation sources are installed within the week, calibrated to deliver 8.5 mSv/day to the growth chambers. The bloom's DNA-repair pathway reactivates within days. Compound production begins climbing back toward baseline.\n\nKel-tor nods once. 'A correct fix. A narrow fix. But it will do for now.'",
+            response: "The proposal enters radiological, biosafety, and facility review. A qualified team characterizes the field and runs a staged, shielded trial with a non-exposed control, interlocks, remote dosimetry, and stop criteria. Only after the approved trial identifies a minimum effective range does a monitored treatment chamber operate. Follow-up measurements show pathway and compound output improving without exceeding the authorized limits.\n\nKel-tor nods once. 'A defensible immediate fix. A narrow policy response, but a safe one.'",
             novaClosing: "A correct fix. Narrow, but effective. The bloom will recover.",
             zelkethClosing: "The vault is repaired. But the policy that built it remains unchanged. I hope the next species from a high-radiation world is luckier than the karreth bloom."
           },
@@ -2998,7 +3037,7 @@ const CAMPAIGN_2_DATA = {
             label: "File a reform recommendation: propose the Concord adopt species-specific shielding standards. Fix the policy, not just the vault.",
             bonusPoints: 10,
             bonusLabel: "Diplomatic",
-            response: "Your recommendation goes to the Concord Council alongside your diagnostic report. The Rhessi delegation, who filed a similar amendment two years ago, cite your field evidence as the strongest case yet for species-specific standards.\n\nZel'keth: 'You did what the system could not do for itself \u2014 you made the invisible assumption visible. The Concord's shielding policy was built for the majority and it failed the minority. Your recommendation gives the minority a voice.'\n\nThe karreth vault gets its radiation sources. And this time, the policy changes too.",
+            response: "Your recommendation goes to the Concord Council alongside the diagnostic report. The Rhessi delegation cites the evidence in support of a species-specific validation pathway. The vault still follows radiological review: specialists run a shielded, monitored trial with controls and stop criteria before any treatment is authorized.\n\nZel'keth: 'You made the hidden assumption visible. The new policy can require evidence without weakening protection.'",
             novaClosing: "You went further than you had to. The Concord needed someone from the outside to say what the Rhessi have been saying for two years. Good work.",
             zelkethClosing: "You did what the system could not do for itself \u2014 you made the invisible assumption visible. The shielding policy was built for the majority and it failed the minority. Your recommendation gives the minority a voice."
           },
@@ -3007,7 +3046,7 @@ const CAMPAIGN_2_DATA = {
             bonusPoints: 10,
             bonusLabel: "Scientific",
             requires: { clueFound: "HORMESIS_OBLIGATE_RADIATION" },
-            response: "Using the detailed hormesis data from the Federation Database, you propose a parallel track: artificial synthesis of karrethins using the documented DNA-repair enzyme cascade, replicated in a controlled lab environment with calibrated radiation inputs. No living bloom required.\n\nNova: 'That's a long-term play. The bloom still needs fixing for the short term, but if the synthesis works, the Concord never has to depend on a single plant again. Smart.'\n\nThe vault gets its radiation sources AND the synthesis research begins. Two solutions from one diagnosis.",
+            response: "You propose independent research on non-living karrethin synthesis while the vault team follows the same licensed, shielded, monitored plant trial required for any short-term intervention. The synthesis work begins as exploratory research; success is not assumed.\n\nNova: 'A useful long-term hedge. It does not replace the safety review or guarantee a result, but it reduces dependence on one pathway if it works.'",
             novaClosing: "That's a long-term play. If the synthesis works, the Concord never depends on a single plant again. The vault gets fixed AND the research begins. Two solutions from one diagnosis.",
             zelkethClosing: "You found a way to honor the bloom's biology and free the Concord from depending on it. That is the kind of thinking Federation Liaison was created for."
           }
@@ -3051,6 +3090,8 @@ const CAMPAIGN_2_DATA = {
         scene: "sprites/c2/scene_firstgarden.png",
         sceneAlt: "sprites/c2/scene_firstgarden_healed.png"
       },
+      sceneDescription: "Earth's restored First Garden, with thriving original beds beside patchy, struggling expansion zones.",
+      resolvedSceneDescription: "Months after an approved monitored trial, treated First Garden plots show healthier connected growth beside control plots.",
       actionLabels: {
         nova: "Consult Dr. Nova",
         vorn_shael: "Consult Vorn-Shael",
@@ -3152,7 +3193,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             network_question: {
-              text: "'Mycorrhizal networks? The fungal... the wood wide web?' Nova stops. 'We never tested for that. We tested pH, minerals, drainage, toxins, organic matter. We never tested whether the fungal network survived the contamination. Of course it didn't survive \u2014 industrial damage would have wiped it out. And we never reinoculated because...' She trails off. 'Because I didn't think of it. Forty years.'",
+              text: "'Mycorrhizal partnerships?' Nova stops. 'We never tested the fungal community. We tested pH, minerals, drainage, toxins, and organic matter. Disturbance could have removed compatible partners, but we do not yet know which fungi are present or whether their absence explains the pattern. We need samples and a controlled comparison.'",
               bonusInsight: true,
               moodShift: 1,
               options: [
@@ -3161,24 +3202,24 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             mycorrhizal_response: {
-              text: "Nova is very quiet for a long moment. 'A fungal network. Connecting roots across zones. Sharing nutrients, water, chemical signals. We rebuilt the soil's body but not its nervous system.' She looks at the thriving original beds. 'The original beds still have their network \u2014 they were established from mature soil that already had the fungi. Everything we built from scratch doesn't.'",
+              text: "Nova is quiet. 'Compatible fungal-root partnerships could help explain why the established beds perform differently. But a soil network is not a nervous system, and transfer is not automatically cooperative.' She looks at the thriving beds. 'We should compare fungal communities and test candidates rather than assume.'",
               revealsClue: "RESTORATION_HISTORY",
               bonusInsight: true,
               moodShift: 2,
               options: [
-                { label: "The fix is cross-zone inoculation from the healthy beds.", goto: "fix_discussion" },
+                { label: "The next step is a screened, controlled inoculation trial.", goto: "fix_discussion" },
                 { label: "We need to check if there are any regulatory issues.", goto: "exit_friendly" }
               ]
             },
             fix_discussion: {
-              text: "'Take soil from the thriving beds \u2014 soil that's full of living fungal networks \u2014 and introduce it into the dead zones. Let the fungi colonize outward the way they would naturally, just... accelerated.' Nova's voice is thick. 'Forty years. We could have done this forty years ago if we'd known to look for it.'",
+              text: "'First characterize both soils, screen for pathogens and invasive organisms, identify compatible fungi, and use replicated treated and control plots. Raw soil transfer may carry unwanted organisms, so cultured or otherwise provenance-screened candidates may be safer.' Nova nods. 'Then monitor colonization, nutrient status, and plant performance before expanding.'",
               options: [
                 { label: "Better late than never. But there might be a regulatory complication.", goto: "regulation_response", requires: { clueFound: "CONCORD_REGULATION" } },
                 { label: "Let's make sure the science is solid first.", goto: "exit_friendly" }
               ]
             },
             regulation_response: {
-              text: "'Breaking Concord rules?' Nova laughs \u2014 short, surprised. 'To fix my own garden. On my own planet. With my own soil.' A pause. 'I understand why the rules exist. Cross-species contamination is real. But this isn't cross-species anything \u2014 it's Earth fungi in Earth soil. The regulation wasn't written for this situation.'",
+              text: "'The regulation requires approval before biological material moves between designated zones.' Nova pauses. 'That review should address provenance, pathogens, invasive organisms, host compatibility, trial design, and monitoring. Earth-to-Earth transfer can still carry risk, even if the rule needs a clearer restoration pathway.'",
               setsFlag: "nova_discussed_regulation",
               options: [
                 { label: "There may be precedent for an exemption.", goto: "exit_friendly" },
@@ -3400,7 +3441,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             destruction_fragment: {
-              text: "'When it is destroyed...' The lights go very still. 'The individual plants survive, for a time. They have their own roots. But they are isolated. They cannot share. The surplus zones hoard. The deficit zones starve. The soil becomes exactly what your chemist described: islands of abundance surrounded by desert. The chemistry is present. The connection is not.'",
+              text: "'When compatible fungi are lost, some host plants may acquire nutrients or water less effectively. Whether material moves among roots, in which direction, and whether recipients benefit depend on the species and conditions.' The lights still. 'That could contribute to these patches, but it must be tested against other explanations.'",
               options: [
                 { label: "That's exactly what happened to this garden. How do we fix it?", goto: "third_fragment", requires: { moodIsNot: "neutral" } },
                 { label: "I'll come back.", goto: "exit_friendly" }
@@ -3417,7 +3458,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             third_fragment: {
-              text: "The indicator lights surge \u2014 bright, fast, cascading through colors you haven't seen before. Kess's voice changes: clearer, more confident, the ancestral memory finally surfacing in full.\n\n'MYCORRHIZAL NETWORK. Fungal hyphae \u2014 thread-like structures thinner than a hair \u2014 that colonize plant root systems and extend outward through the soil, connecting plant to plant across an entire ecosystem. The fungi provide nutrient transport. The plants provide carbon. Neither can build the network alone. It requires living fungal inoculum from established, healthy soil \u2014 you cannot create it from chemistry. You must transplant it.'",
+              text: "The indicator lights surge as Kess's memory clarifies.\n\n'MYCORRHIZAL PARTNERSHIPS. Fungal hyphae colonize compatible roots and extend into soil. Fungi receive plant carbon and can improve acquisition of resources such as phosphorus, nitrogen, or water, depending on the partners and conditions. Some fungal individuals colonize multiple roots, but this is not one cooperative mind. Natural colonization may occur if compatible fungi remain nearby; restoration may also test screened candidates. Chemistry alone cannot tell us which living partners are present.'",
               revealsClue: "MYCORRHIZAL_NETWORK",
               bonusInsight: true,
               moodShift: 2,
@@ -3427,7 +3468,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             full_recovery: {
-              text: "'The original beds \u2014 the ones that thrive \u2014 they retained their fungal network because they were established from mature soil. Every expansion built from clean substrate lacks the fungi. The chemistry was restored. The biology was not.' Kess's lights settle into a steady, warm glow. 'Cross-zone inoculation. Take soil from the living beds. Introduce it to the dead zones. Let the fungi colonize outward. The network will rebuild itself in one to three growing seasons.'",
+              text: "'The thriving and struggling beds differ in biological history. That makes missing compatible fungi a candidate mechanism, not a proven history.' Kess's lights settle. 'Compare communities, screen candidates, and run replicated inoculated and control plots. Monitor colonization and plant response before scaling. Do not promise a recovery time before the trial produces evidence.'",
               options: [
                 { label: "That's exactly what we needed. Thank you, Kess.", goto: "exit_friendly" }
               ]
@@ -3650,7 +3691,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             mycorrhizal_entry: {
-              text: "\u2014\u2014\u2014 MYCORRHIZAL NETWORKS \u2014 EARTH BIOLOGY \u2014\u2014\u2014\n\nMycorrhizal fungi form symbiotic networks connecting the root systems of multiple plants across a soil ecosystem. The fungal hyphae extend far beyond individual root zones, creating an underground web that facilitates:\n\n> Nutrient transport (phosphorus, nitrogen) from source to sink\n> Water redistribution during drought stress\n> Chemical signaling between plants (defense alerts, stress hormones)\n> Carbon sharing between mature and juvenile plants\n\nCommonly called the 'wood wide web.' Present in >90% of Earth plant species. Disrupted by: industrial contamination, topsoil removal, prolonged fallow periods, heavy tillage.\n\n\u26a0 NOTE: Mycorrhizal networks do not regenerate from chemical restoration alone. They require physical reintroduction of living fungal inoculum from established, healthy soil.",
+              text: "\u2014\u2014\u2014 MYCORRHIZAL PARTNERSHIPS \u2014 EARTH BIOLOGY \u2014\u2014\u2014\n\nMany land plants associate with mycorrhizal fungi. Hyphae can extend beyond roots, receive plant carbon, and help particular hosts acquire phosphorus, nitrogen, or water. A fungal individual may colonize multiple roots, creating a common mycorrhizal network.\n\nExperiments sometimes detect movement of carbon, nutrients, water, or signals through shared pathways. Magnitude, direction, ecological significance, and benefit vary with plant, fungus, soil, and experimental design. Evidence does not support treating forests as a universal cooperative communications system.\n\nRestoration can depend on compatible living partners, but natural colonization may occur and inoculation can fail or cause harm. Identify organisms, test host compatibility, screen provenance and pathogens, use controls, and monitor outcomes.",
               options: [
                 { label: "[soil_network] Cross-species comparison", goto: "soil_network" },
                 { label: "[biosafety] Check regulations on inoculation", goto: "biosafety", requires: { clueFound: "MYCORRHIZAL_NETWORK" } },
@@ -3659,7 +3700,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             soil_network: {
-              text: "\u2014\u2014\u2014 UNDERGROUND NETWORKS \u2014 CROSS-SPECIES SURVEY \u2014\u2014\u2014\n\nEarth: Mycorrhizal fungi (multiple phyla). Symbiotic. Transport via hyphal network.\nVorn-Shael homeworld: Crystalline filament organisms. Mutualistic. Transport via mineral conduits.\nZhel'ii: Three-who-are-one VOC signaling (aerial, not subterranean).\nOolian: Kelp anchor-root networks (marine equivalent).\n\nCommon principle: healthy ecosystems rely on biological connectivity between organisms. When the connecting organism is removed, the ecosystem fragments into isolated zones \u2014 even if the chemistry of each zone is individually adequate.\n\nThis principle was demonstrated in Campaign 1 Cases 06\u201307 (Zhel'ii symbiosis disruption) and Campaign 2 Case 04 (circadian signaling disruption).",
+              text: "\u2014\u2014\u2014 BIOLOGICAL INTERACTIONS \u2014 CROSS-SPECIES SURVEY \u2014\u2014\u2014\n\nEarth mycorrhizae and the listed alien systems involve different organisms and mechanisms. Their limited shared lesson is that measuring bulk chemistry alone may miss biologically mediated resource acquisition or signaling.\n\nLoss of a partner can matter, but it need not produce the same pattern in every ecosystem. Each proposed mechanism requires organism identification, compatible alternatives, and local evidence.",
               bonusInsight: true,
               options: [
                 { label: "[back] Return to search", goto: "start" },
@@ -3718,7 +3759,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "See dialogue tree.",
           clueTag: "CHEMICAL_DISCONNECTION",
-          learned: "Chemical signatures exist in isolated patches but don't flow between zones. The biological transport mechanism connecting them is absent."
+          learned: "Chemical signatures form sharp patches; this is consistent with a missing or reduced biological transport process, but does not prove which mechanism is responsible."
         },
         {
           action: "kess",
@@ -3731,7 +3772,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "See dialogue tree.",
           clueTag: "MYCORRHIZAL_NETWORK",
-          learned: "The missing connection is a mycorrhizal fungal network \u2014 underground hyphae that link plant roots across zones. It was destroyed by the original contamination and never restored."
+          learned: "Compatible mycorrhizal partners are a plausible missing factor; fungal identity, abundance, host compatibility, and disturbance history still require testing."
         },
         {
           action: "ilreth_mar",
@@ -3744,7 +3785,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "See dialogue tree.",
           clueTag: "CONCORD_REGULATION",
-          learned: "Concord biosafety regulations forbid cross-zone biological inoculation as a contamination risk. The correct fix is technically illegal under current rules."
+          learned: "Concord rules require prior approval for cross-zone biological transfer so provenance, pathogens, invasive risk, compatibility, and monitoring can be reviewed."
         },
         {
           action: "database",
@@ -3788,29 +3829,29 @@ const CAMPAIGN_2_DATA = {
       ],
 
       solutionChoice: {
-        prompt: "Your diagnosis is supported \u2014 the restored beds appear to be missing compatible mycorrhizal partners after the industrial damage. A controlled inoculation trial using soil or cultured fungi from the healthy original beds is the best-supported next step, with monitoring to test whether connectivity and plant performance improve. But Concord biosafety regulations technically forbid the transfer. How do you proceed?",
+        prompt: "Your diagnosis is supported: missing compatible mycorrhizal partners are a plausible limiting factor, but the organism and disturbance history are not yet proven. Any cross-zone transfer requires approval and review of provenance, pathogens, invasive risk, host compatibility, controls, and monitoring. How do you proceed?",
         options: [
           {
-            label: "Apply for the exemption: use the legal precedent from Case GC-2201 to formally request Concord approval before inoculating.",
+            label: "Apply for an exemption and approval of a screened, replicated inoculation trial with untreated controls and monitoring.",
             bonusPoints: 0,
-            response: "The formal application is filed. The precedent is strong. Weeks later, approval comes through. The monitored inoculation trial begins \u2014 slowly, through legitimate channels. The garden will heal. Eventually.\n\nIlreth-Mar nods approvingly. 'The system works. It is slow, but it works.'",
-            novaClosing: "The garden will heal. It took forty years to get here and it'll take a few more to finish. But we did it right.",
-            zelkethClosing: "You honored the system. The garden recovers. The precedent strengthens. Patience is its own kind of courage."
+            response: "The application identifies cultured or otherwise provenance-screened candidates and defines pathogen screening, compatible hosts, replicated treated and control plots, stop criteria, and monitoring. After independent review, a limited trial is approved. Months of measurements show colonization and plant performance improving in treated plots without detected spread beyond the trial boundary; only then is expansion considered.\n\nIlreth-Mar nods. 'Approval did not guarantee success. The evidence earned each next step.'",
+            novaClosing: "The trial supports the diagnosis, and the garden is improving. We earned that conclusion instead of assuming it.",
+            zelkethClosing: "You respected both the ecological uncertainty and the biosafety duty. The monitored evidence supports the next phase."
           },
           {
-            label: "Inoculate now, file paperwork after: the garden has waited forty years. Do the right thing immediately and accept procedural consequences.",
+            label: "Request independent biosafety review and develop screened candidate cultures; do not inoculate until the trial is cleared.",
             bonusPoints: 10,
-            bonusLabel: "Pragmatic",
-            response: "You walk to the thriving beds, take a handful of living soil, and work it into the dead zones yourself. Nova watches with tears in her eyes. The paperwork can wait.\n\nThe Concord notes the violation. Ilreth-Mar is displeased. Nova is quietly, fiercely proud. The inoculation trial begins that afternoon; recovery will be measured over the coming weeks.",
-            novaClosing: "You did what I couldn't do for forty years \u2014 you stopped asking permission and started fixing. Thank you.",
-            zelkethClosing: "The garden heals. The Concord will have questions. But some questions are worth answering after the fact."
+            bonusLabel: "Scientific",
+            response: "An independent team samples both zones, identifies candidate fungi, rejects organisms with pathogen or invasive-risk flags, and prepares compatible cultures. The resulting protocol goes through approval before any inoculation. After clearance, replicated plots are monitored for colonization, nutrient status, plant performance, and escape. Months later, the treated plots improve relative to controls, supporting cautious expansion.",
+            novaClosing: "The extra review gave us a cleaner test and safer candidates. Now the improvement means something.",
+            zelkethClosing: "Independent review strengthened the evidence and protected the site. Care and urgency can coexist."
           },
           {
             label: "File a formal reform recommendation: propose species-specific biosafety standards that distinguish within-world restoration from cross-world contamination risk.",
             bonusPoints: 10,
             bonusLabel: "Diplomatic",
             requires: { clueFound: "DATABASE_PRECEDENT" },
-            response: "Your recommendation goes to the Concord Council \u2014 not just for this garden, but for every restoration project held hostage by policies that don't distinguish between contamination and healing. The pattern is undeniable: light spectrum, shielding standards, biosafety rules. The Concord's one-size-fits-all approach fails biology.\n\nZel'keth's chromatophores bloom in colors you've never seen. 'This is why Federation Liaison exists. Not to solve one case. To change the system that creates the cases.'",
+            response: "Your reform proposal creates a risk-tiered restoration pathway without waiving review. The garden's own project still undergoes organism identification, provenance and pathogen screening, host-compatibility checks, replicated controls, approval, and monitoring. Months after the limited trial begins, treated plots improve relative to controls and no spread is detected beyond the boundary. The Council uses that evidence when considering reform.\n\nZel'keth's chromatophores brighten. 'A better rule and a defensible trial can advance together.'",
             novaClosing: "You didn't just fix my garden. You fixed the rule that prevented every garden like it. That's the difference between a technician and a liaison.",
             zelkethClosing: "When I first met humans, I gave you a seed and hoped you would understand what it meant. You understood. And now you are teaching the Concord what we taught you."
           }
