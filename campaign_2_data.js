@@ -493,14 +493,29 @@ const CAMPAIGN_2_DATA = {
               revealsClue: "GORLROOT_UPWARD",
               options: [
                 { label: "What about the centrifuge engineering?", goto: "habitat_info" },
-                { label: "I'll come back with data.", goto: "exit_cold" }
+                { label: "The midpoint is 2.1g, so the plant itself must be defective.", goto: "annoyed_escalation" },
+                { label: "You're right. I'll stop guessing and return with evidence.", goto: "recovery" }
               ]
+            },
+            annoyed_escalation: {
+              text: "Gor-vess's jaw tightens. 'The same crop thrives on Vress. You are repeating an unsupported conclusion after I asked for evidence. We are done until you have data.'",
+              moodShift: -2,
+              endsConversation: true,
+              exitLabel: "Step away"
             },
             locked: {
               text: "We are done talking. The gorlroot tubers buckle even though the midpoint is 2.1g. I cannot explain it and neither can you. Come back when you have a real answer.",
               revealsClue: "GORLROOT_UPWARD",
+              options: [
+                { label: "You're right. I'll stop guessing and return with evidence.", goto: "recovery" }
+              ]
+            },
+            recovery: {
+              text: "Gor-vess studies you for a moment. 'Good. Bring measurements, not assumptions. Then we can speak precisely.'",
+              setMood: "neutral",
+              locksSource: false,
               endsConversation: true,
-              exitLabel: "Walk away"
+              exitLabel: "Return to the investigation"
             },
             exit_friendly: {
               text: "Let me know what you find. I will be here \u2014 where else would I go?",
@@ -887,6 +902,7 @@ const CAMPAIGN_2_DATA = {
                 { label: "Vel-aris. I know of the dance.", goto: "telluvian_greeting", requires: { playerSpecies: "telluvian" } },
                 { label: "I've worked with species whose biology outsiders misunderstand.", goto: "alien_rapport", requires: { playerSpeciesNot: "human" } },
                 { label: "Maybe the light cycle is wrong for Telluvian flowers.", goto: "wrong_guess_photoperiod" },
+                { label: "This sounds like ceremony, not a biological mechanism.", goto: "dismissive_culture" },
                 { label: "I'll investigate the other sources first.", goto: "exit_neutral" }
               ]
             },
@@ -964,6 +980,12 @@ const CAMPAIGN_2_DATA = {
                 { label: "So the problem is specifically at pollen release.", goto: "cultural_barrier" },
                 { label: "I'll investigate further.", goto: "exit_neutral" }
               ]
+            },
+            dismissive_culture: {
+              text: "Miran-sel's antennae fold flat. 'The cultural boundary limits what I may explain; it does not make the plant's response imaginary. Dismissing both without evidence is not investigation.'",
+              moodShift: -4,
+              endsConversation: true,
+              exitLabel: "Step away"
             },
             acoustic_insight: {
               text: "Miran-sel's antennae lift sharply. 'You noticed. The garden is silent. 28 decibels of background noise and no periodic signal.' They choose their next words carefully. 'On Telluv, a garden is never silent. There is always... movement in the air.'",
@@ -1050,8 +1072,15 @@ const CAMPAIGN_2_DATA = {
               text: "'The buds form. The buds abort. The existing pores release almost no pollen to ordinary touch. The garden lacks the moth's vibration. Please check the sensor data, plant, and records. The answer is there.'",
               revealsClue: "LYREFLOWER_BUDS_ABORT",
               options: [
-                { label: "I'll investigate.", goto: "exit_neutral" }
+                { label: "You're right. I'll follow the evidence and respect the boundary.", goto: "recovery" },
+                { label: "I'll leave you to it.", goto: "exit_cold" }
               ]
+            },
+            recovery: {
+              text: "Miran-sel's antennae lift slightly. 'Thank you. Return with evidence and I will confirm what the cultural boundary permits.'",
+              setMood: "neutral",
+              endsConversation: true,
+              exitLabel: "Resume the investigation"
             },
             exit_friendly: {
               text: "Miran-sel's antennae dip \u2014 a Telluvian gesture of respect. 'I hope you find what you need. The lyreflower deserves better than silence.'",
@@ -1419,7 +1448,7 @@ const CAMPAIGN_2_DATA = {
                 { label: "Tell me about the new lights.", goto: "new_lights" },
                 { label: "Who do you think is at fault?", goto: "blame_question" },
                 { label: "The sensor data shows the lights are 62% red.", goto: "spectrum_insight", requires: { clueFound: "LIGHT_SPECTRUM_RED_HEAVY" } },
-                { label: "The kelp's pigments are tuned to blue-green, not red.", goto: "pigment_insight", requires: { clueFound: "PIGMENT_MISMATCH" } },
+                { label: "The kelp's measured response is strongest in blue-green wavelengths.", goto: "pigment_insight", requires: { clueFound: "PIGMENT_MISMATCH" } },
                 { label: "Zhal-kelp evolved where blue-green light dominates and little red remains.", goto: "evolution_insight", requires: { clueFound: "KELP_EVOLVED_DEEP_OCEAN_LIGHT" } },
                 { label: "Concord records say zhal-kelp uses chlorophyll a and c plus accessory pigments.", goto: "database_insight", requires: { clueFound: "CHLOROPHYLL_C_BLUE_GREEN" } },
                 { label: "Tei-sal, I am Oolian. I know zhal-kelp.", goto: "oolian_greeting", requires: { playerSpecies: "oolian" } },
@@ -1429,7 +1458,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             oolian_greeting: {
-              text: "Tei-sal's bioluminescent patches flare bright cyan \u2014 recognition. 'You are of the deep waters? Then I do not need to explain what zhal-kelp requires. You have seen the light of the trench. You know it is not this.' They gesture at the red-tinted glow overhead. 'The humans call this light. To the kelp, it is darkness with extra steps.'",
+              text: "Tei-sal's bioluminescent patches flare bright cyan \u2014 recognition. 'You are of the deep waters? Then I do not need to explain what zhal-kelp requires. You have seen the light of the trench. You know it is not this.' They gesture at the red-tinted glow overhead. 'The lamps are bright, but their spectrum is a poor match for this kelp.'",
               revealsClue: "KELP_DYING_NEW_DOME",
               bonusInsight: true,
               moodShift: 1,
@@ -1460,7 +1489,7 @@ const CAMPAIGN_2_DATA = {
               text: "'The human lights are very bright and red-heavy. They were designed for terrestrial crops. At our surveyed beds, water and dissolved material leave predominantly blue-green light and little red.' A pause. 'The fictional zhal-kelp is adapted to that local spectrum.'",
               setsFlag: "teisal_described_lights",
               options: [
-                { label: "So the kelp can't use red light?", goto: "cant_use_red" },
+                { label: "So the red-heavy mix is a poor match for this kelp?", goto: "cant_use_red" },
                 { label: "What spectrum does zhal-kelp need?", goto: "kelp_needs" },
                 { label: "I'll check the spectral data.", goto: "exit_neutral" }
               ]
@@ -1470,12 +1499,12 @@ const CAMPAIGN_2_DATA = {
               revealsClue: "KELP_DYING_NEW_DOME",
               bonusInsight: true,
               options: [
-                { label: "So the lights are on, but the kelp is in the dark.", goto: "realization" },
+                { label: "So the lights are on, but usable energy remains too low.", goto: "realization" },
                 { label: "I need to verify the spectrum.", goto: "exit_friendly" }
               ]
             },
             kelp_needs: {
-              text: "'Blue-green. 460 to 540 nanometers. That is the window of deep ocean light on Kepler-186f. Our Oolian fixtures emit precisely that range. The human fixtures...' Tei-sal's flanks flash a frustrated amber. '...emit red. Beautiful, warm, useless red.'",
+              text: "'Blue-green. 460 to 540 nanometers. That is the strongest measured response window for fictional zhal-kelp at this site. Our Oolian fixtures emphasize that range. The human fixtures...' Tei-sal's flanks flash a frustrated amber. '...are red-heavy and poorly matched to it.'",
               setsFlag: "teisal_described_spectrum",
               options: [
                 { label: "What percentage of the Earth lights is usable?", goto: "usable_fraction" },
@@ -1483,7 +1512,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             usable_fraction: {
-              text: "'I asked the dome sensors to measure. Less than five percent of the output falls in the range the kelp can absorb. Ninety-five percent of the light is wasted \u2014 photons the kelp cannot see. The dome is brightly lit to human eyes. To zhal-kelp eyes, it is nearly dark.'",
+              text: "'I asked the dome sensors to measure. Less than five percent of the output falls in the fictional zhal-kelp's strongest measured blue-green response range. The rest is not absolutely unused, but the red-heavy mix yields far less captured energy than the total brightness suggests. The dome is bright to human eyes and a poor spectral match for this kelp.'",
               revealsClue: "KELP_DYING_NEW_DOME",
               options: [
                 { label: "So the total intensity is fine but the color is wrong.", goto: "realization" },
@@ -1498,7 +1527,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             wrong_guess_defective: {
-              text: "'The lights are not defective. They function exactly as designed \u2014 bright, stable, efficient. They are excellent lights for growing tomatoes or lettuce on Earth. They are not designed for deep-ocean kelp that has never seen a red photon in its evolutionary history.'",
+              text: "'The lights are not defective. They function exactly as designed \u2014 bright, stable, efficient. They are excellent lights for growing tomatoes or lettuce on Earth. They were not specified for fictional deep-ocean kelp adapted to a measured habitat where blue-green light dominates and little red remains.'",
               moodShift: -1,
               options: [
                 { label: "So the problem is the spectrum, not the equipment.", goto: "new_lights" },
@@ -1532,7 +1561,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             pigment_insight: {
-              text: "'You examined the tissue? Good. The chloroplasts are healthy \u2014 the factory is intact. But the pigments in the factory are built to absorb blue-green, and the light coming in is red. It is like having a radio tuned to one frequency while the broadcast is on another. The equipment works. The signal does not match.'",
+              text: "'You examined the tissue? Good. The chloroplasts are healthy \u2014 the factory is intact. Its chlorophyll a and c plus accessory pigments show their strongest measured response in blue-green wavelengths, while the lamps are red-heavy. The equipment works. The spectrum and fictional action response do not match.'",
               revealsClue: "KELP_DYING_NEW_DOME",
               bonusInsight: true,
               moodShift: 1,
@@ -1589,16 +1618,24 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             annoyed: {
-              text: "'The kelp is dying under red light that it cannot absorb. The old Oolian lights were blue-green and the kelp thrived. The new Earth lights are red and the kelp is starving. I have said this several times now. Please \u2014 check the sensor data. The numbers are very clear.'",
+              text: "'The red-heavy lamps are poorly matched to the fictional zhal-kelp's measured response. Its chlorophyll a and c plus accessory pigments still capture some wavelengths outside the strongest blue-green range, so red is not absolutely unused. But the site data show far less usable energy than the total brightness suggests. Please check the sensor record.'",
               revealsClue: "KELP_DYING_NEW_DOME",
               options: [
                 { label: "You're right. I'll check the sensors.", goto: "exit_neutral" },
-                { label: "I'm sorry. Can you explain the pigment issue again?", goto: "recovery" }
+                { label: "Brightness is all that matters. The kelp should simply adapt.", goto: "annoyed_escalation" },
+                { label: "I'm sorry. Can you explain the pigment evidence again?", goto: "recovery" },
+                { label: "I'll leave you to it.", goto: "exit_cold" }
               ]
             },
+            annoyed_escalation: {
+              text: "Tei-sal's patches go dark. 'Adaptation does not occur on demand, and total brightness does not replace an action spectrum. Return when you are prepared to use the measurements.'",
+              moodShift: -2,
+              endsConversation: true,
+              exitLabel: "Step away"
+            },
             recovery: {
-              text: "Tei-sal's patches shift back toward green. 'Of course. I am sorry for my frustration. The kelp has been dying for six weeks and every day is damage. The issue is simple: the kelp's photosynthetic pigments absorb blue-green light. The new lights emit red. Red passes through the kelp unused. The dome is bright but the kelp is starving.'",
-              moodShift: 1,
+              text: "Tei-sal's patches shift back toward green. 'The scientifically grounded comparison is chlorophyll a and c plus accessory pigments. For this fictional species, the measured action spectrum peaks in blue-green wavelengths. Red light is not universally or absolutely unused by kelp; these red-heavy lamps are simply a poor match to the zhal-kelp response measured at this site, so captured energy is much lower than total brightness implies.'",
+              setMood: "neutral",
               locksSource: false,
               options: [
                 { label: "That's very clear. Thank you.", goto: "exit_friendly" },
@@ -1608,8 +1645,9 @@ const CAMPAIGN_2_DATA = {
             locked: {
               text: "'I have explained the light spectrum issue multiple times. The kelp needs blue-green light. It is receiving red. Please verify this with the sensor array and return when you are ready to discuss solutions.'",
               revealsClue: "KELP_DYING_NEW_DOME",
-              endsConversation: true,
-              exitLabel: "Step away"
+              options: [
+                { label: "You're right. I'll use the measured action spectrum instead of assumptions.", goto: "recovery" }
+              ]
             },
             exit_friendly: {
               text: "Tei-sal's patches glow a soft, warm blue. 'The kelp is patient. So am I. Take your time.'",
@@ -1987,6 +2025,7 @@ const CAMPAIGN_2_DATA = {
                 { label: "Vess-lor. I am Zhel'ii. I know what the grove means.", goto: "zhelii_greeting", requires: { playerSpecies: "zhelii" } },
                 { label: "I've seen network organisms before. In the Zhel'ora case.", goto: "alien_rapport", requires: { playerSpeciesNot: "human" } },
                 { label: "Maybe the atmospheric filtering is off.", goto: "wrong_guess_atmosphere" },
+                { label: "If the atmosphere is nominal, maybe there is no real biological problem.", goto: "dismissive_pattern" },
                 { label: "I'll look around first.", goto: "exit_neutral" }
               ]
             },
@@ -2105,6 +2144,12 @@ const CAMPAIGN_2_DATA = {
                 { label: "I'll investigate further.", goto: "exit_neutral" }
               ]
             },
+            dismissive_pattern: {
+              text: "Vess-lor's colors flatten to grey. 'The grove's silence is a measured biological change. Calling it unreal because the familiar readings are nominal dismisses the evidence we asked you to investigate.'",
+              moodShift: -3,
+              endsConversation: true,
+              exitLabel: "Step away"
+            },
             light_insight: {
               text: "'24 hours a day. Yes. We thought maximum light would give maximum energy. But you are suggesting...' Vess-lor's colors shift rapidly. 'On Zhel'ora, the day is 19 hours. The night is 7. The grove has never experienced perpetual day. What happens to a clock that is never allowed to tick?'",
               revealsClue: "NETWORK_FALLEN_SILENT",
@@ -2164,8 +2209,15 @@ const CAMPAIGN_2_DATA = {
               revealsClue: "NETWORK_FALLEN_SILENT",
               options: [
                 { label: "The constant light suppresses the signaling rhythm.", goto: "realization" },
-                { label: "I need to check more sources.", goto: "exit_neutral" }
+                { label: "You're right. I'll return to the timing evidence.", goto: "recovery" },
+                { label: "I'll leave you to it.", goto: "exit_cold" }
               ]
+            },
+            recovery: {
+              text: "Vess-lor's chromatophores soften. 'Thank you. Follow the before-and-after schedule and test the rhythm hypothesis carefully.'",
+              setMood: "neutral",
+              endsConversation: true,
+              exitLabel: "Resume the investigation"
             },
             exit_friendly: {
               text: "Vess-lor's colors settle into a warm, contented violet. 'Thank you, liaison. You have given the grove its voice back. Zel'keth will be pleased \u2014 this descendant means a great deal to them.'",
@@ -2547,6 +2599,7 @@ const CAMPAIGN_2_DATA = {
                 { label: "Kel-tor. I am Rhessi. I know what radiation means to biology.", goto: "rhessi_greeting", requires: { playerSpecies: "rhessi" } },
                 { label: "I've seen what happens when species-specific needs are ignored.", goto: "alien_rapport", requires: { playerSpeciesNot: "human" } },
                 { label: "Maybe the nutrient mix is missing something.", goto: "wrong_guess_nutrients" },
+                { label: "If the shielding is perfect, the bloom itself must simply be defective.", goto: "dismissive_biology" },
                 { label: "I'll investigate the other sources.", goto: "exit_neutral" }
               ]
             },
@@ -2627,6 +2680,12 @@ const CAMPAIGN_2_DATA = {
                 { label: "I'll investigate.", goto: "exit_neutral" }
               ]
             },
+            dismissive_biology: {
+              text: "Kel-tor's expression hardens. 'Perfect for whom? Declaring the organism defective because it falls outside the vault's assumptions is the error that brought you here. Return when you are ready to examine the species record.'",
+              moodShift: -4,
+              endsConversation: true,
+              exitLabel: "Step away"
+            },
             radiation_insight: {
               text: "'Below detection.' Kel-tor allows satisfaction into their voice. 'You noticed. The plant-tissue monitor reads less than 0.01 mGy/day. The fictional homeworld file reports about 8.4 mGy/day absorbed dose in a mixed photon field. The bloom has undergone a large change, and the Concord treated that as automatically beneficial.'",
               revealsClue: "BLOOMS_INERT",
@@ -2692,8 +2751,15 @@ const CAMPAIGN_2_DATA = {
               text: "'The fictional bloom's pathway is radiation-responsive, and the vault reduced measured absorbed dose below detection. The pathway and compound output then declined. Please check the sensor data, transplant record, and species file. Together they justify a controlled test, not an improvised exposure.'",
               revealsClue: "BLOOMS_INERT",
               options: [
-                { label: "I'll check the other sources.", goto: "exit_neutral" }
+                { label: "You're right. I'll return to the measured record.", goto: "recovery" },
+                { label: "I'll leave you to it.", goto: "exit_cold" }
               ]
+            },
+            recovery: {
+              text: "Kel-tor nods once. 'Good. Treat the dose contrast as a hypothesis to test under specialist controls, not a reason to improvise.'",
+              setMood: "neutral",
+              endsConversation: true,
+              exitLabel: "Resume the investigation"
             },
             exit_friendly: {
               text: "Kel-tor nods once. 'Thank you, liaison. For listening to what I could not say officially. The bloom deserves better than a perfect cage.'",
@@ -3115,8 +3181,9 @@ const CAMPAIGN_2_DATA = {
                 { label: "Tell me about the restoration.", goto: "history" },
                 { label: "What have you already tried?", goto: "tried_everything" },
                 { label: "Vorn-Shael says the chemistry is isolated \u2014 compounds in patches that don't connect.", goto: "chemical_response", requires: { clueFound: "CHEMICAL_DISCONNECTION" } },
-                { label: "Kess thinks there's a fungal network that's been broken.", goto: "mycorrhizal_response", requires: { clueFound: "MYCORRHIZAL_NETWORK" } },
-                { label: "The fix might require breaking Concord biosafety rules.", goto: "regulation_response", requires: { clueFound: "CONCORD_REGULATION" } },
+                { label: "Kess thinks compatible mycorrhizal partners may not have re-established.", goto: "mycorrhizal_response", requires: { clueFound: "MYCORRHIZAL_NETWORK" } },
+                { label: "A controlled biological trial may require Concord biosafety approval.", goto: "regulation_response", requires: { clueFound: "CONCORD_REGULATION" } },
+                { label: "If the chemistry is clean, the patchiness cannot be biological.", goto: "dismissive_biology" },
                 { label: "I'll talk to the delegates first.", goto: "exit_neutral" }
               ]
             },
@@ -3182,6 +3249,12 @@ const CAMPAIGN_2_DATA = {
                 { label: "I need to confirm it. Let me talk to Kess.", goto: "exit_neutral" }
               ]
             },
+            dismissive_biology: {
+              text: "Nova's expression tightens. 'Clean bulk chemistry does not prove that every biological partnership is present or functioning. Dismissing the pattern before sampling the living community is exactly the blind spot we're testing.'",
+              moodShift: -3,
+              endsConversation: true,
+              exitLabel: "Step away"
+            },
             chemical_response: {
               text: "'Compounds in patches that don't connect?' Nova's brow furrows. 'The thriving beds have good chemistry. The struggling beds have... the same chemistry, actually. But Vorn-Shael is saying the chemistry isn't flowing between them? Like each bed is an island?' She shakes her head slowly. 'That shouldn't happen in healthy soil. Healthy soil is a network.'",
               revealsClue: "RESTORATION_HISTORY",
@@ -3223,15 +3296,22 @@ const CAMPAIGN_2_DATA = {
               setsFlag: "nova_discussed_regulation",
               options: [
                 { label: "There may be precedent for an exemption.", goto: "exit_friendly" },
-                { label: "We'll figure it out. The diagnosis is clear.", goto: "exit_friendly" }
+                { label: "The evidence supports an approved, controlled test.", goto: "exit_friendly" }
               ]
             },
             annoyed: {
               text: "'The garden grows in patches. I've tried every conventional fix. The chemistry is fine but the biology is disconnected. That's everything I know.' Nova's patience holds, but her eyes are tired. 'Talk to the delegates. They can see things I can't.'",
               revealsClue: "RESTORATION_HISTORY",
               options: [
-                { label: "I'll do that.", goto: "exit_neutral" }
+                { label: "You're right. I'll test the biological hypothesis instead of dismissing it.", goto: "recovery" },
+                { label: "I'll leave you to it.", goto: "exit_cold" }
               ]
+            },
+            recovery: {
+              text: "Nova nods. 'Good. Compare the communities, identify compatible candidates, and let controlled evidence decide.'",
+              setMood: "neutral",
+              endsConversation: true,
+              exitLabel: "Resume the investigation"
             },
             exit_friendly: {
               text: "Nova touches the soil one more time. 'Go find out what my garden needs. I'll be here \u2014 I'm always here.'",
@@ -3265,8 +3345,15 @@ const CAMPAIGN_2_DATA = {
                 { label: "What's unusual about it?", goto: "unusual_pattern" },
                 { label: "Nova says she's tried every conventional fix.", goto: "conventional_response", requires: { flagSet: "nova_ruled_out_basics" } },
                 { label: "Does the chemical pattern match what Kess described?", goto: "kess_correlation", requires: { clueFound: "MYCORRHIZAL_NETWORK" } },
+                { label: "The standard chemistry is present, so this pattern probably does not matter.", goto: "dismissive_pattern" },
                 { label: "I'll come back later.", goto: "exit_neutral" }
               ]
+            },
+            dismissive_pattern: {
+              text: "Vorn-Shael's frills retract. 'A repeated measured pattern does not become irrelevant because the bulk values are familiar. Return when you are prepared to distinguish observation from assumption.'",
+              moodShift: -4,
+              endsConversation: true,
+              exitLabel: "Step away"
             },
             chemical_reading: {
               text: "'Phosphorus. Nitrogen. Carbon chains. Signaling compounds \u2014 auxins, cytokinins, strigolactones. All present.' Vorn-Shael's frills ripple. 'But only in discrete zones. Circular patches of approximately four to six meters diameter. Between the patches: the same compounds at trace levels only. The zones of abundance do not blend into one another. They are islands.'",
@@ -3279,7 +3366,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             unusual_pattern: {
-              text: "'In my species' experience, soil chemistry is a continuum. Compounds diffuse. Gradients form. Organisms transport material through networks. Here, the compounds exist in isolated pools with sharp boundaries. This is not diffusion failure \u2014 the soil matrix can diffuse adequately. Something that should be actively transporting compounds between zones is absent.'",
+              text: "'In my species' experience, soil chemistry is a continuum. Compounds diffuse. Gradients form. Organisms can transport material through networks. Here, the compounds occur in isolated pools with sharp boundaries despite adequate matrix diffusion. That pattern is consistent with reduced biological transport, but chemistry alone cannot identify the organism or prove its absence.'",
               revealsClue: "CHEMICAL_DISCONNECTION",
               bonusInsight: true,
               options: [
@@ -3289,7 +3376,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             no_flow: {
-              text: "'Correct. The chemistry is present but static. In a functioning soil ecosystem, I would expect to see gradient patterns indicating active transport \u2014 compounds moving from zones of high production to zones of high demand. Here, the zones of high production hoard their compounds. The zones of low production starve. The transport mechanism is missing.'",
+              text: "'Correct. The chemistry is present but unusually compartmentalized. In some functioning soil ecosystems, biological transport contributes to gradients between zones. Here, the measured transport signature is reduced. That supports investigating living connections, but it does not yet identify which mechanism is responsible.'",
               setsFlag: "vorn_mentioned_transport",
               options: [
                 { label: "What kind of transport mechanism?", goto: "transport_question" },
@@ -3297,7 +3384,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             healthy_comparison: {
-              text: "'In healthy soil on my homeworld, chemical signatures form smooth gradients. Resources flow from source to sink through biological conduits. Here, I see the sources. I see the sinks. I do not see the conduits.' Vorn-Shael pauses. 'I am a chemist, not a biologist. I can describe the pattern. I cannot name what is missing.'",
+              text: "'In healthy soil on my homeworld, chemical signatures form smoother gradients and biological conduits contribute to transport. Here, I see sources and sinks but not that chemical wake.' Vorn-Shael pauses. 'I am a chemist, not a biologist. I can describe the pattern; I cannot identify its cause.'",
               revealsClue: "CHEMICAL_DISCONNECTION",
               options: [
                 { label: "Conduits. Biological connections between zones.", goto: "active_transport" },
@@ -3305,7 +3392,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             active_transport: {
-              text: "'On my homeworld, the biological conduits are well-characterized. Subterranean filaments that connect plant root systems and facilitate resource sharing. My species can detect the chemical wake they leave.' Vorn-Shael's frills fold inward. 'I detect no such wake here. If Earth has an equivalent organism, it is absent from this soil.'",
+              text: "'On my homeworld, subterranean filaments can connect roots and leave a characteristic chemical wake.' Vorn-Shael's frills fold inward. 'I detect no comparable wake here. If Earth has an equivalent partnership, it may be absent, reduced, incompatible, or simply chemically different. Identification and sampling must decide.'",
               bonusInsight: true,
               options: [
                 { label: "Earth does have an equivalent. Mycorrhizal fungi.", goto: "kess_correlation", requires: { clueFound: "MYCORRHIZAL_NETWORK" } },
@@ -3321,14 +3408,14 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             conventional_response: {
-              text: "'Dr. Nova's interventions were competent and thorough. She addressed every chemical variable within her framework. The pattern I observe is not a chemical deficiency \u2014 the compounds are present. It is a distribution failure. Something that should connect these zones is missing. Her framework did not include the connecting mechanism.'",
+              text: "'Dr. Nova's interventions were competent and thorough. She addressed every chemical variable within her framework. The compounds are present, but their distribution is unusual. Her framework did not test whether compatible living partnerships contribute to that pattern.'",
               options: [
                 { label: "Because humans don't usually think about the underground network.", goto: "exit_friendly" },
                 { label: "What mechanism could connect soil zones?", goto: "transport_question" }
               ]
             },
             kess_correlation: {
-              text: "'Mycorrhizal fungi.' Vorn-Shael's frills extend and hold still \u2014 the closest to excitement their species permits. 'If this fungal network performs the same function as the filament organisms on my homeworld, then its absence would produce exactly the pattern I observe: chemical islands with no transport between them. The diagnosis is consistent.'",
+              text: "'Mycorrhizal fungi.' Vorn-Shael's frills extend and hold still \u2014 the closest to excitement their species permits. 'If compatible fungal-root partnerships contribute to transport here, their loss or failed re-establishment could fit the chemical islands I observe. It is a leading explanation to compare against controls, not a mechanism chemistry alone can prove.'",
               bonusInsight: true,
               moodShift: 1,
               options: [
@@ -3337,11 +3424,18 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             annoyed: {
-              text: "'The chemical pattern is clear: isolated zones of abundance with no active transport between them. The connecting mechanism is absent. I have stated this observation multiple times. I suggest consulting Delegate Kess for biological identification.'",
+              text: "'The chemical pattern is clear: isolated zones with a reduced transport signature. That observation does not prove which compatible organism is absent or impaired. I have stated the limit multiple times. Consult Delegate Kess and sample the communities.'",
               revealsClue: "CHEMICAL_DISCONNECTION",
               options: [
-                { label: "I'll do that.", goto: "exit_neutral" }
+                { label: "You're right. I'll treat the pattern as evidence, not proof of a mechanism.", goto: "recovery" },
+                { label: "I'll leave you to it.", goto: "exit_cold" }
               ]
+            },
+            recovery: {
+              text: "Vorn-Shael's frills extend again. 'Correct. Identify organisms, compare zones, and test the proposed mechanism under controls.'",
+              setMood: "neutral",
+              endsConversation: true,
+              exitLabel: "Resume the investigation"
             },
             exit_friendly: {
               text: "Vorn-Shael's frills settle into a resting position. 'The data is clear. The interpretation requires expertise I do not possess. I trust you will find the right source.'",
@@ -3372,13 +3466,20 @@ const CAMPAIGN_2_DATA = {
               text: "Kess's containment vessel hums softly. Fluid bubbles rise past the preserved brain. Indicator lights pulse in patterns that might be thought. A synthesized voice emerges from the speaker grille. 'You wish to consult me about soil? My species abandoned soil cultivation three thousand years ago. But I carry the ancestral memory. It is... fragmented. Incomplete. Ask, and I will try to reconstruct.'",
               options: [
                 { label: "The soil has isolated patches of good chemistry that don't connect.", goto: "first_fragment", requires: { clueFound: "CHEMICAL_DISCONNECTION" } },
-                { label: "The fungal network \u2014 how does it form? How does it spread?", goto: "third_fragment", requires: { flagSet: "kess_remembered_fungi", moodIsNot: "neutral" } },
+                { label: "The possible fungal partnerships \u2014 how do they establish and spread?", goto: "third_fragment", requires: { flagSet: "kess_remembered_fungi", moodIsNot: "neutral" } },
                 { label: "What do the fungal filaments actually do between plants?", goto: "function_fragment", requires: { flagSet: "kess_remembered_fungi" } },
                 { label: "I found database entries on mycorrhizal networks. Does this help?", goto: "database_assist", requires: { clueFound: "DATABASE_PRECEDENT" } },
                 { label: "What do you remember about underground plant connections?", goto: "cold_start" },
                 { label: "Do you know what a mycorrhizal network is?", goto: "direct_ask" },
+                { label: "Your fragmented memory is not evidence; guessing will not help.", goto: "dismissive_memory" },
                 { label: "I'll come back with more context.", goto: "exit_neutral" }
               ]
+            },
+            dismissive_memory: {
+              text: "Kess's lights dim to a narrow line. 'Fragments are not proof. That is why I asked for observations to test against them. Dismissing the reconstruction before comparing it with evidence is no more rigorous than accepting it blindly.'",
+              moodShift: -3,
+              endsConversation: true,
+              exitLabel: "Step away"
             },
             cold_start: {
               text: "'Underground connections...' The indicator lights flicker rapidly \u2014 searching. 'There is something. Plants do not exist alone. They are connected by... something beneath the surface. A web. A living web.' The lights slow. 'I cannot access more. The memory is there but I cannot reach it without a more specific question. What exactly are you trying to understand?'",
@@ -3396,7 +3497,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             first_fragment: {
-              text: "'Isolated patches. Chemistry present but not flowing.' The indicator lights accelerate \u2014 something is connecting. 'Yes. YES. There is an organism. Below the surface. It connects root systems. A network of filaments that carries compounds between plants across distances the roots alone cannot reach. When this organism is present, the soil is a single system. When it is absent...' The lights stutter. '...the soil is fragments. Islands. Exactly what your chemist describes.'",
+              text: "'Isolated patches. Chemistry present but not flowing.' The indicator lights accelerate. 'A possible comparison is a filament-forming partner below the surface. Compatible fungi can colonize roots and influence resource acquisition; some may connect more than one root. Loss or failed re-establishment could contribute to patchiness, but the garden's organisms and history still have to be identified.'",
               setsFlag: "kess_recognized_network",
               moodShift: 1,
               options: [
@@ -3435,7 +3536,7 @@ const CAMPAIGN_2_DATA = {
               bonusInsight: true,
               moodShift: 1,
               options: [
-                { label: "And when the network is destroyed?", goto: "destruction_fragment" },
+                { label: "And when compatible partnerships are disrupted?", goto: "destruction_fragment" },
                 { label: "How does it form in the first place?", goto: "third_fragment", requires: { moodIsNot: "neutral" } },
                 { label: "I need to check something.", goto: "exit_friendly" }
               ]
@@ -3443,17 +3544,17 @@ const CAMPAIGN_2_DATA = {
             destruction_fragment: {
               text: "'When compatible fungi are lost, some host plants may acquire nutrients or water less effectively. Whether material moves among roots, in which direction, and whether recipients benefit depend on the species and conditions.' The lights still. 'That could contribute to these patches, but it must be tested against other explanations.'",
               options: [
-                { label: "That's exactly what happened to this garden. How do we fix it?", goto: "third_fragment", requires: { moodIsNot: "neutral" } },
+                { label: "Could that fit this garden, and how would we test it?", goto: "third_fragment", requires: { moodIsNot: "neutral" } },
                 { label: "I'll come back.", goto: "exit_friendly" }
               ]
             },
             database_assist: {
-              text: "'You found records?' The lights blaze bright. 'Show me \u2014 describe what you found.' As you relay the database entries on mycorrhizal networks, Kess's vessel hums at a higher pitch. The bubbles accelerate. 'Yes. Mycorrhizal. The word. The concept. Your database confirms what my ancestral memory holds in fragments. This is the mechanism. This is what is missing from the garden.'",
+              text: "'You found records?' The lights blaze bright. 'Show me \u2014 describe what you found.' As you relay the database entries, Kess's vessel hums at a higher pitch. 'Mycorrhizal partnerships are a leading explanation consistent with the patch pattern and my fragmented memory. We still need to identify the organisms in both zones, test host compatibility, and compare screened candidates with untreated controls before claiming the mechanism.'",
               revealsClue: "MYCORRHIZAL_NETWORK",
               bonusInsight: true,
               moodShift: 2,
               options: [
-                { label: "How do we restore it?", goto: "full_recovery" },
+                { label: "How do we test that explanation safely?", goto: "full_recovery" },
                 { label: "Thank you, Kess.", goto: "exit_friendly" }
               ]
             },
@@ -3463,8 +3564,8 @@ const CAMPAIGN_2_DATA = {
               bonusInsight: true,
               moodShift: 2,
               options: [
-                { label: "Transplant living soil from the healthy beds into the dead zones.", goto: "full_recovery" },
-                { label: "That's the diagnosis. The garden's network was never restored.", goto: "full_recovery" }
+                { label: "Identify and provenance-screen candidate fungi before proposing a controlled trial.", goto: "full_recovery" },
+                { label: "So failed re-establishment of compatible partners is a hypothesis to test.", goto: "full_recovery" }
               ]
             },
             full_recovery: {
@@ -3476,9 +3577,16 @@ const CAMPAIGN_2_DATA = {
             annoyed: {
               text: "'The memory is fragmented. I am trying. Repeated visits help \u2014 each conversation activates the ancestral pathways a little further. But I need you to bring me evidence, not frustration. What have your other sources told you?'",
               options: [
-                { label: "The chemistry is isolated in patches. The transport mechanism is missing.", goto: "first_fragment", requires: { clueFound: "CHEMICAL_DISCONNECTION" } },
-                { label: "I'll come back.", goto: "exit_neutral" }
+                { label: "The chemistry is patchy, suggesting reduced biological transport without proving its cause.", goto: "first_fragment", requires: { clueFound: "CHEMICAL_DISCONNECTION" } },
+                { label: "You're right. I'll bring observations and treat the memory as a hypothesis.", goto: "recovery" },
+                { label: "I'll leave you to it.", goto: "exit_cold" }
               ]
+            },
+            recovery: {
+              text: "Kess's lights warm. 'Good. Curiosity with controls: identify the partners, screen their provenance and risks, and let comparison decide.'",
+              setMood: "neutral",
+              endsConversation: true,
+              exitLabel: "Resume the investigation"
             },
             exit_friendly: {
               text: "Kess's lights dim to a warm, contented amber. 'Thank you for your patience. Each visit brings the memory closer to the surface. My ancestors grew worlds from soil. It is... good to remember that.'",
@@ -3510,7 +3618,7 @@ const CAMPAIGN_2_DATA = {
               options: [
                 { label: "I'm investigating why the garden won't heal. What's your role here?", goto: "role" },
                 { label: "What do you think of the summit?", goto: "summit_opinion" },
-                { label: "The fix requires moving soil between zones. Are there regulatory issues?", goto: "biosafety_overview", requires: { clueFound: "MYCORRHIZAL_NETWORK" } },
+                { label: "A controlled biological trial may involve cross-zone material. What review is required?", goto: "biosafety_overview", requires: { clueFound: "MYCORRHIZAL_NETWORK" } },
                 { label: "There's legal precedent for an exemption. Would the Concord grant one?", goto: "exemption_history", requires: { clueFound: "DATABASE_PRECEDENT" } },
                 { label: "I appreciate the Concord sending observers.", goto: "diplomatic_approach" },
                 { label: "Must be strange watching humans struggle with their own dirt.", goto: "wrong_tone" },
@@ -3588,25 +3696,26 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             fix_blocked: {
-              text: "'Blocked is a strong word. The regulation creates a procedural requirement, not a prohibition. An exemption can be granted. A reform can be proposed. Or...' The beak clicks once. '...the regulation can be ignored, and the consequences accepted later. I am not recommending that option. I am acknowledging it exists.'",
+              text: "'Blocked is a strong word. The regulation creates a review requirement, not a prohibition. An exemption can be requested and a reform can be proposed.' The beak clicks once. 'Proceeding without organism identification, provenance and pathogen screening, approval, controls, and monitoring would be both unsafe and a violation.'",
               options: [
-                { label: "What would happen if someone just... did it?", goto: "consequences" },
+                { label: "What are the risks of proceeding without review?", goto: "consequences" },
                 { label: "I'd rather work within the system.", goto: "exemption_history" },
                 { label: "I'll think about it.", goto: "exit_neutral" }
               ]
             },
             consequences: {
-              text: "'A formal violation of Section 14.7 at a Concord summit site? Noted in the record. A review by the Biosafety Committee. Possible sanctions against the host species.' Ilreth-Mar's eyes hold yours. 'The garden would heal. The diplomatic record would not. Whether that trade is acceptable is above my authority.'",
+              text: "'An unreviewed transfer could introduce pathogens, incompatible fungi, or invasive organisms and would invalidate the evidence even if a plot improved. It would also violate Section 14.7 and trigger committee review.' Ilreth-Mar's eyes hold yours. 'Neither ecological outcome nor regulatory approval can be assumed.'",
               options: [
                 { label: "There must be a better path.", goto: "exemption_history" },
-                { label: "Sometimes the right thing doesn't wait for paperwork.", goto: "pragmatic_response" }
+                { label: "Then the trial needs screening, controls, monitoring, and approval first.", goto: "exemption_history" },
+                { label: "Could urgency ever justify skipping review?", goto: "pragmatic_response" }
               ]
             },
             pragmatic_response: {
-              text: "Ilreth-Mar is very still. 'I have heard that argument before. From species that were right and from species that were reckless. The difference is usually only visible afterward.' A long pause. 'I will not stop you. But I will report what I observe. That is my role.'",
+              text: "Ilreth-Mar is very still. 'Urgency may justify expedited review. It does not identify organisms, screen pathogens or invasive risk, establish compatibility, or create controls. Those protections remain necessary before transfer.'",
               setsFlag: "ilreth_warned_about_pragmatism",
               options: [
-                { label: "Understood.", goto: "exit_neutral" }
+                { label: "Understood. We'll seek an expedited approved trial.", goto: "exemption_history" }
               ]
             },
             reform_discussion: {
@@ -3639,14 +3748,29 @@ const CAMPAIGN_2_DATA = {
               text: "'Section 14.7. Cross-zone biological material transfer requires Concord approval. The regulation applies to this summit site. Exemptions exist but must be formally requested. I have explained this clearly. Consult the database for precedent details.'",
               revealsClue: "CONCORD_REGULATION",
               options: [
-                { label: "I'll check the database.", goto: "exit_cold" }
+                { label: "You're obstructing the investigation. I don't need another lecture.", goto: "annoyed_escalation" },
+                { label: "You're right. I'll document the evidence and follow the review path.", goto: "recovery" }
               ]
+            },
+            annoyed_escalation: {
+              text: "Ilreth-Mar's collar locks rigid. 'You asked for the rule, dismissed the answer, and now reject oversight itself. This consultation is over until you can proceed professionally.'",
+              moodShift: -2,
+              endsConversation: true,
+              exitLabel: "Step away"
             },
             locked: {
               text: "'We have nothing further to discuss. The regulations are clear. The database has the precedents. File your application or don't. I am done being consulted.'",
               revealsClue: "CONCORD_REGULATION",
+              options: [
+                { label: "You're right. I'll document the evidence and follow the review path.", goto: "recovery" }
+              ]
+            },
+            recovery: {
+              text: "Ilreth-Mar inclines their head. 'Then identify the organisms, screen provenance and risk, define controls and monitoring, and seek approval before any transfer. We can discuss evidence within that framework.'",
+              setMood: "neutral",
+              locksSource: false,
               endsConversation: true,
-              exitLabel: "Walk away"
+              exitLabel: "Resume the investigation"
             },
             exit_friendly: {
               text: "Ilreth-Mar inclines their head \u2014 a precise, formal gesture. 'Proceed carefully, liaison. The garden's health and Earth's reputation both depend on the path you choose.'",
@@ -3805,7 +3929,7 @@ const CAMPAIGN_2_DATA = {
       diagnoses: [
         {
           id: "mycorrhizal",
-          label: "Loss of compatible mycorrhizal partners \u2014 the restored soil chemistry is suitable, but the fungal-root partnerships needed for efficient nutrient acquisition and connected growth were not re-established. A controlled inoculation trial is warranted.",
+          label: "Failed or incomplete re-establishment of compatible mycorrhizal partners is a leading explanation for the patch pattern. Identify organisms and test screened candidates against controls before concluding causation.",
           isCorrect: true
         },
         {
