@@ -29,6 +29,7 @@ assert.ok(Math.abs(hh.topAccelerationG - 2.0990662517) < 1e-9);
 assert.ok(Math.abs(hh.midpointAccelerationG - 2.1) < 1e-12);
 assert.ok(Math.abs(hh.baseAccelerationG - 2.1009337483) < 1e-9);
 assert.ok(Math.abs(hh.gradientDeltaG - 0.0018674967) < 1e-9);
+assert.match(JSON.stringify(cases[0]), /0\.00187g/, 'displayed Case 01 gradient retains five-decimal precision');
 
 const text = JSON.stringify(campaign);
 for (const prohibited of [
