@@ -12,6 +12,11 @@ assert.match(source, /if \(STATE\.currentCampaign === 1\) showResolvedScene\(cas
 assert.match(source, /sceneImg\.alt = STATE\.currentCampaign === 1[\s\S]*?caseData\.sceneDescription/);
 assert.match(source, /resolvedSceneDescription/);
 assert.match(source, /role="img" aria-label=/);
+assert.match(
+  source,
+  /STATE\.currentCampaign === 1 && source\.type === 'conversation'[\s\S]*?mood === 'angry'[\s\S]*?source\.nodes\.locked[\s\S]*?mood === 'annoyed'[\s\S]*?source\.nodes\.annoyed/,
+  'Campaign 2 authored mood and lock nodes are connected through persisted conversation mood'
+);
 
 const scripts = [...source.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)]
   .map(match => match[1])
@@ -22,4 +27,4 @@ for (const code of scripts) {
   new Function(code);
 }
 
-console.log(JSON.stringify({ assertions: 11, failures: 0, verified: ['gating', 'solution persistence', 'delayed resolved scene', 'sprite matcher', 'canvas and scene accessibility', 'inline syntax'] }, null, 2));
+console.log(JSON.stringify({ assertions: 12, failures: 0, verified: ['gating', 'solution persistence', 'delayed resolved scene', 'sprite matcher', 'canvas and scene accessibility', 'mood-node routing', 'inline syntax'] }, null, 2));

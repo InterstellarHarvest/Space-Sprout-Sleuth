@@ -3507,6 +3507,16 @@
     const caseData = GAME_DATA.cases[STATE.currentCase];
     const source = caseData.sources[sourceKey];
 
+    // Campaign 2 authors explicit annoyed/locked response nodes. Route to
+    // those nodes from the persisted conversation mood so they are playable
+    // narrative states rather than dormant data. Formal clues never depend on
+    // reaching a negative mood.
+    if (STATE.currentCampaign === 1 && source.type === 'conversation' && srcState && srcState.mood !== undefined) {
+      const mood = getMoodLabel(srcState.mood, source.personality);
+      if (mood === 'angry' && source.nodes.locked) return 'locked';
+      if (mood === 'annoyed' && source.nodes.annoyed) return 'annoyed';
+    }
+
     // If locked and has a locked node, show that
     if (srcState && srcState.locked && source.nodes.locked) {
       return 'locked';
