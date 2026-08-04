@@ -74,6 +74,9 @@ try {
   let nextId = 1;
   const pending = new Map();
   const exceptions = [];
+  // One-shot resolvers armed before each navigation; fired by Page.loadEventFired
+  // so we only sample the freshly-loaded execution context, never the stale one.
+  let loadWaiters = [];
   ws.onmessage = event => {
     const message = JSON.parse(event.data);
     if (message.id && pending.has(message.id)) {
@@ -83,6 +86,10 @@ try {
       else handlers.resolve(message.result);
     } else if (message.method === 'Runtime.exceptionThrown') {
       exceptions.push(message.params.exceptionDetails.text);
+    } else if (message.method === 'Page.loadEventFired') {
+      const waiters = loadWaiters;
+      loadWaiters = [];
+      for (const resolve of waiters) resolve();
     }
   };
   const send = (method, params = {}) => new Promise((resolve, reject) => {
@@ -91,18 +98,37 @@ try {
     ws.send(JSON.stringify({ id, method, params }));
   });
 
-  await send('Page.enable');
-  await send('Runtime.enable');
-  await send('Page.navigate', { url: 'http://127.0.0.1:' + webPort + '/index.html' });
-
-  for (let i = 0; i < 100; i++) {
-    const ready = await send('Runtime.evaluate', {
-      expression: 'document.readyState === "complete" && !!window.SSS',
+  // Navigate/reload deterministically: arm a load-event waiter BEFORE issuing the
+  // command, wait for the fresh page's load event (distinguishing it from the old
+  // context), then bounded-poll for the actual game runtime — not merely page
+  // load. Throws a diagnostic error on genuine timeout; never silently proceeds.
+  const LOAD_TIMEOUT_MS = 20000;
+  const RUNTIME_TIMEOUT_MS = 20000;
+  const navigateAndWait = async (label, commandFn, readyExpr = 'true') => {
+    let timer;
+    const loaded = new Promise((resolve, reject) => {
+      loadWaiters.push(() => { clearTimeout(timer); resolve(); });
+      timer = setTimeout(() => reject(new Error('load event timeout (' + label + ') after ' + LOAD_TIMEOUT_MS + 'ms')), LOAD_TIMEOUT_MS);
+    });
+    await commandFn();
+    await loaded;
+    const condition = 'document.readyState === "complete" && !!window.SSS && (' + readyExpr + ')';
+    const deadline = Date.now() + RUNTIME_TIMEOUT_MS;
+    while (Date.now() < deadline) {
+      const ready = await send('Runtime.evaluate', { expression: condition, returnByValue: true });
+      if (ready.result && ready.result.value === true) return;
+      await new Promise(resolve => setTimeout(resolve, 50));
+    }
+    const diag = await send('Runtime.evaluate', {
+      expression: 'JSON.stringify({readyState:document.readyState,hasSSS:!!window.SSS,hasDiagnose:!!document.getElementById("diagnose-btn")})',
       returnByValue: true
     });
-    if (ready.result.value) break;
-    await new Promise(resolve => setTimeout(resolve, 50));
-  }
+    throw new Error('game runtime not ready (' + label + ') within ' + RUNTIME_TIMEOUT_MS + 'ms; last observed: ' + (diag.result && diag.result.value));
+  };
+
+  await send('Page.enable');
+  await send('Runtime.enable');
+  await navigateAndWait('initial load', () => send('Page.navigate', { url: 'http://127.0.0.1:' + webPort + '/index.html' }));
 
   const seededSave = {
     playerName: 'Browser Auditor',
@@ -122,15 +148,7 @@ try {
   await send('Runtime.evaluate', {
     expression: 'localStorage.setItem("space_sprout_sleuth_save", ' + JSON.stringify(JSON.stringify(seededSave)) + ')'
   });
-  await send('Page.reload');
-  for (let i = 0; i < 100; i++) {
-    const ready = await send('Runtime.evaluate', {
-      expression: 'document.readyState === "complete" && !!window.SSS && !!document.getElementById("diagnose-btn")',
-      returnByValue: true
-    });
-    if (ready.result.value) break;
-    await new Promise(resolve => setTimeout(resolve, 50));
-  }
+  await navigateAndWait('seed reload', () => send('Page.reload'), '!!document.getElementById("diagnose-btn")');
 
   const playAllCases = async campaign => {
     const results = [];
@@ -347,22 +365,12 @@ try {
   assert.ok(moodSpecs.every(s => s.recoveryLabel), 'every mood node exposes a direct neutral-recovery option');
 
   const freshCaseState = () => ({ cluesFound: [], nodesVisited: {}, actionsTaken: [], flags: [], sourceStates: {}, wrongGuesses: 0, diagnosed: false, bonusInsights: 0, textProgress: {}, calledHome: false, solutionIdx: -1 });
-  const waitReady = async () => {
-    for (let i = 0; i < 120; i++) {
-      const r = await send('Runtime.evaluate', { expression: 'document.readyState==="complete" && !!window.SSS && !!document.getElementById("diagnose-btn")', returnByValue: true });
-      if (r.result.value) return;
-      await new Promise(res => setTimeout(res, 50));
-    }
-    throw new Error('page not ready after reload');
-  };
   const seedAndBegin = async (caseIndex, keepSave) => {
     if (!keepSave) {
       const seed = { ...seededSave, currentCase: caseIndex, completedCases: Array.from({ length: caseIndex }, (_, i) => i), caseState: freshCaseState() };
       await send('Runtime.evaluate', { expression: 'localStorage.setItem("space_sprout_sleuth_save", ' + JSON.stringify(JSON.stringify(seed)) + ')' });
     }
-    await send('Page.reload');
-    await send('Runtime.enable');
-    await waitReady();
+    await navigateAndWait('case ' + caseIndex + (keepSave ? ' reopen' : ''), () => send('Page.reload'), '!!document.getElementById("diagnose-btn")');
     await send('Runtime.evaluate', { expression: 'SSS.showBriefing(); SSS.beginInvestigation(); true' });
   };
   const evalPage = async (fn, arg) => {
@@ -438,6 +446,34 @@ try {
     }, spec.clueTag);
     assert.ok(spec.expectDot === 'angry' ? r2.angry : r2.annoyed, spec.caseId + ' mood persists across a full page reload');
   }
+
+  // Newly connected cold-exit (exit_cold): from an annoyed conversation the
+  // "I'll leave you to it." option must render the authored cold farewell, end
+  // the conversation, and be non-recovering (mood stays annoyed on re-entry)
+  // and non-trapping (the source re-opens normally). Representative: Vess-lor.
+  const coldSpec = moodSpecs.find(s => s.caseId === 'silent_grove' && s.target === 'annoyed');
+  await seedAndBegin(coldSpec.caseIndex, false);
+  const cold = await evalPage(async spec => {
+    const pause = ms => new Promise(r => setTimeout(r, ms));
+    const skip = async () => { const a = document.getElementById('info-area'); if (a) a.click(); await pause(15); };
+    const info = () => { const a = document.getElementById('info-area'); return a ? a.textContent : ''; };
+    const open = async tag => { const b = document.querySelector('[data-clue-tag="' + tag + '"]'); b.click(); await skip(); };
+    const click = async label => { const o = [...document.querySelectorAll('.dialogue-option')].find(e => e.textContent.trim() === label); if (!o) return false; o.click(); await skip(); return true; };
+    await open(spec.clueTag);
+    for (const label of spec.path) { if (label === '__REENTER__') await open(spec.clueTag); else await click(label); }
+    const annoyedBefore = !!document.querySelector('.mood-dot.annoyed');
+    const hadColdOption = [...document.querySelectorAll('.dialogue-option')].some(e => e.textContent.trim() === "I'll leave you to it.");
+    const clicked = await click("I'll leave you to it.");
+    const coldText = info();
+    await open(spec.clueTag); // re-enter after the cold exit
+    const annoyedAfter = !!document.querySelector('.mood-dot.annoyed');
+    return { annoyedBefore, hadColdOption, clicked, coldText, annoyedAfter };
+  }, coldSpec);
+  capturedTexts.push(cold.coldText);
+  assert.ok(cold.annoyedBefore, 'cold-exit precondition: Vess-lor is annoyed');
+  assert.ok(cold.hadColdOption && cold.clicked, 'annoyed conversation offers the "I\'ll leave you to it." cold-exit option');
+  assert.match(cold.coldText, /says nothing|chromatophores darken/, 'cold exit renders the authored cold farewell');
+  assert.ok(cold.annoyedAfter, 'cold exit is non-recovering (mood persists) and non-trapping (source re-opens)');
 
   // No corrected-wording defect ever rendered during any interaction.
   for (const t of capturedTexts) {
