@@ -150,7 +150,7 @@ try {
   });
   await navigateAndWait('seed reload', () => send('Page.reload'), '!!document.getElementById("diagnose-btn")');
 
-  const playAllCases = async campaign => {
+  const playAllCases = async (campaign, PERS) => {
     const results = [];
     const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
     const skipTyping = async () => {
@@ -160,45 +160,77 @@ try {
     };
     const savedState = () => JSON.parse(localStorage.getItem('space_sprout_sleuth_save'));
 
-    function findPath(source, tag, foundTags) {
-      const queue = [{ nodeId: 'start', path: [], flags: new Set(), visited: new Set(), mood: source.startMood || 0 }];
+    // Mirror index.html mood semantics so the route search models the real
+    // runtime instead of hardcoded values.
+    const moodLabel = (mood, personality) => {
+      const p = PERS[personality] || PERS.patient;
+      if (p.lockThreshold !== null && mood <= -p.lockThreshold) return 'angry';
+      if (mood <= -p.annoyThreshold) return 'annoyed';
+      if (mood >= 2) return 'friendly';
+      return 'neutral';
+    };
+    const startNodeFor = (source, mood, locked) => {
+      const label = moodLabel(mood, source.personality);
+      if (label === 'angry' && source.nodes.locked) return 'locked';
+      if (label === 'annoyed' && source.nodes.annoyed) return 'annoyed';
+      if (locked && source.nodes.locked) return 'locked';
+      return 'start';
+    };
+
+    // Find a route to `tag` whose runtime mood classification never becomes
+    // 'annoyed' or 'angry'. Applies moodShift on FIRST visit only (matching
+    // production nodesVisited), applies setMood via real personality thresholds,
+    // tracks locked state, honors legitimate re-entry, rejects any negative-mood
+    // state, and honors clue/flag/node-visit/species/mood requirements.
+    function findNonNegativeMoodPath(source, tag, foundTags) {
+      const personality = source.personality;
+      const isConversation = source.type === 'conversation';
+      const startId = isConversation ? startNodeFor(source, source.startMood || 0, false) : 'start';
+      const queue = [{ nodeId: startId, path: [], flags: new Set(), visited: new Set(), moodApplied: new Set(), mood: source.startMood || 0, locked: false }];
       const seen = new Set();
       while (queue.length) {
         const state = queue.shift();
-        const signature = state.nodeId + '|' + [...state.flags].sort().join(',') + '|' + state.mood;
-        if (seen.has(signature)) continue;
-        seen.add(signature);
         const node = source.nodes[state.nodeId];
         if (!node) continue;
+        // Apply arrival effects.
+        let mood = state.mood;
+        const moodApplied = new Set(state.moodApplied);
+        if (typeof node.moodShift === 'number' && !moodApplied.has(state.nodeId)) { mood += node.moodShift; moodApplied.add(state.nodeId); }
+        if (node.setMood === 'neutral') mood = 0;
+        else if (node.setMood === 'annoyed') { const p = PERS[personality] || PERS.patient; mood = Math.min(mood, -p.annoyThreshold); }
+        else if (node.setMood === 'angry') { const p = PERS[personality] || PERS.patient; mood = -(p.lockThreshold || 5); }
+        let locked = state.locked;
+        if (node.locksSource === true) locked = true;
+        else if (node.locksSource === false) locked = false;
+        // Reject any state whose runtime mood classification is negative.
+        if (isConversation) {
+          const label = moodLabel(mood, personality);
+          if (label === 'annoyed' || label === 'angry') continue;
+        }
         const flags = new Set(state.flags);
         if (node.setsFlag) flags.add(node.setsFlag);
         const visited = new Set(state.visited);
         visited.add(state.nodeId);
-        let mood = state.mood;
-        if (typeof node.moodShift === 'number') mood += node.moodShift;
-        if (node.setMood === 'neutral') mood = 0;
-        if (node.setMood === 'annoyed') mood = -2;
-        if (node.setMood === 'angry') mood = -5;
+        const signature = state.nodeId + '|' + [...flags].sort().join(',') + '|' + mood + '|' + (locked ? 1 : 0) + '|' + [...moodApplied].sort().join(',');
+        if (seen.has(signature)) continue;
+        seen.add(signature);
         if (node.revealsClue === tag) return state.path;
-        if (node.endsConversation) {
-          queue.push({
-            nodeId: 'start',
-            path: [...state.path, node.exitLabel || 'Back', '__REENTER__'],
-            flags,
-            visited,
-            mood
-          });
+        const options = node.options || [];
+        const ends = node.endsConversation === true || options.length === 0;
+        if (ends) {
+          const reenterId = isConversation ? startNodeFor(source, mood, locked) : 'start';
+          queue.push({ nodeId: reenterId, path: [...state.path, node.exitLabel || 'Back', '__REENTER__'], flags, visited, moodApplied, mood, locked });
           continue;
         }
-        for (const option of node.options || []) {
+        for (const option of options) {
           const req = option.requires || {};
           if (req.clueFound && !foundTags.has(req.clueFound)) continue;
           if (req.flagSet && !flags.has(req.flagSet)) continue;
           if (req.nodeVisited && !visited.has(req.nodeVisited.split('.').pop())) continue;
           if (req.playerSpecies && req.playerSpecies !== 'human') continue;
           if (req.playerSpeciesNot === 'human') continue;
-          if (req.moodIsNot === 'neutral' && mood === 0) continue;
-          queue.push({ nodeId: option.goto, path: [...state.path, option.label], flags, visited, mood });
+          if (req.moodIsNot && moodLabel(mood, personality) === req.moodIsNot) continue;
+          queue.push({ nodeId: option.goto, path: [...state.path, option.label], flags, visited, moodApplied, mood, locked });
         }
       }
       return null;
@@ -209,11 +241,14 @@ try {
       SSS.showBriefing();
       SSS.beginInvestigation();
 
+      const negativeIndicator = () => document.querySelector('.mood-dot.annoyed') || document.querySelector('.mood-dot.angry');
       const foundTags = new Set();
       for (const clue of caseData.clues) {
         const source = caseData.sources[clue.action];
-        const path = findPath(source, clue.clueTag, foundTags);
-        if (!path) throw new Error(caseData.id + ': no playable route for ' + clue.clueTag);
+        const path = findNonNegativeMoodPath(source, clue.clueTag, foundTags);
+        if (!path) throw new Error(caseData.id + ': no non-negative-mood route for ' + clue.clueTag);
+        // Before the route: no annoyed/angry indicator present.
+        if (negativeIndicator()) throw new Error(caseData.id + '/' + clue.clueTag + ': negative mood indicator present before neutral clue route');
         document.querySelector('[data-clue-tag="' + clue.clueTag + '"]').click();
         await skipTyping();
         for (const label of path) {
@@ -229,6 +264,16 @@ try {
           await skipTyping();
         }
         foundTags.add(clue.clueTag);
+        // After the route: still no annoyed/angry indicator.
+        if (negativeIndicator()) throw new Error(caseData.id + '/' + clue.clueTag + ': negative mood indicator present after neutral clue route');
+        // The persisted mood of the source used by this route must be non-negative.
+        const srcState = savedState().caseState.sourceStates[clue.action];
+        if (srcState && typeof srcState.mood === 'number') {
+          const label = moodLabel(srcState.mood, source.personality);
+          if (label === 'annoyed' || label === 'angry') {
+            throw new Error(caseData.id + '/' + clue.clueTag + ': persisted source mood is ' + label + ' after a supposedly neutral route');
+          }
+        }
         SSS.showFieldNotes();
       }
       const collected = savedState().caseState.cluesFound.length;
@@ -271,7 +316,7 @@ try {
   };
 
   const evaluated = await send('Runtime.evaluate', {
-    expression: '(' + playAllCases.toString() + ')(' + JSON.stringify(campaignData) + ')',
+    expression: '(' + playAllCases.toString() + ')(' + JSON.stringify(campaignData) + ', ' + JSON.stringify(personalities) + ')',
     awaitPromise: true,
     returnByValue: true
   });
