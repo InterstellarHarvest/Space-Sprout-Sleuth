@@ -434,7 +434,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             gravity_insight: {
-              text: `A gradient? ${HH.topAccelerationG.toFixed(4)}g at the top and ${HH.baseAccelerationG.toFixed(4)}g at the base? That is ${HH.gradientDeltaG.toFixed(4)}g across 20 centimeters. The direction is outward at both points, but the magnitude increases with radius. On Vress that bed-scale difference is negligible. I should have checked more than the midpoint.`,
+              text: `A gradient? ${HH.topAccelerationG.toFixed(4)}g at the top and ${HH.baseAccelerationG.toFixed(4)}g at the base? That is ${HH.gradientDeltaG.toFixed(5)}g across 20 centimeters. The direction is outward at both points, but the magnitude increases with radius. On Vress that bed-scale difference is negligible. I should have checked more than the midpoint.`,
               revealsClue: "GORLROOT_UPWARD",
               bonusInsight: true,
               moodShift: 1,
@@ -535,7 +535,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             gravity_profile: {
-              text: `——— GRAVITY PROFILE ———\n> SURFACE / TOP (r = ${HH.topRadiusM.toFixed(1)}m)\n>  \u2192 ${HH.topAccelerationG.toFixed(4)}g outward\n> BASE / RING-WALL SIDE (r = ${HH.baseRadiusM.toFixed(1)}m)\n>  \u2192 ${HH.baseAccelerationG.toFixed(4)}g outward\n> MIDPOINT / CALIBRATION (r = ${HH.midpointRadiusM.toFixed(1)}m)\n>  \u2192 ${HH.midpointAccelerationG.toFixed(2)}g outward\n> Magnitude delta across ${Math.round(HH.bedDepthM * 100)}cm: ${HH.gradientDeltaG.toFixed(4)}g\n\n> \u26a0 Direction is radially outward at all three\n> points. Magnitude increases with radius.\n`,
+              text: `——— GRAVITY PROFILE ———\n> SURFACE / TOP (r = ${HH.topRadiusM.toFixed(1)}m)\n>  \u2192 ${HH.topAccelerationG.toFixed(4)}g outward\n> BASE / RING-WALL SIDE (r = ${HH.baseRadiusM.toFixed(1)}m)\n>  \u2192 ${HH.baseAccelerationG.toFixed(4)}g outward\n> MIDPOINT / CALIBRATION (r = ${HH.midpointRadiusM.toFixed(1)}m)\n>  \u2192 ${HH.midpointAccelerationG.toFixed(2)}g outward\n> Magnitude delta across ${Math.round(HH.bedDepthM * 100)}cm: ${HH.gradientDeltaG.toFixed(5)}g\n\n> \u26a0 Direction is radially outward at all three\n> points. Magnitude increases with radius.\n`,
               revealsClue: "GRAVITY_GRADIENT",
               options: [
                 { label: "[cross-ref] What causes the gradient?", goto: "gradient_explanation" },
@@ -544,7 +544,7 @@ const CAMPAIGN_2_DATA = {
               ]
             },
             gradient_explanation: {
-              text: `——— CENTRIFUGAL GRADIENT \u2014 REFERENCE ———\n> Centrifugal acceleration: a = \u03c9\u00b2r\n> r = distance from the rotation axis\n> \u03c9 = rotation rate in radians per second\n\n> Target midpoint: ${HH.targetMidpointG.toFixed(2)}g at ${HH.midpointRadiusM.toFixed(1)}m\n> Required rotation: ${HH.rotationRpm.toFixed(5)} RPM\n> Soil bed radial depth: ${HH.bedDepthM.toFixed(1)}m\n> Top:  ${HH.topAccelerationG.toFixed(4)}g outward\n> Base: ${HH.baseAccelerationG.toFixed(4)}g outward\n> Difference: ${HH.gradientDeltaG.toFixed(4)}g\n\n> On one radial line the direction remains outward.\n> The measured difference is a magnitude gradient,\n> not a change or reversal of down.\n`,
+              text: `——— CENTRIFUGAL GRADIENT \u2014 REFERENCE ———\n> Centrifugal acceleration: a = \u03c9\u00b2r\n> r = distance from the rotation axis\n> \u03c9 = rotation rate in radians per second\n\n> Target midpoint: ${HH.targetMidpointG.toFixed(2)}g at ${HH.midpointRadiusM.toFixed(1)}m\n> Required rotation: ${HH.rotationRpm.toFixed(5)} RPM\n> Soil bed radial depth: ${HH.bedDepthM.toFixed(1)}m\n> Top:  ${HH.topAccelerationG.toFixed(4)}g outward\n> Base: ${HH.baseAccelerationG.toFixed(4)}g outward\n> Difference: ${HH.gradientDeltaG.toFixed(5)}g\n\n> On one radial line the direction remains outward.\n> The measured difference is a magnitude gradient,\n> not a change or reversal of down.\n`,
               bonusInsight: true,
               options: [
                 { label: "[back] Return to main", goto: "start" },
@@ -757,7 +757,7 @@ const CAMPAIGN_2_DATA = {
           },
           text: "[STUB] See sensor readout.",
           clueTag: "GRAVITY_GRADIENT",
-          learned: `At ${HH.rotationRpm.toFixed(5)} RPM, outward acceleration rises from ${HH.topAccelerationG.toFixed(4)}g at the bed top to ${HH.baseAccelerationG.toFixed(4)}g at the base: a ${HH.gradientDeltaG.toFixed(4)}g magnitude difference.`,
+          learned: `At ${HH.rotationRpm.toFixed(5)} RPM, outward acceleration rises from ${HH.topAccelerationG.toFixed(4)}g at the bed top to ${HH.baseAccelerationG.toFixed(4)}g at the base: a ${HH.gradientDeltaG.toFixed(5)}g magnitude difference.`,
         },
         {
           action: "plants",
@@ -830,7 +830,7 @@ const CAMPAIGN_2_DATA = {
 
       explanation: {
         title: "Centrifugal Gravity and the Gradient Problem",
-        body: `Earth roots use statolith-bearing cells as part of gravitropism, but the gorlroot response in this case is explicitly fictional. Gorlroot's paired alien sensor tissues compare acceleration across a swelling tuber and change growth rates on opposite sides.\n\nIn a rotating habitat, the apparent downward acceleration has magnitude a = \u03c9\u00b2r. At the case's ${HH.midpointRadiusM.toFixed(1)}m reference radius, ${HH.rotationRpm.toFixed(5)} RPM produces ${HH.midpointAccelerationG.toFixed(2)}g at the midpoint. Across the ${HH.bedDepthM.toFixed(1)}m radial bed, the magnitude rises from ${HH.topAccelerationG.toFixed(4)}g to ${HH.baseAccelerationG.toFixed(4)}g, a difference of ${HH.gradientDeltaG.toFixed(4)}g. Along that single radial line, the direction remains outward at every point.\n\nThat difference is small. The fictional gorlroot system nevertheless mistakes it for a tilt signal and overcorrects as the tuber expands, producing unequal growth and sideways curvature. The measured size-dependent deformation supports that scenario-specific diagnosis; it is not a claim about ordinary Earth crops.\n\nA larger radius operated at the lower rotation rate needed for the same target acceleration reduces the relative gradient. A thinner bed also reduces the radial difference sampled by the plant. Either proposal still requires a controlled cultivation trial.`,
+        body: `Earth roots use statolith-bearing cells as part of gravitropism, but the gorlroot response in this case is explicitly fictional. Gorlroot's paired alien sensor tissues compare acceleration across a swelling tuber and change growth rates on opposite sides.\n\nIn a rotating habitat, the apparent downward acceleration has magnitude a = \u03c9\u00b2r. At the case's ${HH.midpointRadiusM.toFixed(1)}m reference radius, ${HH.rotationRpm.toFixed(5)} RPM produces ${HH.midpointAccelerationG.toFixed(2)}g at the midpoint. Across the ${HH.bedDepthM.toFixed(1)}m radial bed, the magnitude rises from ${HH.topAccelerationG.toFixed(4)}g to ${HH.baseAccelerationG.toFixed(4)}g, a difference of ${HH.gradientDeltaG.toFixed(5)}g. Along that single radial line, the direction remains outward at every point.\n\nThat difference is small. The fictional gorlroot system nevertheless mistakes it for a tilt signal and overcorrects as the tuber expands, producing unequal growth and sideways curvature. The measured size-dependent deformation supports that scenario-specific diagnosis; it is not a claim about ordinary Earth crops.\n\nA larger radius operated at the lower rotation rate needed for the same target acceleration reduces the relative gradient. A thinner bed also reduces the radial difference sampled by the plant. Either proposal still requires a controlled cultivation trial.`,
         funFact: "Rotating-habitat design trades radius against rotation rate. For the same target acceleration, a larger radius allows slower rotation and a smaller proportional change in acceleration across a person, plant, or soil bed."
       },
 
