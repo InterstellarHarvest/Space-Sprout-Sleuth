@@ -2794,7 +2794,7 @@
         framesPromise = Promise.resolve(CAMPAIGN_2_FRAMES.badges);
       } else {
         // Per-character crew spritesheets (including delegate_* for Case 6)
-        const m = spriteSrc.match(/^sprites_c2\/(\w+)\/spritesheet\.png$/);
+        const m = spriteSrc.match(/^sprites\/c2\/(\w+)\/spritesheet\.png$/);
         if (m && CAMPAIGN_2_FRAMES['crew_' + m[1]]) {
           framesPromise = Promise.resolve(CAMPAIGN_2_FRAMES['crew_' + m[1]]);
         }
@@ -2935,17 +2935,21 @@
   // Build portrait HTML — canvas for spritesheet, or emoji fallback
   function portraitHtml(clue) {
     const sprites = clue.sprites || {};
+    const portraitLabel = escHtml((clue.speaker || clue.label || 'Investigation') + ' portrait');
+    const portraitA11y = STATE.currentCampaign === 1
+      ? ' role="img" aria-label="' + portraitLabel + '"'
+      : '';
     if (sprites.alienPortrait) {
       return '<div class="speaker-portrait" id="active-portrait">' +
-        '<canvas id="portrait-canvas" width="96" height="96" data-alien-frame="' + sprites.alienPortrait + '"></canvas></div>';
+        '<canvas id="portrait-canvas"' + portraitA11y + ' width="96" height="96" data-alien-frame="' + sprites.alienPortrait + '"></canvas></div>';
     }
     if (sprites.spritesheet) {
       return '<div class="speaker-portrait" id="active-portrait">' +
-        '<canvas id="portrait-canvas" width="96" height="96"></canvas></div>';
+        '<canvas id="portrait-canvas"' + portraitA11y + ' width="96" height="96"></canvas></div>';
     }
     if (sprites.portrait) {
       return '<div class="speaker-portrait" id="active-portrait">' +
-        '<canvas id="portrait-canvas" width="96" height="96" data-ui-frame="' + sprites.portrait + '"></canvas></div>';
+        '<canvas id="portrait-canvas"' + portraitA11y + ' width="96" height="96" data-ui-frame="' + sprites.portrait + '"></canvas></div>';
     }
     return '<div class="speaker-portrait"><div class="portrait-fallback">' + clue.icon + '</div></div>';
   }
@@ -2960,16 +2964,20 @@
   // the button shows the species face instead of the NPC face.
   function actionIconHtml(clue) {
     const sprites = clue.sprites || {};
+    const iconLabel = escHtml((clue.label || clue.speaker || 'Investigation source') + ' icon');
+    const iconA11y = STATE.currentCampaign === 1
+      ? ' role="img" aria-label="' + iconLabel + '"'
+      : '';
     if (sprites.alienIcon) {
-      return '<canvas class="action-icon-canvas" data-alien-frame="' + sprites.alienIcon + '" width="96" height="96"></canvas>';
+      return '<canvas class="action-icon-canvas"' + iconA11y + ' data-alien-frame="' + sprites.alienIcon + '" width="96" height="96"></canvas>';
     }
     if (sprites.actionIcon) {
       // UI spritesheet canvas icon (drawUiFrame checks both C1 and C2 sheets)
-      return '<canvas class="action-icon-canvas" data-ui-frame="' + sprites.actionIcon + '" width="96" height="96"></canvas>';
+      return '<canvas class="action-icon-canvas"' + iconA11y + ' data-ui-frame="' + sprites.actionIcon + '" width="96" height="96"></canvas>';
     }
     if (sprites.spritesheet) {
       // Crew spritesheet canvas icon — will be drawn after DOM insert
-      return '<canvas class="action-icon-canvas" data-sheet="' + sprites.spritesheet +
+      return '<canvas class="action-icon-canvas"' + iconA11y + ' data-sheet="' + sprites.spritesheet +
         '" data-json="' + sprites.spritesheetJson + '" width="96" height="96"></canvas>';
     }
     return '<span>' + clue.icon + '</span>';
@@ -3903,6 +3911,9 @@
     sceneImg.classList.remove('loaded', 'scene-fade');
     sceneImg.style.opacity = '';
     const scenePath = caseData.sprites && caseData.sprites.scene;
+    sceneImg.alt = STATE.currentCampaign === 1
+      ? (caseData.sceneDescription || (caseData.name + ' investigation scene'))
+      : '';
     if (scenePath) {
       tryLoadImg(sceneImg, scenePath).then(ok => {
         if (ok) sceneImg.classList.add('loaded');
@@ -3946,11 +3957,11 @@
     const handlersHtml = (STATE.currentCampaign === 1)
       ? '<div class="briefing-handlers">' +
           '<div class="handler-portrait">' +
-            '<canvas id="briefing-nova" width="96" height="96"></canvas>' +
+            '<canvas id="briefing-nova" role="img" aria-label="Dr. Nova portrait" width="96" height="96"></canvas>' +
             '<div class="handler-name">Dr. Nova</div>' +
           '</div>' +
           '<div class="handler-portrait">' +
-            '<canvas id="briefing-zelketh" width="96" height="96"></canvas>' +
+            '<canvas id="briefing-zelketh" role="img" aria-label="Zel\'keth portrait" width="96" height="96"></canvas>' +
             '<div class="handler-name">Zel\'keth</div>' +
           '</div>' +
         '</div>'
@@ -4337,7 +4348,26 @@
     saveState();
     PlayLog.caseComplete(STATE.currentCase, score, STATE.caseState.wrongGuesses);
 
-    // Crossfade to healthy/awakening scene variant if available
+    // Campaign 2 interventions must be chosen and narrated before a healed
+    // scene appears. Campaign 1 and cases without choices retain the existing
+    // immediate authored resolution.
+    if (STATE.currentCampaign !== 1 || !caseData.solutionChoice) {
+      showResolvedScene(caseData);
+    }
+
+    // If case has a solution choice (e.g. Case 07), show that before explanation.
+    // Otherwise, preserve an authored resolution/handoff before the science recap.
+    if (caseData.solutionChoice) {
+      showSolutionChoice(caseData, score);
+    } else if (caseData.resolution) {
+      showResolution(caseData, score);
+    } else {
+      showExplanation(caseData, score);
+    }
+  }
+
+  function showResolvedScene(caseData) {
+    // Crossfade to healthy/awakening scene variant if available.
     const altScene = caseData.sprites && caseData.sprites.sceneAlt;
     if (altScene) {
       sceneImg.classList.add('scene-fade');
@@ -4345,6 +4375,7 @@
       sceneImg.addEventListener('transitionend', function() {
         tryLoadImg(sceneImg, altScene).then(ok => {
           if (ok) {
+            sceneImg.alt = caseData.resolvedSceneDescription || caseData.sceneDescription || (caseData.name + ' resolved scene');
             sceneImg.style.opacity = '1';
             // Start amber pulse effect on the awakened scene if defined
             if (caseData.sprites.sceneAltFx === 'amberPulse') {
@@ -4360,16 +4391,6 @@
           }
         });
       }, { once: true });
-    }
-
-    // If case has a solution choice (e.g. Case 07), show that before explanation.
-    // Otherwise, preserve an authored resolution/handoff before the science recap.
-    if (caseData.solutionChoice) {
-      showSolutionChoice(caseData, score);
-    } else if (caseData.resolution) {
-      showResolution(caseData, score);
-    } else {
-      showExplanation(caseData, score);
     }
   }
 
@@ -4434,6 +4455,10 @@
     }
     // Persist every intervention, including the zero-bonus option.
     saveState();
+
+    // The selected response narrates the approved, monitored outcome; only
+    // now may Campaign 2 show its resolved scene.
+    if (STATE.currentCampaign === 1) showResolvedScene(caseData);
 
     // Show the response, then proceed to explanation
     const baseScore = (STATE.completedCases.find(c => c.caseId === caseData.id) || {}).score || 0;
@@ -4833,7 +4858,7 @@
     const speciesHtml = CAMPAIGN_2_DATA.species.map(s =>
       '<div class="species-option" data-species="' + s.id + '" onclick="SSS.selectSpecies(\'' + s.id + '\')">' +
         '<div class="species-portrait-placeholder">' +
-          '<canvas class="species-portrait-canvas" data-ui-frame="' + s.portrait + '" width="96" height="96" style="width:64px;height:64px;image-rendering:pixelated;"></canvas>' +
+          '<canvas class="species-portrait-canvas" role="img" aria-label="' + escHtml(s.name) + ' species portrait" data-ui-frame="' + s.portrait + '" width="96" height="96" style="width:64px;height:64px;image-rendering:pixelated;"></canvas>' +
         '</div>' +
         '<div class="species-name">' + escHtml(s.name) + '</div>' +
       '</div>'
@@ -5514,6 +5539,7 @@
     if (caseData.solutionChoice && STATE.caseState.solutionIdx < 0) {
       showSolutionChoice(caseData, score);
     } else {
+      if (STATE.currentCampaign === 1) showResolvedScene(caseData);
       showExplanation(caseData, score);
     }
   }
